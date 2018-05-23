@@ -550,7 +550,7 @@ public class NOC extends InterConnect {
 		return memControllerRet;
 	}
 
-	public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter,
+	/*public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter,
 			String name) {
 		EnergyConfig energyConfig = new EnergyConfig(0, 0);
 		
@@ -561,5 +561,5 @@ public class NOC extends InterConnect {
 		}
 		
 		return energyConfig;
-	}
+	}*/
 }

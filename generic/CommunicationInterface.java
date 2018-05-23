@@ -1,8 +1,8 @@
 /*****************************************************************************
-				GPUTejas Simulator
+				Tejas Simulator
 ------------------------------------------------------------------------------------------------------------
 
-   Copyright [2014] [Indian Institute of Technology, Delhi]
+   Copyright [2010] [Indian Institute of Technology, Delhi]
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -16,25 +16,18 @@
    limitations under the License.
 ------------------------------------------------------------------------------------------------------------
 
-	Contributors:  Seep Goel, Geetika Malhotra, Harinder Pal
+	Contributors:  Eldhose Peter
 *****************************************************************************/
 
-package config;
+package generic;
 
-import java.util.Hashtable;
+import dram.MainMemoryDRAMController;
 
-import generic.PortType;
-
-public class SystemConfig {
-	public static int NoOfTPC;
-	public static TpcConfig[] tpc; 
-	public static Hashtable<String, CacheConfig> declaredCaches;
-	public static int mainMemoryLatency;
-	public static long mainMemoryFrequency;
-	public static PortType mainMemPortType;
-	public static int mainMemoryAccessPorts;
-	public static int mainMemoryPortOccupancy;
-	public static BusConfig busConfig;
-	public static NocConfig nocConfig;
-	public static int cacheBusLatency;
+public interface CommunicationInterface {
+	/*
+	 * This is an abstract function to send a message from one simulation element to the other.
+	 * This is used by NOC or Bus based interconnection. 
+	 */
+	public void sendMessage(Event event);
+	public MainMemoryDRAMController getNearestMemoryController(int chanNum);
 }

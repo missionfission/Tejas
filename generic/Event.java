@@ -66,6 +66,17 @@ public abstract class Event implements Cloneable
 		
 		this.priority = requestType.ordinal();
 	}
+	public Event update(SimulationElement requestingElement,
+			SimulationElement processingElement, SimulationElement actualRequestingElement,
+			SimulationElement actualProcessingElement)
+	{
+		//incrementSerializationID();
+		this.requestingElement = requestingElement;
+		this.processingElement = processingElement;
+		//this.actualProcessingElement = actualProcessingElement;
+		//this.actualRequestingElement = actualRequestingElement;
+		return this;
+	}
 
 	public Event(EventQueue eventQ, long eventTime, SimulationElement requestingElement,
 			SimulationElement processingElement, RequestType requestType, int tpcId, int smId) 

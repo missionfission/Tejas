@@ -43,7 +43,7 @@ public class Router extends Switch{
 	private ID id;
 	protected int latencyBetweenNOCElements;
 	protected Vector<Router> neighbours;
-	EnergyConfig power;
+	//EnergyConfig power;
 	public static int incoming=0;
 	public static int outgoing=0;	
 	
@@ -64,7 +64,7 @@ public class Router extends Switch{
 		this.latencyBetweenNOCElements = nocConfig.latencyBetweenNOCElements;
 		this.neighbours= new Vector<Router>(4);
 		this.hopCounters = 0;
-		power = nocConfig.power;
+		//power = nocConfig.power;
 		
 		ArchitecturalComponent.addNOCRouter(this);
 	}
@@ -239,7 +239,7 @@ public class Router extends Switch{
 			}
 		}
 	}
-
+/*
 	public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter, String componentName) throws IOException
 	{
 		if(hopCounters == 0)
@@ -259,7 +259,7 @@ public class Router extends Switch{
 		EnergyConfig power = new EnergyConfig(SystemConfig.nocConfig.power, hopCounters);
 		return power;
 	}
-	
+	*/
 	public void setID(ID id) 
 	{
 		this.id = id.clone();
