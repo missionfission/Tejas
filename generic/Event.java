@@ -38,7 +38,9 @@ public abstract class Event implements Cloneable
 	private long priority;
 	public int tpcId;
 	public int smId;
-
+//serialization and globalSerialization copied
+	public long serializationID = 0;
+	public static long globalSerializationID = 0;
 	public Event clone()
 	{
 		try {
@@ -52,7 +54,12 @@ public abstract class Event implements Cloneable
 	//Element which processes the event.
 	protected SimulationElement requestingElement;
 	protected SimulationElement processingElement;
-
+	protected SimulationElement actualRequestingElement;
+	protected SimulationElement actualProcessingElement;
+	public void incrementSerializationID() {
+		globalSerializationID++;
+		serializationID = globalSerializationID;
+	}
 	public Event(EventQueue eventQ, SimulationElement requestingElement,
 			SimulationElement processingElement, RequestType requestType) 
 	{
@@ -70,11 +77,11 @@ public abstract class Event implements Cloneable
 			SimulationElement processingElement, SimulationElement actualRequestingElement,
 			SimulationElement actualProcessingElement)
 	{
-		//incrementSerializationID();
+		incrementSerializationID(); //copied from tejas
 		this.requestingElement = requestingElement;
 		this.processingElement = processingElement;
-		//this.actualProcessingElement = actualProcessingElement;
-		//this.actualRequestingElement = actualRequestingElement;
+		this.actualProcessingElement = actualProcessingElement;//copied from tejas
+		this.actualRequestingElement = actualRequestingElement;//copied from tejas
 		return this;
 	}
 
@@ -103,6 +110,20 @@ public abstract class Event implements Cloneable
 		return this;
 	}
 
+	public SimulationElement getActualRequestingElement() {
+		return actualRequestingElement;
+	}// copied from tejas
+	
+	public SimulationElement getActualProcessingElement() {
+		return actualProcessingElement;
+	}// copied from Tejas
+	public Event update(long eventTime)
+	{
+		incrementSerializationID();
+		this.eventTime =  eventTime;
+		return this;
+	}
+	
 	public long getEventTime() {
 		return eventTime;
 	}
