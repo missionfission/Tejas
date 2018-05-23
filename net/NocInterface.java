@@ -26,7 +26,7 @@ import net.NOC.CONNECTIONTYPE;
 import main.ArchitecturalComponent;
 import config.NocConfig;
 import config.SystemConfig;
-import dram.MainMemoryDRAMController;
+//import dram.MainMemoryDRAMController;
 /*****************************************************
  * 
  * NocInterface to make the router generic
@@ -68,7 +68,7 @@ public class NocInterface implements CommunicationInterface{
 		return getRouter().getID();
 	}
 
-	public MainMemoryDRAMController getNearestMemoryController(int a) {
+	/*public MainMemoryDRAMController getNearestMemoryController(int a) {
 		return ((NOC)ArchitecturalComponent.getInterConnect()).getNearestMemoryController(getId());		
-	}
+	}*/
 }

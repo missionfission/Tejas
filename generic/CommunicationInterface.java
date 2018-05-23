@@ -21,7 +21,7 @@
 
 package generic;
 
-import dram.MainMemoryDRAMController;
+//import dram.MainMemoryDRAMController;
 
 public interface CommunicationInterface {
 	/*
@@ -29,5 +29,5 @@ public interface CommunicationInterface {
 	 * This is used by NOC or Bus based interconnection. 
 	 */
 	public void sendMessage(Event event);
-	public MainMemoryDRAMController getNearestMemoryController(int chanNum);
+	//public MainMemoryDRAMController getNearestMemoryController(int chanNum);
 }

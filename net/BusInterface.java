@@ -22,7 +22,7 @@
 package net;
 
 import main.ArchitecturalComponent;
-import dram.MainMemoryDRAMController;
+//import dram.MainMemoryDRAMController;
 import generic.CommunicationInterface;
 import generic.Event;
 
@@ -42,8 +42,8 @@ public class BusInterface implements CommunicationInterface{
 		bus.sendBusMessage(event);		
 	}
 
-	public MainMemoryDRAMController getNearestMemoryController(int chanNum) {
+	/*public MainMemoryDRAMController getNearestMemoryController(int chanNum) {
 		// TODO Auto-generated method stub
 		return ArchitecturalComponent.getMainMemoryDRAMController(this,chanNum);
-	}
+	}*/
 }

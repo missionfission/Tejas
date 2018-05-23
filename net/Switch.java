@@ -49,11 +49,7 @@ public class Switch extends SimulationElement{
 	//0 - up ; 1 - right ; 2- down ; 3- left (clockwise) 
 	
 	public Switch(NocConfig nocConfig,int level){
-		super(nocConfig.portType,
-				nocConfig.getAccessPorts(), 
-				nocConfig.getPortOccupancy(),
-				nocConfig.getLatency(),
-				nocConfig.operatingFreq);
+		super(nocConfig.portType,nocConfig.getAccessPorts(), nocConfig.getPortOccupancy(),nocConfig.getLatency(), nocConfig.operatingFreq);
 		this.selScheme = nocConfig.selScheme;
 		this.connection = new Switch[4];
 		this.level = level; //used in omega network

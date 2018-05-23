@@ -85,5 +85,5 @@ public class NocConfig
 		return this.numberOfColumns;
 	}
 
-	public EnergyConfig  power;
+	//public EnergyConfig  power;
 }

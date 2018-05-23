@@ -28,6 +28,8 @@ public abstract class SimulationElement implements Cloneable
 	Port port;
 	protected long latency;
 	protected int stepSize = 1;
+	CommunicationInterface comInterface;
+
 
    public Object clone()
     {
@@ -52,7 +54,13 @@ public abstract class SimulationElement implements Cloneable
 		this.port = new Port(portType, noOfPorts, occupancy);
 		this.latency = latency;
 	}
-
+	public SimulationElement(PortType portType, 
+			int noOfPorts, long occupancy, long latency, long frequency	)
+		{
+			this.port = new Port(portType, noOfPorts, occupancy);//to be added latency in ports in gpu not present but present in tejas
+			this.latency = latency;
+		}
+	
 	public SimulationElement(PortType portType,
 			int noOfPorts,
 			long occupancy,
@@ -74,6 +82,13 @@ public abstract class SimulationElement implements Cloneable
 	public long getLatency() 
 	{
 		return this.latency;
+	}
+	public void setComInterface(CommunicationInterface comInterface) {
+		this.comInterface = comInterface;
+	}
+	
+	public CommunicationInterface getComInterface() {
+		return comInterface;
 	}
 	
 	protected void setLatency(long latency) {

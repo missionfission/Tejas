@@ -32,7 +32,7 @@ import main.ArchitecturalComponent;
 import memorysystem.AddressCarryingEvent;
 import net.NOC.TOPOLOGY;
 import net.RoutingAlgo.SELSCHEME;
-import config.EnergyConfig;
+//import config.EnergyConfig;
 import config.NocConfig;
 import config.SystemConfig;
 

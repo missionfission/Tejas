@@ -2,7 +2,7 @@ package net;
 
 import java.io.FileWriter;
 
-import config.EnergyConfig;
+//import config.EnergyConfig;
 import config.SystemConfig;
 import generic.Event;
 

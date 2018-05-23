@@ -31,8 +31,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import main.ArchitecturalComponent;
-import dram.MainMemoryDRAMController;
-import config.EnergyConfig;
+//import dram.MainMemoryDRAMController;
+//import config.EnergyConfig;
 import config.NocConfig;
 
 public class NOC extends InterConnect {
@@ -532,7 +532,7 @@ public class NOC extends InterConnect {
 		this.networkElements = networkElements;
 	}
 
-	public MainMemoryDRAMController getNearestMemoryController(ID currBankId) {
+	/*public MainMemoryDRAMController getNearestMemoryController(ID currBankId) {
 		MainMemoryDRAMController memControllerRet = null;
 		double distance = Double.MAX_VALUE;
 		int x1 = currBankId.getx();//bankid/cacheColumns;
@@ -549,7 +549,7 @@ public class NOC extends InterConnect {
 		}	
 		return memControllerRet;
 	}
-
+*/
 	/*public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter,
 			String name) {
 		EnergyConfig energyConfig = new EnergyConfig(0, 0);
