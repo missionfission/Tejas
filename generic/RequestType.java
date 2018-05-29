@@ -47,7 +47,7 @@ public enum RequestType {
 	Main_Mem_Write,
 	Mem_Response,
 	LSQ_Commit,
-	
+	Main_Mem_Access,
 	//banked memory element's request types
 	CacheBank_Read,
 	CacheBank_Write,

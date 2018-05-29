@@ -84,7 +84,18 @@ public abstract class Event implements Cloneable
 		this.actualRequestingElement = actualRequestingElement;//copied from tejas
 		return this;
 	}
-
+//	public Event(EventQueue eventQ, long eventTime, SimulationElement requestingElement,
+//			SimulationElement processingElement, RequestType requestType, int coreId) 
+//	{
+//		incrementSerializationID();
+//		this.eventTime = eventTime; // this should be set by the port
+//		this.eventQ = eventQ;
+//		this.requestingElement = requestingElement;
+//		this.processingElement = processingElement;
+//		this.requestType = requestType;
+//		this.coreId = coreId;
+//		this.priority = requestType.ordinal();
+//	}
 	public Event(EventQueue eventQ, long eventTime, SimulationElement requestingElement,
 			SimulationElement processingElement, RequestType requestType, int tpcId, int smId) 
 	{
