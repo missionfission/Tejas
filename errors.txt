@@ -1,0 +1,11 @@
+The following errors are occuring in the tejas:-
+
+
+1) since the DRAM was taken from the single core TEJAS, the global clock was same as the local clock. In the case of GPUTEJAS, each Simulation Multiprocessor (SM)
+   has a local clock.Thus we need to see the clock synchronization and the working of the global clock;
+	what i feel is, the SM that are/is currently using the DRAM, will be the most crucial ones. Their clock should be used in place of the global clock.
+	Now discuss how many SM can simultaneously access the DRAM.
+
+
+
+2)  In the System config, i have added the memory controller to use option, because we used the memory DRAM of the TEJAS in the GPUTEJAS. Please discuss furthure
