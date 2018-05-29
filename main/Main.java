@@ -290,5 +290,9 @@ public class Main {
 	
 	
 	
-	
-}
+	}
+
+
+/*
+i am gantavya and I have mangekyo sharingan
+*/
