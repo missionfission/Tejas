@@ -37,4 +37,5 @@ public class SystemConfig {
 	public static BusConfig busConfig;
 	public static NocConfig nocConfig;
 	public static int cacheBusLatency;
+	public static boolean memControllerToUse;
 }

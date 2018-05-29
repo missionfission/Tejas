@@ -40,8 +40,8 @@ import emulatorinterface.translator.x86.instruction.InstructionClass;
 import emulatorinterface.translator.x86.objparser.ObjParser;
 import generic.*;
 
-
-import jsr166y.Phaser;
+import java.util.concurrent.*;
+//import jsr166y.Phaser;
 
 /* MaxNumThreads threads are created from this class. Each thread
  * continuously keeps reading from the shared memory segment according

@@ -121,7 +121,7 @@ public class MainMemoryBusPacket implements Cloneable{
 		*/
 	
 	}
-	
+/*	
 	//this function for TEST
 	public void printTest()
 	{
@@ -164,5 +164,5 @@ public class MainMemoryBusPacket implements Cloneable{
 
 		}
 	}
-	
+	*/
 }

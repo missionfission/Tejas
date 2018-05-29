@@ -10,7 +10,7 @@ import config.MainMemoryConfig.RowBufferPolicy;
 import config.MainMemoryConfig.SchedulingPolicy;
 import dram.BankState.CurrentBankState;
 import dram.MainMemoryBusPacket.BusPacketType;
-import generic.GlobalClock;
+//import generic.GlobalClock;  TODO we need to fix this/.. added by Gantavya 29/05/2018
 import main.Main;
 import misc.Error;
 import net.Bus;
@@ -678,7 +678,6 @@ public class CommandQueue {
 		if (mainMemoryConfig.schedulingPolicy == SchedulingPolicy.RankThenBankRoundRobin)
 		{
 			rank++;
-			if (rank == mainMemoryConfig.numRanks)
 			{
 				rank = 0;
 				bank++;
@@ -750,9 +749,12 @@ public class CommandQueue {
 		return (CMD_QUEUE_DEPTH - getCommandQueue(rank, bank).size() >= num);
 	
 	}
-
+/*
+ * The following function is for the test prupose, the outputlog was a function in the TEJAS but is not a function in the GPU TEJAS.
+ * SO currently i am commenting the whole
+ */
 	//this function for TEST
-	public void printTest()
+/*	public void printTest()
 	{
 		if (mainMemoryConfig.queuingStructure== QueuingStructure.PerRank)
 		{
@@ -769,5 +771,5 @@ public class CommandQueue {
 		}
 
 	}
-	
+	*/
 }
