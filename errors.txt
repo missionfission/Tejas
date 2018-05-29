@@ -9,3 +9,18 @@ The following errors are occuring in the tejas:-
 
 
 2)  In the System config, i have added the memory controller to use option, because we used the memory DRAM of the TEJAS in the GPUTEJAS. Please discuss furthure
+
+
+
+
+------------------------------------
+
+Some things that need to be served and resolved
+
+
+Global clock issue
+
+Event in gpu is not same as the event in the cpu tejas.
+So we need to see the constructor
+
+Next we have to see the constructor of the architectural component.
