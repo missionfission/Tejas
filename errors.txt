@@ -17,10 +17,11 @@ The following errors are occuring in the tejas:-
 
 Some things that need to be served and resolved
 
+Global clock in the CPUTEJAS vs the local clock per SM in the GPUTEJAS. We have to discuss what to include in the DRAM controller or should we pass the LOCAL CLOCK OF THE SM ACCESSING THE DRAM COMPONENT. So here we need to pass the local clock in the functions.
 
-Global clock issue
 
-Event in gpu is not same as the event in the cpu tejas.
-So we need to see the constructor
+The CORES in the GPUTEJAS we have the TPC--> SM--->SP(this is a core) 
+while in 
+CPUTEJAS we directly have the CORES, and in the main memory DRAM controller, there is one function "ONE CYCLE OPERATION" WHICH involve the 0th core in the CPUTEJAS,here we need to see whether we have to pass the 0th SM or something else.
 
-Next we have to see the constructor of the architectural component.
+
