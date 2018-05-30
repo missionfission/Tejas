@@ -19,6 +19,25 @@ Some things that need to be served and resolved
 
 Global clock in the CPUTEJAS vs the local clock per SM in the GPUTEJAS. We have to discuss what to include in the DRAM controller or should we pass the LOCAL CLOCK OF THE SM ACCESSING THE DRAM COMPONENT. So here we need to pass the local clock in the functions.
 
+/*
+
+
+I have temorarily resolved this issue by replacing the GLOBALCLOCK OF CPUTEJAS BY LOCALCLOCKPERSM OF GPUTEJAS. 
+we need to discuss on this
+
+
+*/
+
+/*
+
+There is a java file called as rank. there is a problem with the nextrRead time of the bank, i am not getting the function where the nextRead is being set,
+In that too i had made the correction of the LocalClockPerSM.
+Need to Discuss
+
+
+*/
+
+// currently the following issue exists with the mainmemorydramcontroller
 
 The CORES in the GPUTEJAS we have the TPC--> SM--->SP(this is a core) 
 while in 

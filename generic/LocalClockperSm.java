@@ -28,8 +28,8 @@ import config.TpcConfig;
 
 public class LocalClockperSm {
 	
-	long currentTime;
-	int stepSize, smId,tpcId;
+	static long currentTime;
+	static int stepSize, smId,tpcId;
 
 	public LocalClockperSm(int id, int Tid) {
 	
@@ -120,7 +120,7 @@ public class LocalClockperSm {
 		}
 	}
 
-	public long getCurrentTime() {
+	public static long getCurrentTime() {
 		return currentTime;
 	}
 

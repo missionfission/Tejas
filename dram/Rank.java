@@ -7,7 +7,7 @@ import dram.BankState.CurrentBankState;
 import dram.MainMemoryBusPacket.BusPacketType;
 import generic.Event;
 import generic.EventQueue;
-import generic.GlobalClock;
+import generic.LocalClockperSm;
 import generic.RequestType;
 import generic.SimulationElement;
 
@@ -73,7 +73,7 @@ public class Rank extends SimulationElement{
 		//BusPacketType busPacketType = b.getBusPacketType();
 		//long addr = event.getAddress();
 		//RequestType requestType = event.getRequestType();
-		long currentTime = GlobalClock.getCurrentTime(); 		//Assumption: time will never change while handling an event
+		long currentTime = LocalClockperSm.getCurrentTime(); 		//Assumption: time will never change while handling an event
 		
 		//System.out.println("Handling rank event scheduled for time " + event.getEventTime());
 		//b.printPacket();

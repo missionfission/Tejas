@@ -37,6 +37,7 @@ public enum RequestType {
 	BOOT_PIPELINE,
 	BROADCAST,
 	
+	Column_Read_Complete,
 	Tell_LSQ_Addr_Ready,
 	Validate_LSQ_Addr,
 	Attempt_L1_Issue,
@@ -65,6 +66,7 @@ public enum RequestType {
 	Write_Modified_to_sharedmem, 
 	Main_Mem_Response,
 	Mem_Cntrlr_State_Update,
+	Rank_Response,
 	
 	TOKEN,
 	LOCAL_TOKEN,

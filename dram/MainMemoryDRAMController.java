@@ -8,10 +8,10 @@ import config.MainMemoryConfig.SchedulingPolicy;
 import config.SystemConfig;
 import dram.BankState.CurrentBankState;
 import dram.MainMemoryBusPacket.BusPacketType;
-//import generic.Core;
+import generic.Core;
 import generic.Event;
 import generic.EventQueue;
-//import generic.GlobalClock;
+import generic.LocalClockperSm;
 import generic.RequestType;
 import main.ArchitecturalComponent;
 import main.Main;
@@ -100,7 +100,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			return;
 		}
 
-		long currentTime = GlobalClock.getCurrentTime();
+		long currentTime = LocalClockperSm.getCurrentTime();
 		
 		//System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
 		//Main.debugPrinter.print("\nHi!! handling a dram event of type " + e.getRequestType()+ "\n");
@@ -166,8 +166,8 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			
 			//for TIMING
 			//create k6 style trace file
-			b.timeCreated = GlobalClock.getCurrentTime();
-			//if(event.getRequestType() == RequestType.Cache_Read)
+			b.timeCreated = LocalClockperSm.getCurrentTime();
+			//if(event.getRequestType() == RequestType.Cache_Read)GlobalClock
      		//		Main.traceFile.print( String.format("0x%08X", b.physicalAddress) + " P_MEM_RD " + b.timeCreated + "\n");
 			//else
 			//	Main.traceFile.print( String.format("0x%08X", b.physicalAddress) + " P_MEM_WR " + b.timeCreated + "\n");
@@ -198,7 +198,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			MainMemoryBusPacket b = ((RamBusAddressCarryingEvent) e).getBusPacket();
 			totalTransactions++;
 			totalReadTransactions[b.rank][b.bank]++;
-			totalTime += ( GlobalClock.getCurrentTime() - b.timeCreated);
+			totalTime += ( LocalClockperSm.getCurrentTime() - b.timeCreated);
 
 			AddressCarryingEvent event = new AddressCarryingEvent(eventQ, 0,
 					this, this.parentCache,	RequestType.Mem_Response,
@@ -260,7 +260,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 
 	
 	public void oneCycleOperation(){
-		long currentTime = GlobalClock.getCurrentTime();
+		long currentTime = LocalClockperSm.getCurrentTime();
 		Core core0 = ArchitecturalComponent.getCores()[0];				//using core 0 queue similar to as in cache
 		
 		if (refreshCount[refreshRank]==0)
