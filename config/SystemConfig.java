@@ -40,6 +40,7 @@ public class SystemConfig {
 	public static int mainMemoryPortOccupancy;
 	public static BusConfig busConfig;
 	public static NocConfig nocConfig;
+	public static MainMemoryConfig mainMemoryConfig;
 	public static int cacheBusLatency;
 	public static boolean memControllerToUse;
 }
