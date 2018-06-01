@@ -8,7 +8,7 @@ import config.MainMemoryConfig.SchedulingPolicy;
 import config.SystemConfig;
 import dram.BankState.CurrentBankState;
 import dram.MainMemoryBusPacket.BusPacketType;
-import generic.Core;
+import generic.SM;
 import generic.Event;
 import generic.EventQueue;
 import generic.LocalClockperSm;
@@ -261,7 +261,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	
 	public void oneCycleOperation(){
 		long currentTime = LocalClockperSm.getCurrentTime();
-		Core core0 = ArchitecturalComponent.getCores()[0];				//using core 0 queue similar to as in cache
+		SM core0 = ArchitecturalComponent.getCores()[0];				//using core 0 queue similar to as in cache
 		
 		if (refreshCount[refreshRank]==0)
 		{
@@ -388,7 +388,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				}
 
 
-
+				//requestType
 				for (int i=0;i< mainMemoryConfig.numRanks;i++)
 				{
 					for (int j=0;j<mainMemoryConfig.numBanks;j++)

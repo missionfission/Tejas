@@ -27,6 +27,10 @@ import generic.PortType;
 
 public class SystemConfig {
 	public static int NoOfTPC;
+	public static enum Interconnect {
+		Bus, Noc
+	}
+	public static Interconnect interconnect;
 	public static TpcConfig[] tpc; 
 	public static Hashtable<String, CacheConfig> declaredCaches;
 	public static int mainMemoryLatency;
