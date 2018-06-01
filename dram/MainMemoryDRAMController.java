@@ -261,7 +261,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	
 	public void oneCycleOperation(){
 		long currentTime = LocalClockperSm.getCurrentTime();
-		SM core0 = ArchitecturalComponent.getCores()[0];				//using core 0 queue similar to as in cache
+		SM core0 = ArchitecturalComponent.getCores()[0][0];				//using core 0 queue similar to as in cache
 		
 		if (refreshCount[refreshRank]==0)
 		{

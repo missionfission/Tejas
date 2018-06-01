@@ -15,8 +15,7 @@ public class StateUpdateEvent extends Event {
 			SimulationElement requestingElement,
 			SimulationElement processingElement,
 			RequestType requestType, int rank, int bank) {
-		super(eventQ, eventTime, requestingElement, processingElement,
-				requestType, -1);
+		super(eventQ, eventTime, requestingElement, processingElement,requestType, -1);
 		this.setRank(rank);
 		this.setBank(bank);
 	}

@@ -30,7 +30,7 @@ import generic.SM;
 import dram.MainMemoryDRAMController;
 import emulatorinterface.communication.IpcBase;
 import generic.CommunicationInterface;
-import generic.Core;
+//import generic.Core;
 //import generic.Core;
 //import generic.CoreBcastBus;
 import generic.EventQueue;
