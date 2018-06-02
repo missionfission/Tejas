@@ -30,6 +30,7 @@ import generic.SM;
 import dram.MainMemoryDRAMController;
 import emulatorinterface.communication.IpcBase;
 import generic.CommunicationInterface;
+import generic.Core;
 //import generic.Core;
 //import generic.Core;
 //import generic.CoreBcastBus;
@@ -60,6 +61,7 @@ import net.Router;
 
 public class ArchitecturalComponent {
 
+	public static Vector<Vector<SM>> sm= new Vector<Vector<SM>>(); 
 	private static SM[][] cores;
 	public static Vector<Cache> sharedCaches = new Vector<Cache>();
 	public static Vector<Cache> caches = new Vector<Cache>();
@@ -140,26 +142,43 @@ public static void createChip() {
 		return coreMemSysArray;
 	}
 private static void createElementsOfBus() {
+	
+	/*
+	 * Added By Gantavya : I have added the SM's in place of the core, because in the NOCs the SM will communicate. So
+	 */
 		
 		Bus bus = new Bus();
 		BusInterface busInterface;
 		
+		for(int i=0;i<SystemConfig.NoOfTPC;i++)
+		{
+			Vector<SM> smVecPerTPC= new Vector<SM>();
+			for(int j=0;j<TpcConfig.NoOfSM;j++){
+				SM sm= createSM(i, j);
+				busInterface = new BusInterface(bus);
+				sm.setComInterface(busInterface);
+				smVecPerTPC.add(sm);
+			}
+			sm.add(smVecPerTPC);
+		}
+		
+		
 		// Create Cores
-//		for(int i=0; i<SystemConfig.NoOfCores; i++) {
-//			Core core = createCore(i);
-//			busInterface = new BusInterface(bus);
-//			core.setComInterface(busInterface);
-//			cores.add(core);
-//		}
-//		
-//		// Create Shared Cache
-//		// PS : Directory will be created as a special shared cache
-//		for(CacheConfig cacheConfig : SystemConfig.sharedCacheConfigs) {
-//			busInterface = new BusInterface(bus);
-//			Cache c = MemorySystem.createSharedCache(cacheConfig.cacheName, busInterface);
-//			c.setComInterface(busInterface);
-//		}
-//		
+		//		for(int i=0; i<SystemConfig.NoOfCores; i++) {
+		//			Core core = createCore(i);
+		//			busInterface = new BusInterface(bus);
+		//			core.setComInterface(busInterface);
+		//			cores.add(core);
+		//		}
+		
+		// Create Shared Cache
+		// PS : Directory will be created as a special shared cache
+		for(CacheConfig cacheConfig : SystemConfig.sharedCacheConfigs) {
+			busInterface = new BusInterface(bus);
+			Cache c = MemorySystem.createSharedCache(cacheConfig.cacheName, busInterface);
+			c.setComInterface(busInterface);
+		}
+		
 		// Create Main Memory Controller
 		//Note: number of physical channels = number of Memory Controllers
 		
@@ -242,6 +261,10 @@ private static void createElementsOfBus() {
 	
 	public static void addNOCRouter(Router router) {
 		nocRouterList.add(router);		
+	}
+	
+	public static SM createSM(int tpc_number, int sm_number){
+		return new SM(tpc_number, sm_number);
 	}
 	
 	public static ArrayList<Router> getNOCRouterList() {

@@ -67,7 +67,7 @@ public class SM extends SimulationElement{
 		
 	}
 		
-
+	
 	public EventQueue getEventQueue() {
 		return eventQueue;
 	}
