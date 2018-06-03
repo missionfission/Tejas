@@ -198,6 +198,21 @@ private static void createElementsOfBus() {
 		}
 //	
 private static void createElementsOfNOC() {
+	
+	/*
+	 * Added By Gantavya:
+	 * This method creates the NOC out of the given file of NOC. 
+	 * In this method first of all I am initializing the cores, 
+	 * ASSUMPTION : I am assuming that in the noc file, the total number of TPC and the number of SM inside those will be consistent 
+	 * 				with those in the config file. Thus We have just added the communication inteface to those of the SM.
+	 * The TPC_number will help us to take a proper count of TPC and the number of SM inside them is taken care by the variable  SM_number_withinTPC
+	 * On appearance of each TPC, I will increase its count, and will set the SM number to -1;
+	 */
+	
+	
+	int TPC_number=-1;
+	int SM_number_withinTPC;    
+	setCores(initCores());
 	//create elements mentioned as topology file
 	BufferedReader readNocConfig = NOC.openTopologyFile(SystemConfig.nocConfig.NocTopologyFile);
 	
@@ -229,11 +244,20 @@ private static void createElementsOfNOC() {
 			//System.out.println("NOC [" + i + "][" + j + "] = " + nextElementToken);
 			
 			CommunicationInterface comInterface = ((NOC)interconnect).getNetworkElements()[i][j];
-			
-			if(nextElementToken.equals("C")){
-				Core core = createCore(cores.size());
-				cores.add(core);
-				core.setComInterface(comInterface);
+			if(nextElementToken.equals("TPC")){
+				TPC_number++;
+				SM_number_withinTPC=-1;
+			}
+			else if(nextElementToken.equals("SM")){
+				if(TPC_number==-1){
+					misc.Error.showErrorAndExit("There should be a TPC before any SM !!");
+				}else{
+					SM_number_withinTPC++;
+					cores[TPC_number][SM_number_withinTPC].setComInterface(comInterface);
+				}
+	//			Core core = createCore(cores.size());
+	//			cores.add(core);
+	//			core.setComInterface(comInterface);
 			} else if(nextElementToken.equals("M")) {
 				MainMemoryDRAMController mainMemController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
 				memoryControllers.add(mainMemController);
