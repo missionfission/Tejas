@@ -31,8 +31,6 @@ import dram.MainMemoryDRAMController;
 import emulatorinterface.communication.IpcBase;
 import generic.CommunicationInterface;
 import generic.Core;
-//import generic.Core;
-//import generic.Core;
 //import generic.CoreBcastBus;
 import generic.EventQueue;
 import generic.LocalClockperSm;
@@ -61,7 +59,7 @@ import net.Router;
 
 public class ArchitecturalComponent {
 
-	public static Vector<Vector<SM>> sm= new Vector<Vector<SM>>(); 
+	//public static Vector<Vector<SM>> sm= new Vector<Vector<SM>>(); 
 	private static SM[][] cores;
 	public static Vector<Cache> sharedCaches = new Vector<Cache>();
 	public static Vector<Cache> caches = new Vector<Cache>();
@@ -112,7 +110,7 @@ public static void createChip() {
 		}
 		return sms;
 	}
-
+	
 	public static SM[][] getCores() {
 		return cores;
 	}
@@ -149,19 +147,14 @@ private static void createElementsOfBus() {
 		
 		Bus bus = new Bus();
 		BusInterface busInterface;
-		
-		for(int i=0;i<SystemConfig.NoOfTPC;i++)
-		{
-			Vector<SM> smVecPerTPC= new Vector<SM>();
+		SM[][] sms = initCores();
+		for(int i=0;i<SystemConfig.NoOfTPC;i++){
 			for(int j=0;j<TpcConfig.NoOfSM;j++){
-				SM sm= createSM(i, j);
-				busInterface = new BusInterface(bus);
-				sm.setComInterface(busInterface);
-				smVecPerTPC.add(sm);
+				busInterface= new BusInterface(bus);
+				sms[i][j].setComInterface(busInterface);
 			}
-			sm.add(smVecPerTPC);
 		}
-		
+		setCores(sms);
 		
 		// Create Cores
 		//		for(int i=0; i<SystemConfig.NoOfCores; i++) {
@@ -173,6 +166,7 @@ private static void createElementsOfBus() {
 		
 		// Create Shared Cache
 		// PS : Directory will be created as a special shared cache
+		
 		for(CacheConfig cacheConfig : SystemConfig.sharedCacheConfigs) {
 			busInterface = new BusInterface(bus);
 			Cache c = MemorySystem.createSharedCache(cacheConfig.cacheName, busInterface);
@@ -203,57 +197,56 @@ private static void createElementsOfBus() {
 		
 		}
 //	
-//	private static void createElementsOfNOC() {
-//		//create elements mentioned as topology file
-//		BufferedReader readNocConfig = NOC.openTopologyFile(SystemConfig.nocConfig.NocTopologyFile);
-//		
-//		// Skip the first line. It contains numrows/cols information
-//		try {
-//			readNocConfig.readLine();
-//		} catch (IOException e1) {
-//			misc.Error.showErrorAndExit("Error in reading noc topology file !!");
-//		}
-//		
-//		int numRows = ((NOC)interconnect).getNumRows();
-//		int numColumns = ((NOC)interconnect).getNumColumns();
-//		for(int i=0;i<numRows;i++)
-//		{
-//			String str = null;
-//			try {
-//				str = readNocConfig.readLine();
-//			} catch (IOException e) {
-//				misc.Error.showErrorAndExit("Error in reading noc topology file !!");
-//			}
-//			
-//			//StringTokenizer st = new StringTokenizer(str," ");
-//			StringTokenizer st = new StringTokenizer(str);
-//			
-//			for(int j=0;j<numColumns;j++)
-//			{
-//				String nextElementToken = (String)st.nextElement();
-//				
-//				//System.out.println("NOC [" + i + "][" + j + "] = " + nextElementToken);
-//				
-//				CommunicationInterface comInterface = ((NOC)interconnect).getNetworkElements()[i][j];
-//				
-//				if(nextElementToken.equals("C")){
-//					Core core = createCore(cores.size());
-//					cores.add(core);
-//					core.setComInterface(comInterface);
-//				} else if(nextElementToken.equals("M")) {
-//					MainMemoryDRAMController mainMemController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
-//					memoryControllers.add(mainMemController);
-//					mainMemController.setComInterface(comInterface);
-//				} else if(nextElementToken.equals("-")) {
-//					//do nothing
-//				} else {
-//					Cache c = MemorySystem.createSharedCache(nextElementToken, comInterface);
-//					//TODO split and multiple shared caches
-//				} 
-//			}
-//		}
-//	}	
-//	
+private static void createElementsOfNOC() {
+	//create elements mentioned as topology file
+	BufferedReader readNocConfig = NOC.openTopologyFile(SystemConfig.nocConfig.NocTopologyFile);
+	
+	// Skip the first line. It contains numrows/cols information
+	try {
+		readNocConfig.readLine();
+	} catch (IOException e1) {
+		misc.Error.showErrorAndExit("Error in reading noc topology file !!");
+	}
+	
+	int numRows = ((NOC)interconnect).getNumRows();
+	int numColumns = ((NOC)interconnect).getNumColumns();
+	for(int i=0;i<numRows;i++)
+	{
+		String str = null;
+		try {
+			str = readNocConfig.readLine();
+		} catch (IOException e) {
+			misc.Error.showErrorAndExit("Error in reading noc topology file !!");
+		}
+		
+		//StringTokenizer st = new StringTokenizer(str," ");
+		StringTokenizer st = new StringTokenizer(str);
+		
+		for(int j=0;j<numColumns;j++)
+		{
+			String nextElementToken = (String)st.nextElement();
+			
+			//System.out.println("NOC [" + i + "][" + j + "] = " + nextElementToken);
+			
+			CommunicationInterface comInterface = ((NOC)interconnect).getNetworkElements()[i][j];
+			
+			if(nextElementToken.equals("C")){
+				Core core = createCore(cores.size());
+				cores.add(core);
+				core.setComInterface(comInterface);
+			} else if(nextElementToken.equals("M")) {
+				MainMemoryDRAMController mainMemController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
+				memoryControllers.add(mainMemController);
+				mainMemController.setComInterface(comInterface);
+			} else if(nextElementToken.equals("-")) {
+				//do nothing
+			} else {
+				Cache c = MemorySystem.createSharedCache(nextElementToken, comInterface);
+				//TODO split and multiple shared caches
+			} 
+		}
+	}
+}	
 	public static void initMemorySystem(SM[][] sms) {
 		coreMemSysArray = MemorySystem.initializeMemSys(ArchitecturalComponent.getCores());		
 	}
