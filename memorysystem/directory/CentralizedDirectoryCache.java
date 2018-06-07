@@ -53,6 +53,26 @@ public class CentralizedDirectoryCache extends Cache
 	public static int networkDelay;
 	
 	
+
+	public CentralizedDirectoryCache(CacheConfig cacheParameters, SMMemorySystem containingMemSys,
+			int networkDelay) 
+	{
+		super(cacheParameters, containingMemSys);
+		
+		lines = new DirectoryEntry[cacheParameters.getSize()*1024];
+		for(int i=0;i<lines.length;i++) {
+			lines[i] = new DirectoryEntry();
+		}
+		invalidations =0;
+		writebacks =0;
+		dataForwards =0;
+		directoryHits = 0;
+		directoryMisses = 0;
+
+		this.levelFromTop = CacheType.Directory;
+		CentralizedDirectoryCache.networkDelay = networkDelay;
+		
+	}
 	public CentralizedDirectoryCache(CacheConfig cacheParameters, SMMemorySystem containingMemSys, int numCores, 
 			int networkDelay) 
 	{

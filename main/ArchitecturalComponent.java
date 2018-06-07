@@ -24,13 +24,15 @@ package main;
 
 import config.SystemConfig;
 import config.TpcConfig;
+import config.CacheConfig;
 import memorysystem.SMMemorySystem;
+import memorysystem.directory.CentralizedDirectoryCache;
 import memorysystem.MemorySystem;
 import generic.SM;
 import dram.MainMemoryDRAMController;
 import emulatorinterface.communication.IpcBase;
 import generic.CommunicationInterface;
-import generic.Core;
+//import generic.Core;
 //import generic.CoreBcastBus;
 import generic.EventQueue;
 import generic.LocalClockperSm;
@@ -38,13 +40,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
+import java.util.Collection;
+import config.NetworkDelay;
 import config.CacheConfig;
 import config.MainMemoryConfig;
 import config.SystemConfig;
-
 import memorysystem.Cache;
 //import memorysystem.CoreMemorySystem;
 import dram.MainMemoryDRAMController;
@@ -166,12 +169,25 @@ private static void createElementsOfBus() {
 		
 		// Create Shared Cache
 		// PS : Directory will be created as a special shared cache
-		
-		for(CacheConfig cacheConfig : SystemConfig.sharedCacheConfigs) {
-			busInterface = new BusInterface(bus);
-			Cache c = MemorySystem.createSharedCache(cacheConfig.cacheName, busInterface);
-			c.setComInterface(busInterface);
+		Collection<CacheConfig> c= SystemConfig.declaredCaches.values();
+		Iterator<CacheConfig> it= c.iterator();
+		while(it.hasNext()) {
+			CacheConfig cc= it.next();
+			if(cc.levelFromTop.equals(Cache.CacheType.sharedCache)) {
+				busInterface = new BusInterface(bus);
+				Cache cache= new Cache(cc, null);
+				cache.setComInterface(busInterface);
+			}else if(cc.levelFromTop.equals(Cache.CacheType.Directory)) {
+				busInterface = new BusInterface(bus);
+				CentralizedDirectoryCache dircCache= new CentralizedDirectoryCache(cc, null, NetworkDelay.networkDelay);
+				dircCache.setComInterface(busInterface);
+			}
 		}
+		//for(CacheConfig cacheConfig : SystemConfig.sharedCacheConfigs) {
+		//	busInterface = new BusInterface(bus);
+		//	Cache c = MemorySystem.createSharedCache(cacheConfig.cacheName, busInterface);
+		//	c.setComInterface(busInterface);
+		//}
 		
 		// Create Main Memory Controller
 		//Note: number of physical channels = number of Memory Controllers
@@ -197,6 +213,7 @@ private static void createElementsOfBus() {
 		
 		}
 //	
+@SuppressWarnings("unused")
 private static void createElementsOfNOC() {
 	
 	/*
@@ -210,8 +227,11 @@ private static void createElementsOfNOC() {
 	 */
 	
 	
+	Collection<CacheConfig> c= SystemConfig.declaredCaches.values();
+	CacheConfig cc;
+	
 	int TPC_number=-1;
-	int SM_number_withinTPC;    
+	int SM_number_withinTPC=-1;    
 	setCores(initCores());
 	//create elements mentioned as topology file
 	BufferedReader readNocConfig = NOC.openTopologyFile(SystemConfig.nocConfig.NocTopologyFile);
@@ -234,7 +254,6 @@ private static void createElementsOfNOC() {
 			misc.Error.showErrorAndExit("Error in reading noc topology file !!");
 		}
 		
-		//StringTokenizer st = new StringTokenizer(str," ");
 		StringTokenizer st = new StringTokenizer(str);
 		
 		for(int j=0;j<numColumns;j++)
@@ -264,9 +283,28 @@ private static void createElementsOfNOC() {
 				mainMemController.setComInterface(comInterface);
 			} else if(nextElementToken.equals("-")) {
 				//do nothing
-			} else {
-				Cache c = MemorySystem.createSharedCache(nextElementToken, comInterface);
-				//TODO split and multiple shared caches
+			} 
+			else if(nextElementToken.equals("CD")) {
+				Iterator<CacheConfig> it= c.iterator();
+				while(it.hasNext()) {
+					cc= it.next();
+					if(cc.levelFromTop.equals(Cache.CacheType.Directory)) {
+						CentralizedDirectoryCache cache= new CentralizedDirectoryCache(cc, null,NetworkDelay.networkDelay);
+						cache.setComInterface(comInterface);
+						break;
+					}
+				}
+			}
+			else {
+				Iterator<CacheConfig> it= c.iterator();
+				while(it.hasNext()) {
+					cc= it.next();
+					if(cc.levelFromTop.equals(Cache.CacheType.sharedCache)) {
+						Cache cache= new Cache(cc, null);
+						cache.setComInterface(comInterface);
+						break;
+					}
+				}
 			} 
 		}
 	}
