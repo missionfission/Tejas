@@ -33,7 +33,7 @@ import dram.MainMemoryDRAMController;
 import emulatorinterface.communication.IpcBase;
 import generic.CommunicationInterface;
 //import generic.Core;
-//import generic.CoreBcastBus;
+import generic.CoreBcastBus;
 import generic.EventQueue;
 import generic.LocalClockperSm;
 import java.io.BufferedReader;
@@ -68,13 +68,16 @@ public class ArchitecturalComponent {
 	public static Vector<Cache> caches = new Vector<Cache>();
 //	public static HashMap<String, NucaCache> nucaList=  new HashMap<String, NucaCache>();
 	private static InterConnect interconnect;
-//	public static CoreBcastBus coreBroadcastBus;
+	public static CoreBcastBus coreBroadcastBus;
 	public static Vector<MainMemoryDRAMController> memoryControllers = new Vector<MainMemoryDRAMController>();
 
 
 	public static void setInterConnect(InterConnect i) {
 	interconnect = i;
 }
+	public static InterConnect getInterConnect() {
+		return interconnect;
+	}
 	
 public static void createChip() {
 		// Interconnect
@@ -274,9 +277,6 @@ private static void createElementsOfNOC() {
 					SM_number_withinTPC++;
 					cores[TPC_number][SM_number_withinTPC].setComInterface(comInterface);
 				}
-	//			Core core = createCore(cores.size());
-	//			cores.add(core);
-	//			core.setComInterface(comInterface);
 			} else if(nextElementToken.equals("M")) {
 				MainMemoryDRAMController mainMemController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
 				memoryControllers.add(mainMemController);
@@ -326,9 +326,9 @@ private static void createElementsOfNOC() {
 		return nocRouterList;
 	}
 
-//	public static void initCoreBroadcastBus() {
-//		coreBroadcastBus = new CoreBcastBus();		
-//	}
+	public static void initCoreBroadcastBus() {
+		coreBroadcastBus = new CoreBcastBus();		
+	}
 
 	public static MainMemoryDRAMController getMainMemoryDRAMController(CommunicationInterface comInterface,int chanNum) {
 		//TODO : return the nearest memory controller based on the location of the communication interface
