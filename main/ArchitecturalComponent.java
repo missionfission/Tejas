@@ -63,7 +63,7 @@ import net.Router;
 public class ArchitecturalComponent {
 
 	//public static Vector<Vector<SM>> sm= new Vector<Vector<SM>>(); 
-	private static SM[][] cores;
+	public static SM[][] cores;
 	public static Vector<Cache> sharedCaches = new Vector<Cache>();
 	public static Vector<Cache> caches = new Vector<Cache>();
 //	public static HashMap<String, NucaCache> nucaList=  new HashMap<String, NucaCache>();
