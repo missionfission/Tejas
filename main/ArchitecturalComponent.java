@@ -95,9 +95,9 @@ public static void createChip() {
 			((NOC)interconnect).ConnectNOCElements();
 		}
 		
-//		MemorySystem.createLinkBetweenCaches();
-//		MemorySystem.setCoherenceOfCaches();
-//		initCoreBroadcastBus();
+		//MemorySystem.createLinkBetweenCaches();
+		//MemorySystem.setCoherenceOfCaches();
+		initCoreBroadcastBus();
 		LocalClockperSm.systemTimingSetUp(getCores());
 	}
 	public static SM[][] initCores()
@@ -147,9 +147,7 @@ public static void createChip() {
 	}
 private static void createElementsOfBus() {
 	
-	/*
-	 * Added By Gantavya : I have added the SM's in place of the core, because in the NOCs the SM will communicate. So
-	 */
+	
 		
 		Bus bus = new Bus();
 		BusInterface busInterface;
@@ -162,16 +160,6 @@ private static void createElementsOfBus() {
 		}
 		setCores(sms);
 		
-		// Create Cores
-		//		for(int i=0; i<SystemConfig.NoOfCores; i++) {
-		//			Core core = createCore(i);
-		//			busInterface = new BusInterface(bus);
-		//			core.setComInterface(busInterface);
-		//			cores.add(core);
-		//		}
-		
-		// Create Shared Cache
-		// PS : Directory will be created as a special shared cache
 		Collection<CacheConfig> c= SystemConfig.declaredCaches.values();
 		Iterator<CacheConfig> it= c.iterator();
 		while(it.hasNext()) {
@@ -186,11 +174,6 @@ private static void createElementsOfBus() {
 				dircCache.setComInterface(busInterface);
 			}
 		}
-		//for(CacheConfig cacheConfig : SystemConfig.sharedCacheConfigs) {
-		//	busInterface = new BusInterface(bus);
-		//	Cache c = MemorySystem.createSharedCache(cacheConfig.cacheName, busInterface);
-		//	c.setComInterface(busInterface);
-		//}
 		
 		// Create Main Memory Controller
 		//Note: number of physical channels = number of Memory Controllers
