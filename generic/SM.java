@@ -27,6 +27,7 @@ import memorysystem.AddressCarryingEvent;
 import memorysystem.MemorySystem;
 import pipeline.GPUExecutionEngine;
 import pipeline.GPUpipeline;
+//import pipeline.multi_issue_inorder.MultiIssueInorderExecutionEngine;
 
 /**
  * represents a single core
@@ -182,8 +183,14 @@ public class SM extends SimulationElement{
 
 	}
 	
-	public void activatePipeline(int i){
+	public void activatePipeline(){
 		this.pipelineInterface.resumePipeline();
+	}
+
+
+	public void sleepPipeline() {
+		// TODO Auto-generated method stub
+		//((MultiIssueInorderExecutionEngine)this.getExecEngine()).getFetchUnitIn().inputToPipeline.enqueue(Instruction.getSyncInstruction());
 	}
 
 }
