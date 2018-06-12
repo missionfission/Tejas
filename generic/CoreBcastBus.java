@@ -49,8 +49,8 @@ public class CoreBcastBus extends SimulationElement{
 		else if(event.getRequestType() == RequestType.TREE_BARRIER){
 
 			long barAddress = ((AddressCarryingEvent)event).getAddress();
-			int tpcId = ((AddressCarryingEvent)event).tpcId;
-			int smId = ((AddressCarryingEvent)event).smId;
+			 tpcId = ((AddressCarryingEvent)event).tpcId;
+			 smId = ((AddressCarryingEvent)event).smId;
 
 			Barrier bar = BarrierTable.barrierList.get(barAddress);
 			int numThreads = bar.getNumThreads();
