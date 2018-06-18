@@ -21,7 +21,7 @@
 #include <list>
 #include <memory>
 
-#include <arch/common/Arch.h>
+#include <common/Arch.h>
 #include <lib/cpp/CommandLine.h>
 #include <lib/mhandle/mhandle.h>
 #include <lib/util/misc.h>

@@ -25,9 +25,9 @@
 #include <memory>
 #include <vector>
 
-#include <arch/common/Arch.h>
-#include <arch/common/Emulator.h>
-#include <arch/kepler/disassembler/Disassembler.h>
+#include <common/Arch.h>
+#include <common/Emulator.h>
+#include <kepler/disassembler/Disassembler.h>
 #include <lib/cpp/Debug.h>
 #include <lib/cpp/Error.h>
 #include <lib/cpp/Misc.h>

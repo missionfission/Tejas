@@ -20,9 +20,9 @@
 
 #include <memory>
 
-#include <arch/kepler/disassembler/Disassembler.h>
-#include <arch/kepler/emulator/Emulator.h>
-#include <arch/kepler/emulator/Grid.h>
+#include <kepler/disassembler/Disassembler.h>
+#include <kepler/emulator/Emulator.h>
+#include <kepler/emulator/Grid.h>
 #include <lib/cpp/String.h>
 #include <lib/util/string.h>
 #include <memory/Memory.h>

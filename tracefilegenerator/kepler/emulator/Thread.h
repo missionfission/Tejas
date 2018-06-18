@@ -20,7 +20,7 @@
 #ifndef ARCH_KEPLER_EMU_THREAD_H
 #define ARCH_KEPLER_EMU_THREAD_H
 
-#include <arch/kepler/disassembler/Disassembler.h>
+#include <kepler/disassembler/Disassembler.h>
 #include "../disassembler/Instruction.h"
 #include "Emulator.h"
 #include "Grid.h"

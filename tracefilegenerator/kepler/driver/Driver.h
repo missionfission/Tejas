@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <arch/common/Driver.h>
+#include <common/Driver.h>
 #include <lib/cpp/Debug.h>
 #include <lib/cpp/Error.h>
 

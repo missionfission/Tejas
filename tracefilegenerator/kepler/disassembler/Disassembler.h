@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include <arch/common/Disassembler.h>
+#include <common/Disassembler.h>
 #include <lib/cpp/CommandLine.h>
 
 #include "Instruction.h"

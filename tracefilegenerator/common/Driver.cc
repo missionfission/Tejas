@@ -17,9 +17,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <arch/kepler/driver/Driver.h>
-#include <arch/hsa/driver/Driver.h>
-#include <arch/southern-islands/driver/Driver.h>
+#include <kepler/driver/Driver.h>
+#include <hsa/driver/Driver.h>
+#include <southern-islands/driver/Driver.h>
 #include <lib/cpp/Misc.h>
 
 #include "Driver.h"

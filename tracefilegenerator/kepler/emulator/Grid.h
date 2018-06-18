@@ -26,7 +26,7 @@
 #include <vector>
 #include <memory/Memory.h>
 
-#include <arch/kepler/driver/Function.h>
+#include <kepler/driver/Function.h>
 
 #include "Emulator.h"
 #include "ThreadBlock.h"

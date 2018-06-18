@@ -23,7 +23,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include <arch/common/Disassembler.h>
+#include <common/Disassembler.h>
 #include <lib/cpp/Error.h>
 #include <lib/cpp/Misc.h>
 #include <lib/cpp/String.h>
