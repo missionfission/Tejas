@@ -182,7 +182,7 @@
 			<WriteDynamicPower>0.81449264705</WriteDynamicPower>
 		</L2>
 	</Library>
-	<!--
+	
 	<Interconnect>BUS</Interconnect>
 		
 		<NOC>
@@ -252,7 +252,7 @@
 			<RefreshPeriod>7800</RefreshPeriod>      <!-- Time (in ns) after which a Refresh is issued -->
 			<DATA_BUS_BITS>64</DATA_BUS_BITS>      <!-- Width of DATA bus in bits. 64 bits according to JEDEC standard -->
 	</MainMemoryController>
-	-->
+	
 	<OperationLatency>
 			<load>100</load>
 			<store>1</store>

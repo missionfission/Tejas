@@ -34,8 +34,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import memorysystem.Cache;
 import memorysystem.Cache.CacheType;
 import memorysystem.Cache.CoherenceType;
+import net.RoutingAlgo;
+import net.NOC.CONNECTIONTYPE;
+import net.NOC.TOPOLOGY;
 
 import org.w3c.dom.*;
+
+import config.MainMemoryConfig.QueuingStructure;
+import config.MainMemoryConfig.RowBufferPolicy;
+import config.MainMemoryConfig.SchedulingPolicy;
 
 
 
@@ -116,17 +123,17 @@ public class XMLParser
 		
 		SystemConfig.cacheBusLatency = Integer.parseInt(getImmediateString("CacheBusLatency", systemElmnt));
 		SystemConfig.tpc = new TpcConfig[SystemConfig.NoOfTPC];		
-//		SystemConfig.nocConfig = new NocConfig();
-//		NodeList NocLst = systemElmnt.getElementsByTagName("NOC");
-//		Element nocElmnt = (Element) NocLst.item(0);
-//		setNocProperties(nocElmnt, SystemConfig.nocConfig);
-//
-//		//set Bus Parameters
-//		NodeList busLst = systemElmnt.getElementsByTagName("BUS");
-//		Element busElmnt = (Element) busLst.item(0);
-//		SystemConfig.busConfig = new BusConfig();
-//		SystemConfig.busConfig.setLatency(Integer.parseInt(getImmediateString("Latency", busElmnt)));
-		//Set tpc parameters
+		SystemConfig.nocConfig = new NocConfig();
+		NodeList NocLst = systemElmnt.getElementsByTagName("NOC");
+		Element nocElmnt = (Element) NocLst.item(0);
+		setNocProperties(nocElmnt, SystemConfig.nocConfig);
+
+		//set Bus Parameters
+		NodeList busLst = systemElmnt.getElementsByTagName("BUS");
+		Element busElmnt = (Element) busLst.item(0);
+		SystemConfig.busConfig = new BusConfig();
+		SystemConfig.busConfig.setLatency(Integer.parseInt(getImmediateString("Latency", busElmnt)));
+	//	Set tpc parameters
 		for(int i =0; i<SystemConfig.NoOfTPC ; i++)
 		{
 			SystemConfig.tpc[i] = new TpcConfig();
@@ -345,6 +352,158 @@ public class XMLParser
 			System.exit(1);
 		}
 		
+	}
+	
+	private static void setNocProperties(Element NocType, NocConfig nocConfig)
+	{
+		if(SystemConfig.interconnect==SystemConfig.Interconnect.Noc) {
+			String nocConfigFilename = getImmediateString("NocConfigFile", NocType);
+			nocConfig.NocTopologyFile = nocConfigFilename;
+		}
+		
+		nocConfig.numberOfBuffers = Integer.parseInt(getImmediateString("NocNumberOfBuffers", NocType));
+		nocConfig.portType = setPortType(getImmediateString("NocPortType", NocType));
+		nocConfig.accessPorts = Integer.parseInt(getImmediateString("NocAccessPorts", NocType));
+		nocConfig.portOccupancy = Integer.parseInt(getImmediateString("NocPortOccupancy", NocType));
+		nocConfig.latency = Integer.parseInt(getImmediateString("NocLatency", NocType));
+		nocConfig.operatingFreq = Integer.parseInt(getImmediateString("NocOperatingFreq", NocType));
+		nocConfig.latencyBetweenNOCElements = Integer.parseInt(getImmediateString("NocLatencyBetweenNOCElements", NocType));
+		
+		String tempStr = getImmediateString("NocTopology", NocType);
+		nocConfig.topology = TOPOLOGY.valueOf(tempStr);
+		
+		tempStr = getImmediateString("NocRoutingAlgorithm", NocType);
+		nocConfig.rAlgo = RoutingAlgo.ALGO.valueOf(tempStr);
+				
+		tempStr = getImmediateString("NocSelScheme", NocType);
+		nocConfig.selScheme = RoutingAlgo.SELSCHEME.valueOf(tempStr);
+		
+		tempStr = getImmediateString("NocRouterArbiter", NocType);
+		nocConfig.arbiterType = RoutingAlgo.ARBITER.valueOf(tempStr);
+				
+		nocConfig.technologyPoint = Integer.parseInt(getImmediateString("TechPoint", NocType));
+		
+		tempStr = getImmediateString("NocConnection", NocType);
+		nocConfig.ConnType = CONNECTIONTYPE.valueOf(tempStr);
+	}
+	private static void setMemControllerProperties(Element MemControllerElmnt, MainMemoryConfig mainMemConfig, Long core_freq){
+		
+		mainMemConfig.rowBufferPolicy = setRowBufferPolicy(getImmediateString("rowBufferPolicy", MemControllerElmnt));
+		mainMemConfig.schedulingPolicy = setSchedulingPolicy(getImmediateString("schedulingPolicy", MemControllerElmnt));
+		mainMemConfig.queuingStructure = setQueuingStructure(getImmediateString("queuingStructure", MemControllerElmnt));
+		mainMemConfig.numRankPorts=Integer.parseInt(getImmediateString("numRankPorts", MemControllerElmnt));
+		mainMemConfig.rankPortType = setPortType(getImmediateString("rankPortType", MemControllerElmnt));
+		mainMemConfig.rankOccupancy=Integer.parseInt(getImmediateString("rankOccupancy", MemControllerElmnt));
+		mainMemConfig.rankLatency=Integer.parseInt(getImmediateString("rankLatency", MemControllerElmnt));	//this is not used anywhere as we are modelling the RAM and bus
+		mainMemConfig.rankOperatingFrequency=Integer.parseInt(getImmediateString("rankOperatingFrequency", MemControllerElmnt));
+		
+		mainMemConfig.numChans=Integer.parseInt(getImmediateString("numChans", MemControllerElmnt));
+		
+		//those related to memory not added
+				//calculate later
+				
+		mainMemConfig.numRanks=Integer.parseInt(getImmediateString("numRanks", MemControllerElmnt));
+		mainMemConfig.numBanks=Integer.parseInt(getImmediateString("numBanks", MemControllerElmnt));
+		mainMemConfig.numRows=Integer.parseInt(getImmediateString("numRows", MemControllerElmnt));
+		mainMemConfig.numCols=Integer.parseInt(getImmediateString("numCols", MemControllerElmnt));
+		mainMemConfig.TRANSQUEUE_DEPTH=Integer.parseInt(getImmediateString("TRANSQUEUE_DEPTH", MemControllerElmnt));
+		mainMemConfig.TOTAL_ROW_ACCESSES=Integer.parseInt(getImmediateString("TOTAL_ROW_ACCESSES", MemControllerElmnt));
+
+		mainMemConfig.tCK=Double.parseDouble(getImmediateString("tCK", MemControllerElmnt));
+
+		int ram_freq = (int)((1/mainMemConfig.tCK)*1000);
+		double cpu_ram_ratio = core_freq/ram_freq;
+		mainMemConfig.cpu_ram_ratio = cpu_ram_ratio;
+
+		//timing params
+		mainMemConfig.tCCD = (int) Math.round(Integer.parseInt(getImmediateString("tCCD", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tBL = (int) Math.round(Integer.parseInt(getImmediateString("tBL", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tCL = (int) Math.round(Integer.parseInt(getImmediateString("tCL", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tAL = (int) Math.round(Integer.parseInt(getImmediateString("tAL", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRP = (int) Math.round(Integer.parseInt(getImmediateString("tRP", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tCMD = (int) Math.round(Integer.parseInt(getImmediateString("tCMD", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRC = (int) Math.round(Integer.parseInt(getImmediateString("tRC", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRCD = (int) Math.round(Integer.parseInt(getImmediateString("tRCD", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRAS = (int) Math.round(Integer.parseInt(getImmediateString("tRAS", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRFC = (int) Math.round(Integer.parseInt(getImmediateString("tRFC", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRTRS = (int) Math.round(Integer.parseInt(getImmediateString("tRTRS", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRRD = (int) Math.round(Integer.parseInt(getImmediateString("tRRD", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tRTP = (int) Math.round(Integer.parseInt(getImmediateString("tRTP", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tWTR = (int) Math.round(Integer.parseInt(getImmediateString("tWTR", MemControllerElmnt))*cpu_ram_ratio);
+		mainMemConfig.tWR = (int) Math.round(Integer.parseInt(getImmediateString("tWR", MemControllerElmnt))*cpu_ram_ratio);
+		
+		//for refresh
+		mainMemConfig.RefreshPeriod=Integer.parseInt(getImmediateString("RefreshPeriod", MemControllerElmnt));
+		mainMemConfig.DATA_BUS_BITS=Integer.parseInt(getImmediateString("DATA_BUS_BITS", MemControllerElmnt));
+		
+		//dont need to multiply for tFAW as it runs on RAM clock anyway
+		mainMemConfig.tFAW=Integer.parseInt(getImmediateString("tFAW", MemControllerElmnt));
+		mainMemConfig.BL=Integer.parseInt(getImmediateString("tBL", MemControllerElmnt));  //this is the number of bursts, not scaled to cpu clock
+		//used for adressing mapping etc
+		
+		mainMemConfig.tRL = (mainMemConfig.tCL+mainMemConfig.tAL);
+		mainMemConfig.tWL = (int) Math.round(mainMemConfig.tRL-1*cpu_ram_ratio);
+		mainMemConfig.ReadToPreDelay = (mainMemConfig.tAL+mainMemConfig.tBL/2+ Math.max(mainMemConfig.tRTP,mainMemConfig.tCCD)-mainMemConfig.tCCD);
+		mainMemConfig.WriteToPreDelay = (mainMemConfig.tWL+mainMemConfig.tBL/2+mainMemConfig.tWR);
+		mainMemConfig.ReadToWriteDelay = (mainMemConfig.tRL+mainMemConfig.tBL/2+mainMemConfig.tRTRS-mainMemConfig.tWL);
+		mainMemConfig.ReadAutopreDelay = (mainMemConfig.tAL+mainMemConfig.tRTP+mainMemConfig.tRP);
+		mainMemConfig.WriteAutopreDelay = (mainMemConfig.tWL+mainMemConfig.tBL/2+mainMemConfig.tWR+mainMemConfig.tRP);
+		mainMemConfig.WriteToReadDelayB = (mainMemConfig.tWL+mainMemConfig.tBL/2+mainMemConfig.tWTR);
+		mainMemConfig.WriteToReadDelayR = (mainMemConfig.tWL+mainMemConfig.tBL/2+mainMemConfig.tRTRS-mainMemConfig.tRL);
+		
+		
+		//bus params
+		mainMemConfig.TRANSACTION_SIZE = mainMemConfig.DATA_BUS_BITS/8 * mainMemConfig.BL;
+		mainMemConfig.DATA_BUS_BYTES = mainMemConfig.DATA_BUS_BITS/8;
+		SystemConfig.mainMemoryConfig=mainMemConfig;
+	
+	}
+
+	private static RowBufferPolicy setRowBufferPolicy(String inputStr)
+	{
+		RowBufferPolicy result = null;
+		if (inputStr.equalsIgnoreCase("OpenPage"))
+			result = RowBufferPolicy.OpenPage;
+		else if (inputStr.equalsIgnoreCase("ClosePage"))
+			result = RowBufferPolicy.ClosePage;
+		else
+		{
+			System.err.println("XML Configuration error : Invalid Row Buffer Policy specified");
+			System.exit(1);
+		}
+		return result;
+	}
+	//added by kush
+	
+	private static SchedulingPolicy setSchedulingPolicy(String inputStr)
+	{
+		SchedulingPolicy result = null;
+		if (inputStr.equalsIgnoreCase("RankThenBankRoundRobin"))
+			result = SchedulingPolicy.RankThenBankRoundRobin;
+		else if (inputStr.equalsIgnoreCase("BankThenRankRoundRobin"))
+			result = SchedulingPolicy.BankThenRankRoundRobin;
+		else
+		{
+			System.err.println("XML Configuration error : Invalid DRAM Scheduling Policy specified");
+			System.exit(1);
+		}
+		return result;
+	}
+	//added by kush
+	
+	private static QueuingStructure setQueuingStructure(String inputStr)
+	{
+		QueuingStructure result = null;
+		if (inputStr.equalsIgnoreCase("PerRank"))
+			result = QueuingStructure.PerRank;
+		else if (inputStr.equalsIgnoreCase("PerRankPerBank"))
+			result = QueuingStructure.PerRankPerBank;
+		else
+		{
+			System.err.println("XML Configuration error : Invalid DRAM Queuing Structure specified");
+			System.exit(1);
+		}
+		return result;
 	}
 	
 }
