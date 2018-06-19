@@ -45,8 +45,11 @@
 				<NoOfWarpSchedulers>2</NoOfWarpSchedulers>
 				<NoOfSP>8</NoOfSP> 				<!--Number of streaming processors in a SM-->
 				<WarpSize>32</WarpSize>			<!--Number of threads in a warp-->
-				
-				
+				<!--copied from tejas 
+				<TreeBarrier>false</TreeBarrier>			<!--Only for particular purposes. Otherwise keep it as false-->
+				<BarrierLatency>2</BarrierLatency>
+				<BarrierUnit>Distributed</BarrierUnit>			<!--Central and distributed-->
+				-->
 		<!--Streaming processor(SP) Parameters-->
 				<SP>
 					<NoOfThreadsSupported>32</NoOfThreadsSupported>
@@ -65,6 +68,7 @@
 		
 		
 		<MainMemory>
+			<MemControllerToUse>DRAM</MemControllerToUse> 
 			<MainMemoryLatency>200</MainMemoryLatency>		
 			<MainMemoryFrequency>3600</MainMemoryFrequency>		
 			<MainMemoryPortType>FCFS</MainMemoryPortType>		
@@ -178,7 +182,77 @@
 			<WriteDynamicPower>0.81449264705</WriteDynamicPower>
 		</L2>
 	</Library>
+	<!--
+	<Interconnect>BUS</Interconnect>
+		
+		<NOC>
+			<NocConfigFile>Add Path Here</NocConfigFile>
+			<NocSelScheme>STATIC</NocSelScheme>
+			<NocNumberOfBuffers>4</NocNumberOfBuffers>
+			<NocPortType>FCFS</NocPortType>
+			<NocAccessPorts>4</NocAccessPorts>
+			<NocPortOccupancy>1</NocPortOccupancy>
+			<NocLatency>1</NocLatency>
+			<NocOperatingFreq>2000</NocOperatingFreq>
+			<NocTopology>TORUS</NocTopology>     
+			<NocRoutingAlgorithm>SIMPLE</NocRoutingAlgorithm>
+			<NocLatencyBetweenNOCElements>4</NocLatencyBetweenNOCElements>
+			<NocRouterArbiter>RR_ARBITER</NocRouterArbiter>
+			<TechPoint>90</TechPoint>
+			<NocConnection>ELECTRICAL</NocConnection>
 			
+			
+			<LeakageEnergy>0.1877</LeakageEnergy>
+			<DynamicEnergy>2.1164</DynamicEnergy>
+		</NOC>
+		
+	<BUS>
+		<Latency>30</Latency>
+		<LeakageEnergy>0.1877</LeakageEnergy>
+		<DynamicEnergy>2.1164</DynamicEnergy>
+	</BUS>
+	<MainMemoryController>               <!-- These values are used when controller specified above is DRAM (not SIMPLE) -->
+			<rowBufferPolicy>OpenPage</rowBufferPolicy>		<!-- OpenPage or ClosePage -->
+			<schedulingPolicy>RankThenBankRoundRobin</schedulingPolicy>	<!-- RankThenBankRoundRobin or BankThenRankRoundRobin-->
+			<queuingStructure>PerRank</queuingStructure>	<!-- PerRank or PerRankPerBank -->
+			<numRankPorts>1</numRankPorts>
+			<rankPortType>FCFS</rankPortType>	<!--Type of access ports in the MainMemoryController (UL : Unlimited; FCFS : First Come First Serve; PR : Priority port)-->
+			<rankOccupancy>1</rankOccupancy>
+			<rankLatency>100</rankLatency>
+			<rankOperatingFrequency>3600</rankOperatingFrequency>
+			<numChans>2</numChans>      <!-- Number of physical channels = number of memory controllers -->
+			<numRanks>2</numRanks>      <!-- Number of Ranks per memory controller-->
+			<numBanks>8</numBanks>      <!-- Number of Banks per Rank -->
+			<numRows>16384</numRows>      <!-- Number of Rows per Bank -->
+			<numCols>2048</numCols>      <!-- Number of Columns per Bank -->
+			<TRANSQUEUE_DEPTH>32</TRANSQUEUE_DEPTH>      <!-- Depth of transaction queue. Note: currently this is not used -->
+			<TOTAL_ROW_ACCESSES>4</TOTAL_ROW_ACCESSES>      <!-- For Open Page policy: Number of continuous row accesses after which the row would be closed. This is to prevent starvation to other rows. -->
+
+			<!-- Timing parameters follow below -->
+			<!-- Currently set according to DDR3 Micron 32M 8B x4 speed grade: 125 -->
+			<!-- Timing parameters for other devices can be found in DRAMSim2 repository in GitHub. Check folder "ini" for device specific timing parameters. Or same can be obtained from Datasheets for Micron DDR parts -->
+
+			<tCCD>4</tCCD>      <!-- Column-to-Column Delay: internal burst (prefetch) length. DDR: 1, DDR2: 2, DDR2: 4-->
+			<tBL>8</tBL>      <!-- Data burst duration i.e. number of bytes returned for each request (burst). Specified in beats not cycles. DDR3: 8 beats -->
+			<tCL>11</tCL>      <!-- Column Access Strobe latency. Cycles between column access command and start of data return by the DRAM device -->
+			<tAL>0</tAL>      <!-- Latency added to column accesses. Used for posted CAS commands. -->
+			<tRP>11</tRP>      <!-- Row Precharge. Time that it takes for the array to precharge (in cycles) -->
+			<tCMD>1</tCMD>      <!-- Command transport duration. The num of cycles a command occupies on the command bus from controller to DRAM device (Ranks) -->
+			<tRC>39</tRC>      <!-- Row Cycle. Cycles between accesses to different rows in a bank. tRC = tRAS + tRP -->
+			<tRCD>11</tRCD>      <!-- Row to Column command delay. Cycles between row access and date readt at sense amplifiers -->
+			<tRAS>28</tRAS>      <!-- Row Access Strobe. Cycles between row access command and data restoration in the DRAM array. DRAM bank cannot be precharged until at least tRAS cycles after previous bank activation -->
+			<tRFC>88</tRFC>      <!-- Refresh Cycle time. Cycles it takes to refresh the array. -->
+			<tRTRS>1</tRTRS>      <!-- Rank to Rank switching time. Cycles required to switch from 1 rank to another rank -->
+			<tRRD>5</tRRD>      <!-- Row activation to Row activation delay. Minimum cycles between two row activation commands to the same DRAM device. Limits peak current profile. -->
+			<tFAW>24</tFAW>      <!-- Four (row) bank Activation Window. A rolling time-frame in which a maximum of four-bank activation can be engaged. Limits peak current profile. -->
+			<tRTP>6</tRTP>      <!-- Rank to Precharge. Cycles between a read and a precharge command. -->
+			<tWTR>6</tWTR>      <!-- Write to Read delay time.The minimum time interval -->
+			<tWR>12</tWR>      <!-- Write Recovery Time. The minimum cycles between end of a write data burst and the start of a precharge command. Allows sense amplifiers to restore data to cells. -->
+			<tCK>1.25</tCK>      <!-- Clock cycle period in ns -->
+			<RefreshPeriod>7800</RefreshPeriod>      <!-- Time (in ns) after which a Refresh is issued -->
+			<DATA_BUS_BITS>64</DATA_BUS_BITS>      <!-- Width of DATA bus in bits. 64 bits according to JEDEC standard -->
+	</MainMemoryController>
+	-->
 	<OperationLatency>
 			<load>100</load>
 			<store>1</store>

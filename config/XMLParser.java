@@ -116,7 +116,16 @@ public class XMLParser
 		
 		SystemConfig.cacheBusLatency = Integer.parseInt(getImmediateString("CacheBusLatency", systemElmnt));
 		SystemConfig.tpc = new TpcConfig[SystemConfig.NoOfTPC];		
-		
+//		SystemConfig.nocConfig = new NocConfig();
+//		NodeList NocLst = systemElmnt.getElementsByTagName("NOC");
+//		Element nocElmnt = (Element) NocLst.item(0);
+//		setNocProperties(nocElmnt, SystemConfig.nocConfig);
+//
+//		//set Bus Parameters
+//		NodeList busLst = systemElmnt.getElementsByTagName("BUS");
+//		Element busElmnt = (Element) busLst.item(0);
+//		SystemConfig.busConfig = new BusConfig();
+//		SystemConfig.busConfig.setLatency(Integer.parseInt(getImmediateString("Latency", busElmnt)));
 		//Set tpc parameters
 		for(int i =0; i<SystemConfig.NoOfTPC ; i++)
 		{
