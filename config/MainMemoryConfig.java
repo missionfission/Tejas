@@ -21,9 +21,9 @@ public class MainMemoryConfig {
 		BankThenRankRoundRobin
 	};
 	
-	public static RowBufferPolicy rowBufferPolicy; 	
-	public static SchedulingPolicy schedulingPolicy;	//TODO: hard-coded for now
-	public static QueuingStructure queuingStructure;
+	public RowBufferPolicy rowBufferPolicy; 	
+	public SchedulingPolicy schedulingPolicy;	//TODO: hard-coded for now
+	public QueuingStructure queuingStructure;
 	
 	//system config
 	//changed by harveenk for testing RAM clk
@@ -34,7 +34,7 @@ public class MainMemoryConfig {
 	public int rankLatency;
 	public int rankOperatingFrequency;								//TODO: currently synchronous with MC
 
-	public double cpu_ram_ratio;
+	public double sm_ram_ratio;
 	
 	//system config
 	public int numChans;

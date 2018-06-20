@@ -49,6 +49,7 @@ public class SM extends SimulationElement{
 	private long coreCyclesTaken;
 	private long noOfInstructionsExecuted;
 	
+	
 	private pipeline.GPUpipeline pipelineInterface;
 	
 	
@@ -192,5 +193,8 @@ public class SM extends SimulationElement{
 		// TODO Auto-generated method stub
 		//((MultiIssueInorderExecutionEngine)this.getExecEngine()).getFetchUnitIn().inputToPipeline.enqueue(Instruction.getSyncInstruction());
 	}
+
+
+
 
 }

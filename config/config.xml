@@ -68,7 +68,7 @@
 		
 		
 		<MainMemory>
-			<MemControllerToUse>DRAM</MemControllerToUse> 
+			<MemControllerToUse>True</MemControllerToUse> 
 			<MainMemoryLatency>200</MainMemoryLatency>		
 			<MainMemoryFrequency>3600</MainMemoryFrequency>		
 			<MainMemoryPortType>FCFS</MainMemoryPortType>		

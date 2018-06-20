@@ -63,6 +63,7 @@ public class XMLParser
 			setSimulationParameters();
 			setSystemParameters();
 			setLatencyParameters();
+			
 		} 
 		catch (Exception e) 
 		{
@@ -70,6 +71,7 @@ public class XMLParser
 		}
  	}
 			
+
 	private static void setLatencyParameters()
 	{
 		NodeList nodeLst = doc.getElementsByTagName("OperationLatency");
@@ -161,6 +163,18 @@ public class XMLParser
 				SystemConfig.declaredCaches.put(cacheName, newCacheConfigEntry);
 			}
 		}	
+		
+		if(SystemConfig.memControllerToUse==true){
+					
+					MainMemoryConfig mainMemoryConfig=new MainMemoryConfig();
+					NodeList MemControllerLst = systemElmnt.getElementsByTagName("MainMemoryController");
+					Element MemControllerElmnt = (Element) MemControllerLst.item(0);
+					setMemControllerProperties(MemControllerElmnt,mainMemoryConfig, SystemConfig.tpc[0].sm[0].frequency);
+				
+				}
+		
+		
+		
 	}
 
 	@SuppressWarnings("static-access")
@@ -386,7 +400,7 @@ public class XMLParser
 		tempStr = getImmediateString("NocConnection", NocType);
 		nocConfig.ConnType = CONNECTIONTYPE.valueOf(tempStr);
 	}
-	private static void setMemControllerProperties(Element MemControllerElmnt, MainMemoryConfig mainMemConfig, Long core_freq){
+	private static void setMemControllerProperties(Element MemControllerElmnt, MainMemoryConfig mainMemConfig, int core_freq){
 		
 		mainMemConfig.rowBufferPolicy = setRowBufferPolicy(getImmediateString("rowBufferPolicy", MemControllerElmnt));
 		mainMemConfig.schedulingPolicy = setSchedulingPolicy(getImmediateString("schedulingPolicy", MemControllerElmnt));
@@ -413,7 +427,7 @@ public class XMLParser
 
 		int ram_freq = (int)((1/mainMemConfig.tCK)*1000);
 		double cpu_ram_ratio = core_freq/ram_freq;
-		mainMemConfig.cpu_ram_ratio = cpu_ram_ratio;
+		mainMemConfig.sm_ram_ratio = cpu_ram_ratio;
 
 		//timing params
 		mainMemConfig.tCCD = (int) Math.round(Integer.parseInt(getImmediateString("tCCD", MemControllerElmnt))*cpu_ram_ratio);
