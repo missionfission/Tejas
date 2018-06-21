@@ -60,6 +60,11 @@ public class MainMemoryController extends SimulationElement
 								null,
 								event.getRequestingElement(),
 								RequestType.Mem_Response));
+			AddressCarryingEvent e = new AddressCarryingEvent(eventQ, 2,
+					null, event.getRequestingElement(),	RequestType.Mem_Response,
+					((AddressCarryingEvent)event).getAddress());
+			
+			
 		}
 		else if (event.getRequestType() == RequestType.Main_Mem_Write)
 		{

@@ -1,5 +1,7 @@
 package dram;
 
+import generic.LocalClockperSm;
+
 import java.util.ArrayList;
 
 //import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
@@ -754,22 +756,22 @@ public class CommandQueue {
  * SO currently i am commenting the whole
  */
 	//this function for TEST
-/*	public void printTest()
+	public void printTest()
 	{
 		if (mainMemoryConfig.queuingStructure== QueuingStructure.PerRank)
 		{
-			Main.outputLog.print("\n== Printing Per Rank Queue at Clock Cycle "+ GlobalClock.getCurrentTime() +"\n" );
+			System.out.println("\n== Printing Per Rank Queue at Clock Cycle "+  LocalClockperSm.getCurrentTime() +"\n" );
 			for (int i=0;i< mainMemoryConfig.numRanks;i++)
 			{
-				Main.outputLog.print(" = Rank " + i + "  size : " + queues.get(i).get(0).size() + "\n");
+				System.out.println(" = Rank " + i + "  size : " + queues.get(i).get(0).size() + "\n");
 				for (int j=0;j < queues.get(i).get(0).size();j++)
 				{
-					Main.outputLog.print("    "+ j + "]");
-					queues.get(i).get(0).get(j).printTest();
+					System.out.println("    "+ j + "]");
+					//queues.get(i).get(0).get(j).printTest();
 				}
 			}
 		}
 
 	}
-	*/
+	
 }

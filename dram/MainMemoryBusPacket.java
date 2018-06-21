@@ -94,13 +94,13 @@ public class MainMemoryBusPacket implements Cloneable{
 	
 	public void printPacket()
 	{
-		/*
-		System.out.println("Bus packet type: "+ busPacketType +" Row: "+ row +" Col: "						
-				+ column +" Bank: "+
-				bank +" Rank: "+
-				rank +" Phys Address: "+
-				physicalAddress + " Id : " + testid + " timeCreated: " + timeCreated );
-		*/
+	
+//		System.out.println("Bus packet type: "+ busPacketType +" Row: "+ row +" Col: "						
+//				+ column +" Bank: "+
+//				bank +" Rank: "+
+//				rank +" Phys Address: "+
+//				physicalAddress + " Id : " + testid + " timeCreated: " + timeCreated );
+	
 	}
 	
 	public void printPacketToFile()

@@ -122,12 +122,22 @@ public class XMLParser
 		SystemConfig.mainMemPortType = setPortType(getImmediateString("MainMemoryPortType", systemElmnt));
 		SystemConfig.mainMemoryAccessPorts = Integer.parseInt(getImmediateString("MainMemoryAccessPorts", systemElmnt));
 		SystemConfig.mainMemoryPortOccupancy = Integer.parseInt(getImmediateString("MainMemoryPortOccupancy", systemElmnt));
-		
+		SystemConfig.memControllerToUse=true;
 		SystemConfig.cacheBusLatency = Integer.parseInt(getImmediateString("CacheBusLatency", systemElmnt));
+		String interconnect = getImmediateString("Interconnect",systemElmnt); 
+		if(interconnect.equalsIgnoreCase("Bus"))
+		{
+			SystemConfig.interconnect = SystemConfig.Interconnect.Bus;
+		}
+		else if(interconnect.equalsIgnoreCase("Noc"))
+		{
+			SystemConfig.interconnect = SystemConfig.Interconnect.Noc;
+		}
 		SystemConfig.tpc = new TpcConfig[SystemConfig.NoOfTPC];		
 		SystemConfig.nocConfig = new NocConfig();
 		NodeList NocLst = systemElmnt.getElementsByTagName("NOC");
 		Element nocElmnt = (Element) NocLst.item(0);
+	
 		setNocProperties(nocElmnt, SystemConfig.nocConfig);
 
 		//set Bus Parameters

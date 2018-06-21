@@ -260,9 +260,8 @@ public class Main {
 
 	
 	public static void initializeArchitecturalComponents() {
-
-		ArchitecturalComponent.setCores(ArchitecturalComponent.initCores());
-		ArchitecturalComponent.initMemorySystem(ArchitecturalComponent.getCores());
+		ArchitecturalComponent.createChip();
+		
 
 	}
 

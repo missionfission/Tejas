@@ -102,7 +102,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 
 		long currentTime = LocalClockperSm.getCurrentTime();
 		
-		//System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
+		System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
 		//Main.debugPrinter.print("\nHi!! handling a dram event of type " + e.getRequestType()+ "\n");
 		
 		
@@ -285,6 +285,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			
 			int rank = b.rank;
 			int bank = b.bank;
+			System.out.println(b.busPacketType); 
 			
 			if (b.busPacketType == BusPacketType.WRITE || b.busPacketType == BusPacketType.WRITE_P)
 			{
@@ -521,7 +522,9 @@ public class MainMemoryDRAMController extends MainMemoryController{
 
 	public double getAverageLatency()
 	{
-		return totalTime/totalTransactions;
+		//return totalTime/totalTransactions;
+		return totalTime;
+
 	}
 
 	public long[][] getTotalReadTransactions()

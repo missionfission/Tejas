@@ -173,7 +173,9 @@ public class MemorySystem
 			}
 			
 			return smMemSysArray;
-		}
+	
+			
+	}
 		
 		
 		public static   CentralizedDirectoryCache getDirectoryCache()

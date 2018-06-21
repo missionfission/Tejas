@@ -66,6 +66,58 @@ public class Statistics {
 			outputFileWriter.write("EmulatorType: OCELOT\n");
 			
 			outputFileWriter.write("Schedule: " + (new Date()).toString() + "\n");
+			if (SystemConfig.interconnect == Interconnect.Noc)
+			{
+				outputFileWriter.write("\n\nNOC Topology\t\t=\t" + SystemConfig.nocConfig.topology + "\n");
+				outputFileWriter.write("NOC Routing Algorithm\t=\t" + SystemConfig.nocConfig.rAlgo + "\n");
+			}
+//					
+			if(SystemConfig.memControllerToUse==true){							
+			outputFileWriter.write("\n[RAM statistics]\n\n");
+			long totalReadAndWrite= 0L;
+			long totalReadRank= 0L;
+			long totalWriteRank= 0L;
+			long totalReadTransactions[][];
+			long totalWriteTransactions[][];
+			double avgLatency;
+			long maxCoreCycles = 0;
+			
+
+			for(int k=0; k < SystemConfig.mainMemoryConfig.numChans; k++)
+			{
+				outputFileWriter.write("For channel " + k + ":\n");
+				avgLatency = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getAverageLatency();
+				outputFileWriter.write("Average Read Latency: " + avgLatency + " cycles = " + (avgLatency/SmConfig.frequency* 1000) + " ns\n");
+				totalReadTransactions = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getTotalReadTransactions();
+				totalWriteTransactions = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getTotalWriteTransactions();
+				totalReadAndWrite=0L;			
+		
+				for(int i=0;i<SystemConfig.mainMemoryConfig.numRanks;i++){
+					
+					outputFileWriter.write("\t Rank "+(i+1)+"\n");
+					
+					for(int j=0;j<SystemConfig.mainMemoryConfig.numBanks;j++){
+						outputFileWriter.write("\t\t Bank "+(j+1)+" :: ");
+						outputFileWriter.write(" Reads : " +totalReadTransactions[i][j] + " | Writes: "+totalWriteTransactions[i][j] +"\n\n");
+						totalReadAndWrite += totalReadTransactions[i][j] + totalWriteTransactions[i][j];
+						totalReadRank += totalReadTransactions[i][j];
+						totalWriteRank += totalWriteTransactions[i][j];
+						}
+
+					outputFileWriter.write("\t Total Reads: " + totalReadRank);
+					outputFileWriter.write("\t Total Writes: " + totalWriteRank + "\n");
+					totalReadRank = 0L;
+					totalWriteRank = 0L;
+
+				}
+				outputFileWriter.write("\nTotal Reads and Writes: " + (totalReadAndWrite*64) + " Bytes\n");
+				outputFileWriter.write("Total Bandwidth: "+ (totalReadAndWrite*64)/(double)(maxCoreCycles/SystemConfig.mainMemoryConfig.sm_ram_ratio * SystemConfig.mainMemoryConfig.tCK)/(1024*1024*1024) * 1000000000 + " GB/s\n");
+				outputFileWriter.write("\n");
+			}
+			}
+			outputFileWriter.write("\n\n");
+			
+		
 		}
 		catch (IOException e)
 		{
@@ -206,56 +258,7 @@ public class Statistics {
 			outputFileWriter.write("Total Constant Cache Misses " +  tot_sharedcache_misses + "\n");
 			outputFileWriter.write("\n");
 			outputFileWriter.write("****************************************************************************\n");
-			if (SystemConfig.interconnect == Interconnect.Noc)
-			{
-				outputFileWriter.write("\n\nNOC Topology\t\t=\t" + SystemConfig.nocConfig.topology + "\n");
-				outputFileWriter.write("NOC Routing Algorithm\t=\t" + SystemConfig.nocConfig.rAlgo + "\n");
-			}
-//					
-			if(SystemConfig.memControllerToUse==true){							
-			outputFileWriter.write("\n[RAM statistics]\n\n");
-			long totalReadAndWrite= 0L;
-			long totalReadRank= 0L;
-			long totalWriteRank= 0L;
-			long totalReadTransactions[][];
-			long totalWriteTransactions[][];
-			double avgLatency;
-			long maxCoreCycles = 0;
-			
-
-			for(int k=0; k < SystemConfig.mainMemoryConfig.numChans; k++)
-			{
-				outputFileWriter.write("For channel " + k + ":\n");
-				avgLatency = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getAverageLatency();
-				outputFileWriter.write("Average Read Latency: " + avgLatency + " cycles = " + (avgLatency/SmConfig.frequency* 1000) + " ns\n");
-				totalReadTransactions = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getTotalReadTransactions();
-				totalWriteTransactions = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getTotalWriteTransactions();
-				totalReadAndWrite=0L;			
 		
-				for(int i=0;i<SystemConfig.mainMemoryConfig.numRanks;i++){
-					
-					outputFileWriter.write("\t Rank "+(i+1)+"\n");
-					
-					for(int j=0;j<SystemConfig.mainMemoryConfig.numBanks;j++){
-						outputFileWriter.write("\t\t Bank "+(j+1)+" :: ");
-						outputFileWriter.write(" Reads : " +totalReadTransactions[i][j] + " | Writes: "+totalWriteTransactions[i][j] +"\n\n");
-						totalReadAndWrite += totalReadTransactions[i][j] + totalWriteTransactions[i][j];
-						totalReadRank += totalReadTransactions[i][j];
-						totalWriteRank += totalWriteTransactions[i][j];
-						}
-
-					outputFileWriter.write("\t Total Reads: " + totalReadRank);
-					outputFileWriter.write("\t Total Writes: " + totalWriteRank + "\n");
-					totalReadRank = 0L;
-					totalWriteRank = 0L;
-
-				}
-				outputFileWriter.write("\nTotal Reads and Writes: " + (totalReadAndWrite*64) + " Bytes\n");
-				outputFileWriter.write("Total Bandwidth: "+ (totalReadAndWrite*64)/(double)(maxCoreCycles/SystemConfig.mainMemoryConfig.sm_ram_ratio * SystemConfig.mainMemoryConfig.tCK)/(1024*1024*1024) * 1000000000 + " GB/s\n");
-				outputFileWriter.write("\n");
-			}
-			}
-			outputFileWriter.write("\n\n");
 			
 		}
 		catch(IOException e)

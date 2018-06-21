@@ -95,8 +95,7 @@ public static void createChip() {
 			((NOC)interconnect).ConnectNOCElements();
 		}
 		
-		//MemorySystem.createLinkBetweenCaches();
-		//MemorySystem.setCoherenceOfCaches();
+		initMemorySystem(getCores());
 		initCoreBroadcastBus();
 		LocalClockperSm.systemTimingSetUp(getCores());
 	}
@@ -202,16 +201,7 @@ private static void createElementsOfBus() {
 @SuppressWarnings("unused")
 private static void createElementsOfNOC() {
 	
-	/*
-	 * Added By Gantavya:
-	 * This method creates the NOC out of the given file of NOC. 
-	 * In this method first of all I am initializing the cores, 
-	 * ASSUMPTION : I am assuming that in the noc file, the total number of TPC and the number of SM inside those will be consistent 
-	 * 				with those in the config file. Thus We have just added the communication inteface to those of the SM.
-	 * The TPC_number will help us to take a proper count of TPC and the number of SM inside them is taken care by the variable  SM_number_withinTPC
-	 * On appearance of each TPC, I will increase its count, and will set the SM number to -1;
-	 */
-	
+
 	
 	Collection<CacheConfig> c= SystemConfig.declaredCaches.values();
 	CacheConfig cc;
