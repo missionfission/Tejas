@@ -153,7 +153,7 @@ public class Main {
 		
 		}
 		
-		Statistics.initStatistics();
+		
 		
 		System.out.println("\n\nRunning the simulation !!!");
 		startTime = System.currentTimeMillis();
@@ -170,7 +170,7 @@ public class Main {
 		}
 		statFileWritten = true;
 		System.out.println("\n\nSimulation completed !!");
-		
+		Statistics.initStatistics();
 		System.exit(0);
 	}
 	

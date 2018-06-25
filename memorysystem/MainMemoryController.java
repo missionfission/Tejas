@@ -33,49 +33,20 @@ public class MainMemoryController extends SimulationElement
 	long numAccesses;
 		
 	public MainMemoryController() {
-		super(PortType.Unlimited,
-				-1, 
-				10,
-				250);
+		super(PortType.Unlimited,-1,10,250);
 	}
 	
 	public MainMemoryController(int[] memoryControllersLocations) 
 	{
-		super(PortType.Unlimited,
-				-1, 
-				10,
-				250);
+		super(PortType.Unlimited,-1,10,250);
 		this.numberOfMemoryControllers = memoryControllersLocations.length;
 		this.mainmemoryControllersLocations = memoryControllersLocations;
 	}
 	
 	public void handleEvent(EventQueue eventQ, Event event)
 	{
-		if (event.getRequestType() == RequestType.Main_Mem_Read)
-		{
-			event.getRequestingElement().getPort().put(
-						event.update(
-								eventQ,
-								2,//wire delay from main memory to cache
-								null,
-								event.getRequestingElement(),
-								RequestType.Mem_Response));
-			AddressCarryingEvent e = new AddressCarryingEvent(eventQ, 2,
-					null, event.getRequestingElement(),	RequestType.Mem_Response,
-					((AddressCarryingEvent)event).getAddress());
-			
-			
+
 		}
-		else if (event.getRequestType() == RequestType.Main_Mem_Write)
-		{
-			//Just to tell the requesting things that the write is completed
-		}
-		
-		incrementNumAccesses();
-	}
 	
-	void incrementNumAccesses()
-	{
-		numAccesses += 1;
-	}
+
 }

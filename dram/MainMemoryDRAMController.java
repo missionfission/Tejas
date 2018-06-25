@@ -94,7 +94,6 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	public void handleEvent(EventQueue eventQ, Event e)
 	{
 	
-		//added later by kush
 		if(SystemConfig.memControllerToUse==false){
 			super.handleEvent(eventQ,e);
 			return;
@@ -107,7 +106,15 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		
 		
 		//check if state update event
-		
+		if (e.getRequestType() == RequestType.Main_Mem_Read)
+		{
+			
+		}
+		else if (e.getRequestType() == RequestType.Main_Mem_Write)
+			{
+			
+			}
+
 		if(e.getRequestType() == RequestType.Mem_Cntrlr_State_Update) {
 			
 			StateUpdateEvent event = (StateUpdateEvent) e;
@@ -167,17 +174,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			//for TIMING
 			//create k6 style trace file
 			b.timeCreated = LocalClockperSm.getCurrentTime();
-			//if(event.getRequestType() == RequestType.Cache_Read)GlobalClock
-     		//		Main.traceFile.print( String.format("0x%08X", b.physicalAddress) + " P_MEM_RD " + b.timeCreated + "\n");
-			//else
-			//	Main.traceFile.print( String.format("0x%08X", b.physicalAddress) + " P_MEM_WR " + b.timeCreated + "\n");
-			
-			
-			
-			//System.out.println("Of bus packet type:");
-			//b.printPacket();
 		
-			//add it to the list of pending transactions, we will enqueue to command queue from this list
 			pendingTransQueue.add(b);	
 			
 		}
@@ -187,12 +184,12 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		else if (e.getRequestType() == RequestType.Rank_Response)
 		{
 			
-			//System.out.println("Received rank response! Sending event");	
+			System.out.println("Received rank response! Sending event");	
 			//System.out.println("Time : " + GlobalClock.getCurrentTime() );
 			
 
 			//For TIMING
-			//Main.timingLog.print(Long.toString(((RamBusAddressCarryingEvent) e).getBusPacket().timeCreated));
+			//Main.timingLog.print(Long.toString(((RamBusAddressCtotalReadTransactionsarryingEvent) e).getBusPacket().timeCreated));
 			//Main.timingLog.print(" " + GlobalClock.getCurrentTime() + "\n");
 			
 			MainMemoryBusPacket b = ((RamBusAddressCarryingEvent) e).getBusPacket();
@@ -299,6 +296,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				RamBusAddressCarryingEvent event = new RamBusAddressCarryingEvent( core0.getEventQueue() , (currentTime + mainMemoryConfig.tWL), this,
 						ranks[rank], RequestType.Main_Mem_Access, dataPacketToSend.physicalAddress, dataPacketToSend);
 				event.getEventQ().addEvent(event);
+				System.out.println("Write Transaction");
 				totalWriteTransactions[rank][bank]++;
 			}
 			
@@ -666,7 +664,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		Error.showErrorAndExit("Invalid Row Buffer Policy!");
 		}
 
-		
+		long numAccesses;
 		//if num ranks = 1, decoded rank will always be "0"
 
 
@@ -772,5 +770,5 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			Main.outputLog.print("\n");
 		}
 	}*/
-	
+		
 }

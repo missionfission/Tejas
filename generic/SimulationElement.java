@@ -61,13 +61,7 @@ public abstract class SimulationElement implements Cloneable
 			this.latency = latency;
 		}
 	
-	public SimulationElement(PortType portType,
-			int noOfPorts,
-			long occupancy,
-			EventQueue eq,
-			long latency,
-			long frequency	//in MHz
-	)
+	public SimulationElement(PortType portType,int noOfPorts,long occupancy,EventQueue eq,long latency,long frequency)
 	{
 		this.port = new Port(portType, noOfPorts, occupancy);
 		this.latency = latency;
