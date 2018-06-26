@@ -91,7 +91,7 @@ public class Statistics {
 				totalReadTransactions = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getTotalReadTransactions();
 				totalWriteTransactions = ArchitecturalComponent.getMainMemoryDRAMController(null,k).getTotalWriteTransactions();
 				totalReadAndWrite=0L;			
-		
+//		
 				for(int i=0;i<SystemConfig.mainMemoryConfig.numRanks;i++){
 					
 					outputFileWriter.write("\t Rank "+(i+1)+"\n");
@@ -130,7 +130,9 @@ public class Statistics {
 		try{
 			int lastIndex = javaTid % 16;
 			for(int i = 0; i < Main.runners[javaTid].TOTALBLOCKS ; i++)
-			{
+			{      // System.out.println(Main.runners[javaTid].ipcBase);
+                            //    System.out.println(Main.runners[javaTid].ipcBase.kernelExecuted);
+                             //   System.out.println(smCycles[Main.runners[javaTid].ipcBase.kernelExecuted][lastIndex]);
 				smCycles[Main.runners[javaTid].ipcBase.kernelExecuted][lastIndex] += Main.runners[javaTid].blockState[i].tot_cycles;
 				lastIndex = ( lastIndex + SimulationConfig.MaxNumJavaThreads ) % 16;
 			}

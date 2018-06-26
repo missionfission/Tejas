@@ -191,6 +191,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			MainMemoryBusPacket b = ((RamBusAddressCarryingEvent) e).getBusPacket();
 			totalTransactions++;
 			totalReadTransactions[b.rank][b.bank]++;
+                        System.out.println(totalReadTransactions[b.rank][b.bank]);
 			totalTime += ( LocalClockperSm.getCurrentTime() - b.timeCreated);
 
 			AddressCarryingEvent event = new AddressCarryingEvent(eventQ, 0,

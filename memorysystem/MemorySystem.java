@@ -43,6 +43,7 @@ public class MemorySystem
 	static SM[][] cores;
 	static Hashtable<String, Cache> cacheList;
 	public static MainMemoryDRAMController mainMemoryController;
+        
 	public static CentralizedDirectoryCache centralizedDirectory;
 	
 	public static Hashtable<String, Cache> getCacheList() {

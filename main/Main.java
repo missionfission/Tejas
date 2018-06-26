@@ -159,10 +159,11 @@ public class Main {
 		startTime = System.currentTimeMillis();
 	
 		startRunnerThreads();
-
+                Statistics.initStatistics();
 		waitForJavaThreads();
 		
 		endTime = System.currentTimeMillis();
+              
 		Statistics.printAllStatistics(traceFileFolder,startTime, endTime);
 		int TotalblocksExecuted=0, TotalblocksGiven=0;
 		for(int i=0;i<SimulationConfig.MaxNumJavaThreads;i++){
@@ -170,7 +171,7 @@ public class Main {
 		}
 		statFileWritten = true;
 		System.out.println("\n\nSimulation completed !!");
-		Statistics.initStatistics();
+		
 		System.exit(0);
 	}
 	

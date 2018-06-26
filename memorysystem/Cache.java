@@ -478,10 +478,8 @@ public class Cache extends SimulationElement
 		
 		private void sendReadRequestToMainMemory(AddressCarryingEvent receivedEvent)
 		{
-			receivedEvent.update(receivedEvent.getEventQ(),
-					MemorySystem.mainMemoryController.getLatency(),
-					this,
-					MemorySystem.mainMemoryController,
+			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),this,
+                                MemorySystem.mainMemoryController,
 					RequestType.Main_Mem_Read);
 
 			MemorySystem.mainMemoryController.getPort().put(receivedEvent);

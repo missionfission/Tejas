@@ -189,6 +189,7 @@ public class SimplerRunnableThread implements Runnable {
 				InstructionClass type;
 				// Process all the packets read from the communication channel
 				while(fromEmulator.isEmpty() == false) {
+					
 					pnew = fromEmulator.dequeue();
 					
 					type=pnew.insClass;
@@ -210,7 +211,9 @@ public class SimplerRunnableThread implements Runnable {
 					}
 					
 					boolean ret = processPacket(threadParam, pnew, currBlock, assignedSP);
+					
 					if(ret==false) {
+						System.out.println(ret);
 						// There is not enough space in pipeline buffer. 
 						// So don't process any more packets.
 						break;
@@ -219,6 +222,7 @@ public class SimplerRunnableThread implements Runnable {
 				runPipelines(assignedSP);
 				if(blockEndSeen)
 				{
+					
 					currBlock=(currBlock+1);
 					if(currBlock==TOTALBLOCKS){allover=true;currBlock--;}
 					blockEndSeen=false;
