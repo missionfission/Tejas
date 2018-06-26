@@ -24,6 +24,10 @@ package memorysystem;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import net.BusInterface;
+import net.ID;
+import net.NocInterface;
+
 import pipeline.GPUMemorySystem;
 import main.ArchitecturalComponent;
 import memorysystem.Cache.CacheType;
@@ -32,13 +36,14 @@ import generic.*;
 import config.CacheConfig;
 import config.SystemConfig;
 import config.TpcConfig;
-
+import dram.*;
 
 public class MemorySystem
 {
 	static SM[][] cores;
 	static Hashtable<String, Cache> cacheList;
 	public static MainMemoryController mainMemoryController;
+	public static MainMemoryDRAMController maindramController;
 	public static CentralizedDirectoryCache centralizedDirectory;
 	
 	public static Hashtable<String, Cache> getCacheList() {
@@ -87,8 +92,9 @@ public class MemorySystem
 			}
 		}
 		
-		mainMemoryController = new MainMemoryController();
-		//Initialize the core memory systems
+//		mainMemoryController = new MainMemoryController();
+//		maindramController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
+		mainMemoryController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
 		for (int i = 0; i < SystemConfig.NoOfTPC ; i++)
 		{
 			for(int j =0 ; j<  TpcConfig.NoOfSM; j++)
@@ -202,4 +208,33 @@ public class MemorySystem
 						+ cache.misses);
 			}
 		}
+		public MainMemoryDRAMController getMemoryControllerId(CommunicationInterface comInterface) {
+			
+			MainMemoryDRAMController memControllerRet = null;
+			
+			if(comInterface.getClass()==NocInterface.class) {
+				ID currBankId = ((NocInterface)comInterface).getId();
+		    	double distance = Double.MAX_VALUE;
+		    	ID memControllerId = ((NocInterface) (ArchitecturalComponent.memoryControllers.get(0).getComInterface())).getId();
+		    	int x1 = currBankId.getx();//bankid/cacheColumns;
+		    	int y1 = currBankId.gety();//bankid%cacheColumns;
+		   
+		    	for(MainMemoryDRAMController memController:ArchitecturalComponent.memoryControllers) {
+		    		int x2 = ((NocInterface)memController.getComInterface()).getId().getx();
+		    		int y2 = ((NocInterface)memController.getComInterface()).getId().gety();
+		    		double localdistance = Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
+		    		if(localdistance < distance) {
+		    			distance = localdistance;
+		    			memControllerRet = memController;
+		    			memControllerId = ((NocInterface)memController.getComInterface()).getId();
+		    		}
+		    	}
+			} else if(comInterface.getClass()==BusInterface.class) {
+				memControllerRet = ArchitecturalComponent.memoryControllers.get(0);
+			}
+	    	
+	    	return memControllerRet;
+	    }
+
+		
 	}

@@ -33,7 +33,7 @@ import memorysystem.Cache;
 import memorysystem.MESI;
 import memorysystem.MemorySystem;
 import memorysystem.SMMemorySystem;
-
+import dram.MainMemoryDRAMController;
 public class CentralizedDirectoryCache extends Cache 
 {
 

@@ -20,6 +20,7 @@ package memorysystem;
 
 	Contributors:  Seep Goel, Geetika Malhotra, Harinder Pal
 *****************************************************************************/ 
+import dram.MainMemoryDRAMController;
 import generic.EventQueue;
 import generic.PortType;
 import generic.SimulationElement;
@@ -30,10 +31,12 @@ public class MainMemoryController extends SimulationElement
 {
 	public int numberOfMemoryControllers;
 	public int[] mainmemoryControllersLocations;
+	//public static MainMemoryDRAMController dummy;
 	long numAccesses;
 		
 	public MainMemoryController() {
 		super(PortType.Unlimited,-1,10,250);
+		
 	}
 	
 	public MainMemoryController(int[] memoryControllersLocations) 
@@ -44,8 +47,8 @@ public class MainMemoryController extends SimulationElement
 	}
 	
 	public void handleEvent(EventQueue eventQ, Event event)
-	{
-
+	{ 
+		//dummy.handleEvent(eventQ, event);
 		}
 	
 

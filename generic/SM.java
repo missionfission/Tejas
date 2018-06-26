@@ -23,6 +23,8 @@ package generic;
 
 import java.util.Vector;
 
+import dram.MainMemoryDRAMController;
+
 import memorysystem.AddressCarryingEvent;
 import memorysystem.MemorySystem;
 import pipeline.GPUExecutionEngine;
@@ -43,7 +45,6 @@ public class SM extends SimulationElement{
 	GPUExecutionEngine execEngine;
 	public EventQueue eventQueue;
 	public int currentBlocks;
-	
 	private int tpc_number;
 	private int sm_number;
 	private long coreCyclesTaken;
@@ -142,14 +143,19 @@ public class SM extends SimulationElement{
 	@Override
 	public void handleEvent(EventQueue eventQ, Event event) 
 	{
+		
+		System.out.println("Handled by SM");
+		
 		if (event.getRequestType() == RequestType.Main_Mem_Read ||
 				  event.getRequestType() == RequestType.Main_Mem_Write )
 		{
-			this.handleMemoryReadWrite(eventQ,event);
+			
+		//	this.handleMemoryReadWrite(eventQ,event);
+			
 		}
 		else if (event.getRequestType() == RequestType.Main_Mem_Response )
 		{
-			handleMainMemoryResponse(eventQ, event);
+//			handleMainMemoryResponse(eventQ, event);
 		}
 		else 
 		{
@@ -157,33 +163,31 @@ public class SM extends SimulationElement{
 			misc.Error.showErrorAndExit(" unexpected request came to cache bank");
 		}
 	}	
-	protected void handleMemoryReadWrite(EventQueue eventQ, Event event) 
-    {
-    	
-		//System.out.println(((AddressCarryingEvent)event).getDestinationBankId() + ""+ ((AddressCarryingEvent)event).getSourceBankId());
-		AddressCarryingEvent addrEvent = (AddressCarryingEvent) event;
-		
-
-		
-		Vector<Integer> sourceId = addrEvent.getSourceId();
-		Vector<Integer> destinationId = ((AddressCarryingEvent)event).getDestinationId();
-		
-		RequestType requestType = event.getRequestType();
-		MemorySystem.mainMemoryController.getPort().put(((AddressCarryingEvent)event).updateEvent(eventQ, 
-												MemorySystem.mainMemoryController.getLatencyDelay(), this, 
-												MemorySystem.mainMemoryController, requestType, sourceId,
-												destinationId));
-
-	}
-	@SuppressWarnings("unused")
-	protected void handleMainMemoryResponse(EventQueue eventQ, Event event) 
-	{
-		AddressCarryingEvent addrEvent = (AddressCarryingEvent) event;
-
-		
-
-	}
 	
+	
+// FOR Main Mem Read and Write Requests Transferred to MainMemoryDRAMController
+	
+	
+//	protected void handleMemoryReadWrite(EventQueue eventQ, Event event) 
+//    {
+//		System.out.println("Handled by SM - In Function handleMemoryReadWrite");
+//		//System.out.println(((AddressCarryingEvent)event).getDestinationBankId() + ""+ ((AddressCarryingEvent)event).getSourceBankId());
+//		AddressCarryingEvent addrEvent = (AddressCarryingEvent) event;
+//		Vector<Integer> sourceId = addrEvent.getSourceId();
+//		Vector<Integer> destinationId = ((AddressCarryingEvent)event).getDestinationId();
+//		RequestType requestType = event.getRequestType();
+//		MemorySystem.mainMemoryController.getPort().put(((AddressCarryingEvent)event).updateEvent(eventQ,MemorySystem.mainMemoryController.getLatencyDelay(), this, MemorySystem.mainMemoryController, requestType, sourceId, destinationId));
+//
+//	}
+//	@SuppressWarnings("unused")
+//	protected void handleMainMemoryResponse(EventQueue eventQ, Event event) 
+//	{
+//		AddressCarryingEvent addrEvent = (AddressCarryingEvent) event;
+//
+//		
+//
+//	}
+//	
 	public void activatePipeline(){
 		this.pipelineInterface.resumePipeline();
 	}

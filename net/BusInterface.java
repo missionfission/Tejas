@@ -17,6 +17,7 @@ public class BusInterface implements CommunicationInterface{
 	 * Messages are coming from simulation elements(cores, cache banks) in order to pass it to another
 	 * through electrical snooping Bus.
 	 */
+	//@Override
 	public void sendMessage(Event event) {
 		bus.sendBusMessage(event);		
 	}

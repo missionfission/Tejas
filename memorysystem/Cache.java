@@ -27,6 +27,7 @@ import main.ArchitecturalComponent;
 import memorysystem.directory.CentralizedDirectoryCache;
 import misc.Util;
 import config.CacheConfig;
+import config.SystemConfig;
 import config.CacheConfig.WritePolicy;
 import config.SimulationConfig;
 import generic.*;
@@ -249,8 +250,7 @@ public class Cache extends SimulationElement
 			{
 			}
 			
-			if (event.getRequestType() == RequestType.Cache_Read
-					|| event.getRequestType() == RequestType.Cache_Write)
+			if (event.getRequestType() == RequestType.Cache_Read || event.getRequestType() == RequestType.Cache_Write)
 			{
 				this.handleAccess(eventQ, (AddressCarryingEvent) event);
 				
@@ -455,14 +455,23 @@ public class Cache extends SimulationElement
 				missStatusHoldingRegister.handleLowerMshrFull(receivedEvent);
 			}
 		}
-		
+//		if(SystemConfig.memControllerToUse==true){
+//			int chan=findChannelNumber(addr);
+//			memController = getComInterface()
+//					.getNearestMemoryController(chan);
+//		}
+//		else{
+//			memController = getComInterface()
+//					.getNearestMemoryController(0);	
+//		}
+//
+//		event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,
+//				memController, requestType, addr);
+//		sendEvent(event);
+//	}		
 		private void sendWriteRequestToMainMemory(AddressCarryingEvent receivedEvent)
 		{
-			receivedEvent.update(receivedEvent.getEventQ(),
-					MemorySystem.mainMemoryController.getLatency(),
-					this,
-					MemorySystem.mainMemoryController,
-					RequestType.Main_Mem_Write);
+			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),	this,MemorySystem.mainMemoryController,	RequestType.Main_Mem_Write);
 
 			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
 		}

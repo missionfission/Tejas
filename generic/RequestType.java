@@ -91,4 +91,8 @@ public enum RequestType {
 
 	MSHR_Full,
 	Tlb_Miss_Response, CacheLine_Invalidate, Send_Migrate_Block
+	
+	
+	
+	
 }

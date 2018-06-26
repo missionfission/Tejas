@@ -1,5 +1,5 @@
 /*****************************************************************************
-				Tejas Simulator
+				GPUTejas Simulator
 ------------------------------------------------------------------------------------------------------------
 
    Copyright [2010] [Indian Institute of Technology, Delhi]
@@ -14,12 +14,11 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-------------------------------------------------------------------------------------------------------------
-
-	Contributors:  Eldhose Peter
-*****************************************************************************/
-
+------------------------------------------------------------------------------------------------------------*/
 package generic;
+import dram.MainMemoryDRAMController;
+
+
 
 //import dram.MainMemoryDRAMController;
 
@@ -29,5 +28,5 @@ public interface CommunicationInterface {
 	 * This is used by NOC or Bus based interconnection. 
 	 */
 	public void sendMessage(Event event);
-	//public MainMemoryDRAMController getNearestMemoryController(int chanNum);
+	public MainMemoryDRAMController getNearestMemoryController(int chanNum);
 }

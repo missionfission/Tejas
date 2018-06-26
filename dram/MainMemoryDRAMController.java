@@ -94,26 +94,18 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	public void handleEvent(EventQueue eventQ, Event e)
 	{
 	
-		if(SystemConfig.memControllerToUse==false){
-			super.handleEvent(eventQ,e);
-			return;
-		}
+//		if(SystemConfig.memControllerToUse==false){
+//			super.handleEvent(eventQ,e);
+//			return;
+//		}
 
 		long currentTime = LocalClockperSm.getCurrentTime();
 		
 		System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
-		//Main.debugPrinter.print("\nHi!! handling a dram event of type " + e.getRequestType()+ "\n");
+//		Main.debugPrinter.print("\nHi!! handling a dram event of type " + e.getRequestType()+ "\n");
 		
 		
-		//check if state update event
-		if (e.getRequestType() == RequestType.Main_Mem_Read)
-		{
-			
-		}
-		else if (e.getRequestType() == RequestType.Main_Mem_Write)
-			{
-			
-			}
+	//	check if state update event
 
 		if(e.getRequestType() == RequestType.Mem_Cntrlr_State_Update) {
 			
