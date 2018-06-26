@@ -104,7 +104,11 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
 //		Main.debugPrinter.print("\nHi!! handling a dram event of type " + e.getRequestType()+ "\n");
 		
-		
+		if(e.getRequestType() == RequestType.Main_Mem_Read)
+		{
+			e.getRequestingElement().getPort().put(
+					e.update(eventQ,2,null,e.getRequestingElement(),RequestType.Mem_Response));
+		}
 	//	check if state update event
 
 		if(e.getRequestType() == RequestType.Mem_Cntrlr_State_Update) {
@@ -222,9 +226,9 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				MainMemoryBusPacket RWcommand = b.Clone();
 				//RWcommand.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));
 				
-				//System.out.println("Enqueuing commands for address " + event.getAddress());
-				//System.out.println("ACTcommand busPacketType "+ACTcommand.busPacketType);
-				//System.out.println("RWcommand busPacketType "+RWcommand.busPacketType);
+//				System.out.println("Enqueuing commands for address " + event.getAddress());
+				System.out.println("ACTcommand busPacketType "+ACTcommand.busPacketType);
+				System.out.println("RWcommand busPacketType "+RWcommand.busPacketType);
 				
 				commandQueue.enqueue(ACTcommand);
 				commandQueue.enqueue(RWcommand);

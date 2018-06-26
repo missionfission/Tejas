@@ -31,7 +31,6 @@ public class MainMemoryController extends SimulationElement
 {
 	public int numberOfMemoryControllers;
 	public int[] mainmemoryControllersLocations;
-	//public static MainMemoryDRAMController dummy;
 	long numAccesses;
 		
 	public MainMemoryController() {
@@ -48,7 +47,7 @@ public class MainMemoryController extends SimulationElement
 	
 	public void handleEvent(EventQueue eventQ, Event event)
 	{ 
-		//dummy.handleEvent(eventQ, event);
+//		
 		}
 	
 

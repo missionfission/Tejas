@@ -42,8 +42,7 @@ public class MemorySystem
 {
 	static SM[][] cores;
 	static Hashtable<String, Cache> cacheList;
-	public static MainMemoryController mainMemoryController;
-	public static MainMemoryDRAMController maindramController;
+	public static MainMemoryDRAMController mainMemoryController;
 	public static CentralizedDirectoryCache centralizedDirectory;
 	
 	public static Hashtable<String, Cache> getCacheList() {
@@ -92,8 +91,6 @@ public class MemorySystem
 			}
 		}
 		
-//		mainMemoryController = new MainMemoryController();
-//		maindramController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
 		mainMemoryController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
 		for (int i = 0; i < SystemConfig.NoOfTPC ; i++)
 		{
