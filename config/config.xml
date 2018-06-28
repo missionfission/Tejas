@@ -231,7 +231,7 @@
 		</dCache>
 		<L2>
 			<WriteMode>WT</WriteMode>			
-			<LastLevel>Y</LastLevel>			
+			<LastLevel>N</LastLevel>			
 			<BlockSize>64</BlockSize>			
 			<Associativity>16</Associativity>
 			<Size>8192</Size>				
@@ -250,10 +250,7 @@
 			<WriteDynamicPower>0.81449264705</WriteDynamicPower>
 		</L2>
 	</Library>
-	
-
-	
-	
+		
 	<OperationLatency>
 			<load>100</load>
 			<store>1</store>

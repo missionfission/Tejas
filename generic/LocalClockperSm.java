@@ -130,13 +130,13 @@ public class LocalClockperSm {
 		return currentTime;
 	}
 
-	public void setCurrentTime(long currentTime) {
-		this.currentTime = currentTime;
+	public static void setCurrentTime(long currentTime) {
+		currentTime = currentTime;
 	}
 	
-	public void incrementClock()
+	public static void incrementClock()
 	{
-		this.currentTime += this.stepSize;
+		currentTime += stepSize;
 	}
 
 	public int getStepSize() {

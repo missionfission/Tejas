@@ -91,7 +91,7 @@ public static void createChip() {
 			createElementsOfBus();
 		} else if(SystemConfig.interconnect == SystemConfig.Interconnect.Noc) {
 			ArchitecturalComponent.setInterConnect(new NOC(SystemConfig.nocConfig));
-			//createElementsOfNOC();			
+			createElementsOfNOC();			
 			((NOC)interconnect).ConnectNOCElements();
 		}
 		

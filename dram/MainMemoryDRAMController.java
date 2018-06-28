@@ -101,7 +101,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 
 		long currentTime = LocalClockperSm.getCurrentTime();
 		
-		System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
+		//System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
 //		Main.debugPrinter.print("\nHi!! handling a dram event of type " + e.getRequestType()+ "\n");
 		
 		if(e.getRequestType() == RequestType.Main_Mem_Read)
@@ -180,7 +180,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		else if (e.getRequestType() == RequestType.Rank_Response)
 		{
 			
-			System.out.println("Received rank response! Sending event");	
+//			System.out.println("Received rank response! Sending event");	
 			//System.out.println("Time : " + GlobalClock.getCurrentTime() );
 			
 
@@ -191,7 +191,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			MainMemoryBusPacket b = ((RamBusAddressCarryingEvent) e).getBusPacket();
 			totalTransactions++;
 			totalReadTransactions[b.rank][b.bank]++;
-                        System.out.println(totalReadTransactions[b.rank][b.bank]);
+//            System.out.println(totalReadTransactions[b.rank][b.bank]);
 			totalTime += ( LocalClockperSm.getCurrentTime() - b.timeCreated);
 
 			AddressCarryingEvent event = new AddressCarryingEvent(eventQ, 0,
@@ -256,7 +256,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	public void oneCycleOperation(){
 		long currentTime = LocalClockperSm.getCurrentTime();
 		SM core0 = ArchitecturalComponent.getCores()[0][0];				//using core 0 queue similar to as in cache
-		
+		//System.out.println("In one cycle operation DRAM");
 		if (refreshCount[refreshRank]==0)
 		{
 			commandQueue.needRefresh(refreshRank);
@@ -273,13 +273,13 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		b = commandQueue.pop(currentTime);
 		//if(commandQueue.canPop()) 
 		
-		
+		//System.out.println(b);
 		if(b!=null)
 		{
-			
+			//System.out.println("LOL ");
 			int rank = b.rank;
 			int bank = b.bank;
-			System.out.println(b.busPacketType); 
+//			System.out.println(b.busPacketType); System.out.println("HOORAY");
 			
 			if (b.busPacketType == BusPacketType.WRITE || b.busPacketType == BusPacketType.WRITE_P)
 			{
@@ -362,7 +362,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			case WRITE_P:
 			case WRITE:
 				if (b.busPacketType == BusPacketType.WRITE_P) 
-				{
+				{	System.out.println("in write");
 					bankStates[rank][bank].nextActivate = Math.max(currentTime + mainMemoryConfig.WriteAutopreDelay,
 																	bankStates[rank][bank].nextActivate);
 					bankStates[rank][bank].lastCommand = BusPacketType.WRITE_P;
@@ -455,9 +455,9 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			}
 				break;
 			case REFRESH:
-			{
+			{System.out.println(rank);
 				for (int i=0; i< mainMemoryConfig.numBanks ;i++)
-				{
+				{	
 					bankStates[rank][i].nextActivate = currentTime + mainMemoryConfig.tRFC;
 					bankStates[rank][i].currentBankState = CurrentBankState.REFRESHING;
 					bankStates[rank][i].lastCommand = BusPacketType.REFRESH;

@@ -23,21 +23,5 @@ public class Bus extends InterConnect {
 		 event.getProcessingElement().getPort().put(event);
 	 }
 
-	/*@Override
-	public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter,
-			String name) {
-		EnergyConfig energyConfig = new EnergyConfig(0, 0);
-		//TODO : Add bus energy
-		energyConfig.add(calculateEnergy());
-		return energyConfig;
-	}
-	public EnergyConfig calculateEnergy() {
-		if(hopCounter == 0)
-		{
-			return new EnergyConfig(0, 0);
-		}
-		EnergyConfig power = new EnergyConfig(SystemConfig.busEnergy, hopCounter);
-		return power;
-	}
-	*/
+
 }

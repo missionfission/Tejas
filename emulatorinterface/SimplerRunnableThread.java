@@ -24,16 +24,21 @@ package emulatorinterface;
 
 
 import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Array;
 import java.util.Hashtable;
 
 import config.SimulationConfig;
+import config.SmConfig;
+import config.SystemConfig;
 
 import main.ArchitecturalComponent;
 import main.Main;
+import memorysystem.Cache;
 import pipeline.GPUpipeline;
+import emulatorinterface.communication.IpcBase;
 import emulatorinterface.communication.Packet;
 import emulatorinterface.communication.filePacket.SimplerFilePacket;
 import emulatorinterface.translator.x86.instruction.InstructionClass;
@@ -62,7 +67,11 @@ public class SimplerRunnableThread implements Runnable {
 	public int TOTALBLOCKS, blocksExecuted=0;
 	FileInputStream fos = null;
 	ObjectInputStream is = null;
-	
+	long counter1=0;
+	long counter2=0;
+	//changed by kush, only declare here, initialize later
+	long RAMclock;
+	long CoreClock;
 	public Hashtable<Long, InstructionClass> kernelInstructionsTable;
 	public void initialize() throws IOException
 	{
@@ -288,35 +297,91 @@ public class SimplerRunnableThread implements Runnable {
 		if(this.ipcBase != null) {
 			t=(new Thread(this, threadName));
 		}
+		
+		CoreClock = SmConfig.frequency * 1000000;
+
+		//added later by kush
+		if(SystemConfig.memControllerToUse==true)
+			RAMclock = (long) (1 / (SystemConfig.mainMemoryConfig.tCK) * 1000000000);
 
 	}
 
 	protected void runPipelines(int assignedSP) {
 		int minN = Integer.MAX_VALUE;
-		 if(maxCoreAssign>0) {
+
+		boolean RAMcyclerun = false;
+
+		if(maxCoreAssign>0) {
 			
 			int n = inputToPipeline.size(); 
-					
+						
 			if (n < minN && n != 0)
 				minN = n;
-		}
+			}
 		minN = (minN == Integer.MAX_VALUE) ? 0 : minN;
 
+		
 		for (int i1 = 0; i1 < minN; i1++) {
-					pipelineInterfaces.oneCycleOperation(assignedSP);
-					AddToSetAndIncrementClock();
+
+			/* Note: DRAM simulation
+			Order of execution must be maintained for cycle accurate simulation.
+			Order is:
+			MainMemoryController.oneCycleOperation()
+			processEvents()   [called from within oneCycleOperation of pipelines]
+			MainMemoryController.enqueueToCommandQ();
+			*/
+
+			counter1 += RAMclock;
+
 			
-		}
-		
-		}
+			if (counter2 < counter1)
+				{
 
-
-		
-
+				counter2 += CoreClock;
+				for(int k=0;k<SystemConfig.mainMemoryConfig.numChans;k++){
+					ArchitecturalComponent.getMainMemoryDRAMController(null,k).oneCycleOperation();
+				}
+				//important - one cycle operation for dram must occur before events are processed
 	
-	private void AddToSetAndIncrementClock() {
+				RAMcyclerun = true;	
+				
+				}
 
-		assignedSM.clock.incrementClock();
+			pipelineInterfaces.oneCycleOperation(assignedSP);
+			
+			
+			if(counter1 == counter2)
+				{
+					counter1 = 0;
+					counter2 = 0;
+				}
+			
+			
+			if(RAMcyclerun == true)
+			{
+
+				//add the packets pending at this cycle to the queue
+
+				for(int k=0;k<SystemConfig.mainMemoryConfig.numChans;k++){
+					ArchitecturalComponent.getMainMemoryDRAMController(null,k).enqueueToCommandQ();
+		
+					
+				}	
+				RAMcyclerun = false;	
+		}
+
+			AddToSetAndIncrementClock(); 
+		}
+		
+	
+	}
+	
+	
+
+
+private void AddToSetAndIncrementClock() {
+
+		LocalClockperSm.incrementClock();
 		blockState[currBlock].tot_cycles++;
 		
 		epochCount++;

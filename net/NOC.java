@@ -1,5 +1,5 @@
 /*****************************************************************************
-				Tejas Simulator
+				
 ------------------------------------------------------------------------------------------------------------
 
    Copyright [2010] [Indian Institute of Technology, Delhi]
@@ -550,16 +550,5 @@ public class NOC extends InterConnect {
 		return memControllerRet;
 	}
 
-	/*public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter,
-			String name) {
-		EnergyConfig energyConfig = new EnergyConfig(0, 0);
-		
-		for(int i = 0; i < this.numRows; i++) {
-			for(int j = 0; j < this.numColumns; j++) {
-				energyConfig.add(networkElements[i][j].getRouter().calculateEnergy());
-			}
-		}
-		
-		return energyConfig;
-	}*/
+
 }

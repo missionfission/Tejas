@@ -239,27 +239,7 @@ public class Router extends Switch{
 			}
 		}
 	}
-/*
-	public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter, String componentName) throws IOException
-	{
-		if(hopCounters == 0)
-		{
-			return new EnergyConfig(0, 0);
-		}
-		EnergyConfig power = new EnergyConfig(SystemConfig.nocConfig.power, hopCounters);
-		power.printEnergyStats(outputFileWriter, componentName);
-		return power;
-	}
-	
-	public EnergyConfig calculateEnergy() {
-		if(hopCounters == 0)
-		{
-			return new EnergyConfig(0, 0);
-		}
-		EnergyConfig power = new EnergyConfig(SystemConfig.nocConfig.power, hopCounters);
-		return power;
-	}
-	*/
+
 	public void setID(ID id) 
 	{
 		this.id = id.clone();
