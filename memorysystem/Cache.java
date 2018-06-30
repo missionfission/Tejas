@@ -23,6 +23,8 @@ package memorysystem;
 
 import java.util.*;
 
+import net.NocInterface;
+
 import main.ArchitecturalComponent;
 import memorysystem.directory.CentralizedDirectoryCache;
 import misc.Util;
@@ -30,6 +32,7 @@ import config.CacheConfig;
 import config.SystemConfig;
 import config.CacheConfig.WritePolicy;
 import config.SimulationConfig;
+import dram.MainMemoryDRAMController;
 import generic.*;
 
 public class Cache extends SimulationElement
@@ -79,6 +82,7 @@ public class Cache extends SimulationElement
 		
 		public MissStatusHoldingRegister missStatusHoldingRegister;
 		
+
 		public long noOfRequests;
 		public long noOfAccesses;
 		public long noOfResponsesReceived;
@@ -261,8 +265,7 @@ public class Cache extends SimulationElement
 				this.addToWorkingSet(address);
 			}
 			
-			else if (event.getRequestType() == RequestType.Cache_Read_Writeback
-					|| event.getRequestType() == RequestType.Send_Mem_Response 
+			else if (event.getRequestType() == RequestType.Cache_Read_Writeback|| event.getRequestType() == RequestType.Send_Mem_Response 
 					|| event.getRequestType() == RequestType.Send_Mem_Response_Invalidate) 
 			{
 				this.handleAccessWithDirectoryUpdates(eventQ, (AddressCarryingEvent) event);
@@ -309,22 +312,53 @@ public class Cache extends SimulationElement
 			}
 			else
 			{	
-				if(this.coherence == CoherenceType.Directory 
-						&& event.getRequestType() == RequestType.Cache_Write)
+				if(this.coherence == CoherenceType.Directory && event.getRequestType() == RequestType.Cache_Write)
 				{
 					writeMissUpdateDirectory(event.tpcId, event.smId, ( address>>> blockSizeBits ), event, address);
 				}
-				else if(this.coherence == CoherenceType.Directory 
-						&& event.getRequestType() == RequestType.Cache_Read )
+				else if(this.coherence == CoherenceType.Directory && event.getRequestType() == RequestType.Cache_Read )
 				{
 					readMissUpdateDirectory(event.tpcId, event.smId,( address>>> blockSizeBits ), event, address);
 				} 
 				else 
 				{
-	
-					sendReadRequest(event);
+					sendRequestToNextLevel(address, RequestType.Cache_Read);
+//					sendReadRequest(event);
 				}
+			
+			//	mshr.addToMSHR(event);	
 			}
+			
+		}
+		public void sendRequestToNextLevel(long addr, RequestType requestType) {
+			if(this.isLastLevel==true)
+//			Cache c = this.nextLevel;
+			{	AddressCarryingEvent event = null;
+			//event = new AddressCarryingEvent(getEventQueue(), 0, this, c,	requestType, addr);
+			//addEventAtLowerCache(event, c);
+			SM core0 = ArchitecturalComponent.getCores()[0][0];
+	
+			MainMemoryDRAMController memController;
+//			if(SystemConfig.memControllerToUse==true){
+//				int chan= findChannelNumber(addr);
+//				System.out.println(chan);
+//					memController = getComInterface().getNearestMemoryController(chan);
+//				}
+//				else{
+					memController = getComInterface().getNearestMemoryController(0);	
+//				}
+
+				event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,memController, requestType, addr);
+				sendEvent(event);
+			}
+		}
+		
+		public EventQueue getEventQueue() {
+//			if (containingMemSys != null) {
+//				return containingMemSys.getCore().eventQueue;
+//			} else {
+				return (ArchitecturalComponent.getCores()[0])[0].eventQueue;
+//			}
 		}
 
 		@SuppressWarnings("unused")
@@ -418,8 +452,7 @@ public class Cache extends SimulationElement
 			}			
 		}
 		
-		/*
-		 * forward memory request to next level
+		/* forward memory request to next level
 		 * handle related lower level mshr scenarios
 		 */
 		public void sendWriteRequestToLowerCache(AddressCarryingEvent receivedEvent)
@@ -471,16 +504,17 @@ public class Cache extends SimulationElement
 //	}		
 		private void sendWriteRequestToMainMemory(AddressCarryingEvent receivedEvent)
 		{
+			System.out.println("Was earlier calling through here upar waala ha");
 			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),	this,MemorySystem.mainMemoryController,	RequestType.Main_Mem_Write);
 
 			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
 		}
 		
 		private void sendReadRequestToMainMemory(AddressCarryingEvent receivedEvent)
-		{
+		{ 
+		//	System.out.println("Was earlier calling through here");
 			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),this,
-                                MemorySystem.mainMemoryController,
-					RequestType.Main_Mem_Read);
+                                MemorySystem.mainMemoryController,receivedEvent.getRequestType());
 
 			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
 		}
@@ -659,6 +693,45 @@ public class Cache extends SimulationElement
 				noOfWritesForwarded++;
 			}
 		}
+		public static int findChannelNumber(long physicalAddress){
+			long tempA,tempB;
+			int channelBits = log2(SystemConfig.mainMemoryConfig.numChans);
+			
+			int DataBusBytesOffest = log2(SystemConfig.mainMemoryConfig.DATA_BUS_BYTES);		//for 64 bit bus -> 8 bytes -> lower 3 bits of address irrelevant
+			
+			int ColBytesOffset = log2(SystemConfig.mainMemoryConfig.BL);		
+			//these are the bits we need to throw away because of "bursts". The column address is incremented internally on bursts
+			//So for a burst length of 4, 8 bytes of data are transferred on each burst
+			//Each consecutive 8 byte chunk comes for the "next" column
+			//So we traverse 4 columns in 1 request. Thus the lower log2(4) bits become irrelevant for us. Throw them away
+			//Finally we get 8 bytes * 4 = 32 bytes of data for a 64 bit data bus and BL = 4.
+			//This is equal to a cache line
+			
+			//For clarity
+			//Throw away bits to account for data bus size in bytes
+			//and for burst length
+			physicalAddress >>>= (DataBusBytesOffest + ColBytesOffset); 		//using >>> for unsigned right shift
+			//System.out.println("Shifted address by " + (DataBusBytesOffest + ColBytesOffset) + " bits");
+					
+					
+			//By the same logic, need to remove the burst-related column bits from the column bit width to be decoded
+			//colEffectiveBits = colBits - ColBytesOffset;
+		
+			//row:rank:bank:col:chan
+			
+			tempA = physicalAddress;
+			physicalAddress = physicalAddress >>> channelBits;			//always unsigned shifting
+			tempB = physicalAddress << channelBits;
+			//System.out.println("Shifted address by " + rankBits + " bits");
+			int decodedChan = (int) (tempA ^ tempB);
+			return decodedChan;
+		}
+		
+		public static int log2(int a)
+		{
+			return (int) (Math.log(a)/Math.log(2));
+		}
+
 		
 		private void processBlockAvailable(AddressCarryingEvent event)
 		{
@@ -969,9 +1042,10 @@ simElement, requestType,((AddressCarryingEvent)event).getAddress(),((AddressCarr
 				if(cl.getState()!=MESI.MODIFIED) {
 					
 					cl.setState(MESI.MODIFIED);
-					
+					System.out.println(this.coherence);
 					// Send request to lower cache.
 					if(this.coherence==CoherenceType.None && this.isLastLevel==false) {
+						
 						AddressCarryingEvent newEvent  = (AddressCarryingEvent)event.clone();
 						newEvent.setAddress(addr);
 						sendWriteRequest(newEvent);
@@ -1056,6 +1130,7 @@ simElement, requestType,((AddressCarryingEvent)event).getAddress(),((AddressCarr
 	
 		public CacheLine processRequest(RequestType requestType, long addr, Event event)
 		{
+			System.out.println("request in processrequest of cache "+ requestType );
 			CacheLine ll = null;
 			if(requestType == RequestType.Cache_Read )  {
 				ll = this.read(addr);

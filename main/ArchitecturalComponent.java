@@ -179,6 +179,7 @@ private static void createElementsOfBus() {
 		
 		//added later by kush
 		//in case we use simple (fixed latency) memory controllers, num channels not taken into consideration currently (default to 1)
+		System.out.println(SystemConfig.mainMemoryConfig.numChans);
 		if(SystemConfig.memControllerToUse==true){
 			for(int i=0;i<SystemConfig.mainMemoryConfig.numChans;i++){
 				MainMemoryDRAMController mainMemController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);

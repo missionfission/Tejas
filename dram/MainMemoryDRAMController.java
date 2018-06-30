@@ -94,18 +94,16 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	public void handleEvent(EventQueue eventQ, Event e)
 	{
 	
-//		if(SystemConfig.memControllerToUse==false){
-//			super.handleEvent(eventQ,e);
-//			return;
-//		}
-
+		if(SystemConfig.memControllerToUse==false){
+			super.handleEvent(eventQ,e);
+			return;
+		}
+		System.out.println("Function Called by"+e.getRequestingElement()+"the request is "+e.getRequestType());
 		long currentTime = LocalClockperSm.getCurrentTime();
-		
-		//System.out.println("Hi!! handling a dram event of type " + e.getRequestType());
-//		Main.debugPrinter.print("\nHi!! handling a dram event of type " + e.getRequestType()+ "\n");
-		
+
 		if(e.getRequestType() == RequestType.Main_Mem_Read)
 		{
+			
 			e.getRequestingElement().getPort().put(
 					e.update(eventQ,2,null,e.getRequestingElement(),RequestType.Mem_Response));
 		}
@@ -113,9 +111,10 @@ public class MainMemoryDRAMController extends MainMemoryController{
 
 		if(e.getRequestType() == RequestType.Mem_Cntrlr_State_Update) {
 			
+			
 			StateUpdateEvent event = (StateUpdateEvent) e;
 			
-			int rank = event.getRank();
+			int rank = event.getRank(); System.out.println(e.getRequestType()+"rank is "+rank+" in handle event of DRAM");
 			int bank = event.getBank();
 			long eventTime = event.getEventTime();		//IMP: the reference for timing should be the time previous event was generated
 														//and not the current clock cycle as these 2 may differ sometimes!
@@ -217,7 +216,9 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			b = pendingTransQueue.get(i);
 			if(commandQueue.hasRoomFor(2,b.rank, b.bank))
 			{
-				numTransactions--;							//the transaction is no longer waiting in the controller
+				numTransactions--;			
+				System.out.println(numTransactions+" number of trans");
+				//the transaction is no longer waiting in the controller
 				//pendingTransQueue.remove(0);
 				//create new ACTIVATE bus packet with the address we just decoded 
 				MainMemoryBusPacket ACTcommand = b.Clone();							//check cloning is ok
@@ -276,10 +277,10 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		//System.out.println(b);
 		if(b!=null)
 		{
-			//System.out.println("LOL ");
+			System.out.println(b.rank+" in one cycle operation "+b.busPacketType);
 			int rank = b.rank;
 			int bank = b.bank;
-//			System.out.println(b.busPacketType); System.out.println("HOORAY");
+		//	System.out.println(b.busPacketType); System.out.println("HOORAY");
 			
 			if (b.busPacketType == BusPacketType.WRITE || b.busPacketType == BusPacketType.WRITE_P)
 			{
@@ -455,7 +456,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			}
 				break;
 			case REFRESH:
-			{System.out.println(rank);
+			{
 				for (int i=0; i< mainMemoryConfig.numBanks ;i++)
 				{	
 					bankStates[rank][i].nextActivate = currentTime + mainMemoryConfig.tRFC;

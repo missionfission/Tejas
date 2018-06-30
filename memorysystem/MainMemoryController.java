@@ -47,7 +47,7 @@ public class MainMemoryController extends SimulationElement
 	
 	public void handleEvent(EventQueue eventQ, Event event)
 	{ 
-//		
+		System.out.println("purana vaala memory controller");
 		}
 	
 
