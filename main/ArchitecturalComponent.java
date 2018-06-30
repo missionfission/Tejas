@@ -71,7 +71,7 @@ public class ArchitecturalComponent {
 	public static CoreBcastBus coreBroadcastBus;
 	public static Vector<MainMemoryDRAMController> memoryControllers = new Vector<MainMemoryDRAMController>();
 
-
+	public static Bus bus = new Bus();
 	public static void setInterConnect(InterConnect i) {
 	interconnect = i;
 }
@@ -148,7 +148,7 @@ private static void createElementsOfBus() {
 	
 	
 		
-		Bus bus = new Bus();
+		
 		BusInterface busInterface;
 		SM[][] sms = initCores();
 		for(int i=0;i<SystemConfig.NoOfTPC;i++){
@@ -170,8 +170,14 @@ private static void createElementsOfBus() {
 			}else if(cc.levelFromTop.equals(Cache.CacheType.Directory)) {
 				busInterface = new BusInterface(bus);
 				CentralizedDirectoryCache dircCache= new CentralizedDirectoryCache(cc, null, NetworkDelay.networkDelay);
-				dircCache.setComInterface(busInterface);
+				dircCache.setComInterface(busInterface);}
+			else if(cc.levelFromTop.equals(Cache.CacheType.iCache))
+			{System.out.println("bus interface for icache");
+			busInterface = new BusInterface(bus);
+			Cache cache= new Cache(cc, null);
+			cache.setComInterface(busInterface);
 			}
+			
 		}
 		
 		// Create Main Memory Controller

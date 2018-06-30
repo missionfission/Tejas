@@ -21,6 +21,9 @@
 *****************************************************************************/ 
 package generic;
 
+import memorysystem.Cache;
+import net.BusInterface;
+import main.ArchitecturalComponent;
 public abstract class SimulationElement implements Cloneable
 {
 	//a simulation element encapsulates a port.
@@ -82,6 +85,12 @@ public abstract class SimulationElement implements Cloneable
 	}
 	
 	public CommunicationInterface getComInterface() {
+		if (comInterface==null)
+			{ BusInterface busInterface;
+			busInterface = new BusInterface(ArchitecturalComponent.bus);
+			setComInterface(busInterface);
+			}
+	
 		return comInterface;
 	}
 	
@@ -103,8 +112,7 @@ public abstract class SimulationElement implements Cloneable
 			misc.Error.showErrorAndExit("Send event with zero latency !!");
 		}
 
-		if (event.getProcessingElement().getComInterface() != this
-				.getComInterface()) {
+		if (event.getProcessingElement().getComInterface() != this.getComInterface()) {
 			getComInterface().sendMessage(event);
 		} else {
 			event.getProcessingElement().getPort().put(event);

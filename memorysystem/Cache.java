@@ -146,10 +146,7 @@ public class Cache extends SimulationElement
 				int mshrSize
 				)
 		{
-			super(PortType.FirstComeFirstServe,
-					2, 
-					2,
-					2);
+			super(PortType.FirstComeFirstServe,	2,2,2);
 			
 			// set the parameters
 			this.blockSize = blockSize;
@@ -345,10 +342,14 @@ public class Cache extends SimulationElement
 //					memController = getComInterface().getNearestMemoryController(chan);
 //				}
 //				else{
+			CommunicationInterface ComInterface = getComInterface();
+			System.out.println(ComInterface + " "+levelFromTop);
+			
 					memController = getComInterface().getNearestMemoryController(0);	
 //				}
 
 				event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,memController, requestType, addr);
+//				System.out.println(event.getProcessingElement().getPort().put(event));
 				sendEvent(event);
 			}
 		}
