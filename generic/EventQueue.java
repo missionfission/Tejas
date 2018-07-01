@@ -51,8 +51,8 @@ public class EventQueue
 		long eventTime;
 		
 		@SuppressWarnings("static-access")
-		long currentClockTime = ArchitecturalComponent.getCores()[tpcId][smId].clock.getCurrentTime();
-		
+//		long currentClockTime = ArchitecturalComponent.getCores()[tpcId][smId].clock.getCurrentTime();
+		long currentClockTime=LocalClockperSm.getCurrentTime();
 		while(!priorityQueue.isEmpty())
 		{
 			eventTime = priorityQueue.peek().getEventTime();

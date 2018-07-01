@@ -342,24 +342,24 @@ public class Cache extends SimulationElement
 //					memController = getComInterface().getNearestMemoryController(chan);
 //				}
 //				else{
-			CommunicationInterface ComInterface = getComInterface();
-			System.out.println(ComInterface + " "+levelFromTop);
+		CommunicationInterface ComInterface = getComInterface();
+			//System.out.println(ComInterface + " "+levelFromTop);
 			
-					memController = getComInterface().getNearestMemoryController(0);	
+		memController = getComInterface().getNearestMemoryController(0);	
 //				}
 
-				event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,memController, requestType, addr);
+		event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,memController, requestType, addr);
 //				System.out.println(event.getProcessingElement().getPort().put(event));
-				sendEvent(event);
+		sendEvent(event);
 			}
 		}
 		
 		public EventQueue getEventQueue() {
-//			if (containingMemSys != null) {
-//				return containingMemSys.getCore().eventQueue;
-//			} else {
+			if (containingMemSys != null) {
+				return containingMemSys.getSM().eventQueue;
+			} else {
 				return (ArchitecturalComponent.getCores()[0])[0].eventQueue;
-//			}
+			}
 		}
 
 		@SuppressWarnings("unused")
@@ -1144,7 +1144,7 @@ simElement, requestType,((AddressCarryingEvent)event).getAddress(),((AddressCarr
 		public void populateConnectedMSHR()
 		{
 			//if mode3
-			//((Mode3MSHR)(missStatusHoldingRegister)).populateConnectedMSHR(this.prevLevel);
+//			((Mode3MSHR)(missStatusHoldingRegister)).populateConnectedMSHR(this.prevLevel);
 		}
 		
 		

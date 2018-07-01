@@ -299,8 +299,6 @@ public class SimplerRunnableThread implements Runnable {
 		}
 		
 		CoreClock = SmConfig.frequency * 1000000;
-
-		//added later by kush
 		if(SystemConfig.memControllerToUse==true)
 			RAMclock = (long) (1 / (SystemConfig.mainMemoryConfig.tCK) * 1000000000);
 
@@ -382,6 +380,7 @@ public class SimplerRunnableThread implements Runnable {
 private void AddToSetAndIncrementClock() {
 
 		LocalClockperSm.incrementClock();
+		ArchitecturalComponent.getCores()[pipelineInterfaces.getCore().getTPC_number()][pipelineInterfaces.getCore().getSM_number()].clock.incrementClock();
 		blockState[currBlock].tot_cycles++;
 		
 		epochCount++;

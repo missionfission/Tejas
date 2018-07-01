@@ -161,8 +161,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			
 			//maintain number of transactions waiting to be serviced
 			numTransactions++;
-			
-			
+			System.out.println("Num of Transactions here are increased"+numTransactions);		
 			MainMemoryBusPacket b = AddressMapping(event.getAddress()); 
 			b.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));
 			
@@ -211,26 +210,27 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	{
 
 		MainMemoryBusPacket b;	
-		for(int i=0; i < pendingTransQueue.size(); i++)
-		{
+		for(int i=0; i < pendingTransQueue.size(); i++){
+//		{	System.out.println("Size of Pending Transaction Queue  "+pendingTransQueue.size());
 			b = pendingTransQueue.get(i);
+//			System.out.println("Size of Pending Transaction Queue get ke baad "+pendingTransQueue.size());
 			if(commandQueue.hasRoomFor(2,b.rank, b.bank))
 			{
 				numTransactions--;			
-				System.out.println(numTransactions+" number of trans");
+//				System.out.println(numTransactions+" number of trans");
 				//the transaction is no longer waiting in the controller
 				//pendingTransQueue.remove(0);
 				//create new ACTIVATE bus packet with the address we just decoded 
+				
 				MainMemoryBusPacket ACTcommand = b.Clone();							//check cloning is ok
 				ACTcommand.setBusPacketType(BusPacketType.ACTIVATE);
-				
 				//create read or write command and enqueue it
 				MainMemoryBusPacket RWcommand = b.Clone();
-				//RWcommand.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));
-				
-//				System.out.println("Enqueuing commands for address " + event.getAddress());
+//			    RWcommand.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));			
+//				System.out.println("Enqueuing commands for address " + event.getAddress());	at dram.MainMemoryDRAMController.enqueueToCommandQ(MainMemoryDRAMController.java:215)Function Called byiCache : 0the request is Cache_Read
+
 				System.out.println("ACTcommand busPacketType "+ACTcommand.busPacketType);
-				System.out.println("RWcommand busPacketType "+RWcommand.busPacketType);
+//				System.out.println("RWcommand busPacketType "+RWcommand.busPacketType);
 				
 				commandQueue.enqueue(ACTcommand);
 				commandQueue.enqueue(RWcommand);
@@ -239,16 +239,19 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				ACTcommand.printPacketToFile();
 				//Main.debugPrinter.print("Enqueued RW command bus packet to queue as follows:");
 				RWcommand.printPacketToFile();
-				
+					
 				//if enqueued, remove the pending packet
+				if (pendingTransQueue.size()>0)
 				pendingTransQueue.remove(0);
+				else
+					System.out.println("What the fuck is happening  " + pendingTransQueue.size()+"printing i also "+i);
 
 				break;               //just enqueue the first one !! not all pending, break when first is enqueued
 
 			}
 			
 		}	
-				
+					
 	}
 			
 			

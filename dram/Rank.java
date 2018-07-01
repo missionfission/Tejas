@@ -215,6 +215,7 @@ public class Rank extends SimulationElement{
 			        currentTime < bankStates[b.bank].nextActivate)
 			{
 				Error.showErrorAndExit("== Error - Rank " + id + " received an ACT when not allowed");
+				System.out.println("ACT not Allowed !!!");
 			}
 			
 			bankStates[b.bank].currentBankState = CurrentBankState.ROW_ACTIVE;
