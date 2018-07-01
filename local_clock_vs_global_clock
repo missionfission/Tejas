@@ -1,0 +1,22 @@
+TEJAS GLOBAL CLOCK----
+dram controller-> oneCycle operation -> commandQueue.pop(Current Time);
+               -> handle event- not doing big role
+
+rank---> handle event, used to set the new activate, precharge etc times.
+
+emulator interface- run pipelines - increase the clock cycle, and after 1000 cycles it checks the status of the mshr.
+
+Generic-- barrier-- increment thread method(); set the current time
+	  eventQueue--- while adding the element, it see the current time and event time.
+	pinpointprocessing ---- actually in gpu tejas we dont neeed it .
+	  port--- to set the time of event in the port(if port is not occupied) otherwise to see 
+			availability of the port.
+
+Main-- architecture component-- create chip() that calls init core.
+
+Memory system-- event time setting
+
+
+
+
+
