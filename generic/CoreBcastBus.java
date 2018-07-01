@@ -67,36 +67,25 @@ public class CoreBcastBus extends SimulationElement{
 			}
 			else{
 				//System.out.println("Core Id : " + coreId );
-				bar.addTreeInfo(coreId);
-				if(bar.getTreeInfo(coreId) == 3){
-					if(coreId == 1){
+//				bar.addTreeInfo(coreId);
+//				if(bar.getTreeInfo(coreId) == 3){
+//					if(coreId == 1){
 						//	BarrierTable.barrierReset(barAddress);
-						this.getPort().put(new AddressCarryingEvent(
-								0,eventQ,
-								0,
-								this, 
-								this, 
-								RequestType.TREE_BARRIER_RELEASE, 
-								barAddress,
+				long barAddress = ((AddressCarryingEvent)event).getAddress();
+						this.getPort().put(new AddressCarryingEvent(0,eventQ,0,this,this,RequestType.TREE_BARRIER_RELEASE,barAddress,
 								tpcId,smId,((AddressCarryingEvent)event).getSourceId(),((AddressCarryingEvent)event).getDestinationId()));
 					}
-					else{
-						this.getPort().put(new AddressCarryingEvent(
-								0,eventQ,
-								1,
-								this, 
-								this, 
-								RequestType.TREE_BARRIER, 
-								barAddress,
-								tpcId,smId,((AddressCarryingEvent)event).getSourceId(),((AddressCarryingEvent)event).getDestinationId()));
-					}
-				}
-			}
-		}
-		else if(event.getRequestType() == RequestType.PIPELINE_RESUME){
+//					else{
+//						this.getPort().put(new AddressCarryingEvent(0,eventQ,1,	this,this,RequestType.TREE_BARRIER, 
+//						barAddress,tpcId,smId,((AddressCarryingEvent)event).getSourceId(),((AddressCarryingEvent)event).getDestinationId()));
+//					}
+//				}
+//			}
+//		}
+		 if(event.getRequestType() == RequestType.PIPELINE_RESUME){
 			for(int i : toResume){
 				ArchitecturalComponent.getCores()[tpcId][smId].activatePipeline();
-				SimplerRunnableThread.setThreadState(i,false);
+				//SimplerRunnableThread.setThreadState(i,false);
 			}
 			toResume.clear();
 		}
