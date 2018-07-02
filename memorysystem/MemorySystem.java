@@ -61,37 +61,37 @@ public class MemorySystem
 		/*First initialize the L2 and greater caches (to be linked with L1 caches and among themselves)*/
 		cacheList = new Hashtable<String, Cache>(); //Declare the hash table for level 2 or greater caches
 		boolean flag = false;
-		for (Enumeration<String> cacheNameSet = SystemConfig.declaredCaches.keys(); cacheNameSet.hasMoreElements(); )
-		{
-			String cacheName = cacheNameSet.nextElement();
-			
-			if (!(cacheList.containsKey(cacheName))) //If not already present
-			{
-				cacheParameterObj = SystemConfig.declaredCaches.get(cacheName);
-				
-				//Declare the new cache
-				Cache newCache = null;
-				newCache = new Cache(cacheParameterObj, null);
-				
-				
-				//Put the newly formed cache into the new list of caches
-				cacheList.put(cacheName, newCache);
-				
-				//add initial cachepull event
-				if(newCache.levelFromTop == CacheType.Lower)
-				{
-					ArchitecturalComponent.getCores()[0][0].getEventQueue().addEvent(
-											new CachePullEvent(
-													ArchitecturalComponent.getCores()[0][0].getEventQueue(),
-													0,
-													newCache,
-													newCache,
-													RequestType.PerformPulls,
-													-1, -1));
-				}
-			}
-		}
-		
+//		for (Enumeration<String> cacheNameSet = SystemConfig.declaredCaches.keys(); cacheNameSet.hasMoreElements(); )
+//		{
+//			String cacheName = cacheNameSet.nextElement();
+//			
+//			if (!(cacheList.containsKey(cacheName))) //If not already present
+//			{
+//				cacheParameterObj = SystemConfig.declaredCaches.get(cacheName);
+//				
+//				//Declare the new cache
+//				Cache newCache = null;
+//				newCache = new Cache(cacheParameterObj, null);
+//				
+//				
+//				//Put the newly formed cache into the new list of caches
+//				cacheList.put(cacheName, newCache);
+//				
+//				//add initial cachepull event
+//				if(newCache.levelFromTop == CacheType.Lower)
+//				{
+//					ArchitecturalComponent.getCores()[0][0].getEventQueue().addEvent(
+//											new CachePullEvent(
+//													ArchitecturalComponent.getCores()[0][0].getEventQueue(),
+//													0,
+//													newCache,
+//													newCache,
+//													RequestType.PerformPulls,
+//													-1, -1));
+//				}
+//			}
+//		}
+//		
 		mainMemoryController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);
 		for (int i = 0; i < SystemConfig.NoOfTPC ; i++)
 		{

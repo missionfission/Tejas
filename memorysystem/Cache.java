@@ -21,19 +21,26 @@
 *****************************************************************************/ 
 package memorysystem;
 
-import java.util.*;
+import generic.CommunicationInterface;
+import generic.Event;
+import generic.EventQueue;
+import generic.PortType;
+import generic.RequestType;
+import generic.SM;
+import generic.SimulationElement;
 
-import net.NocInterface;
+import java.util.ArrayList;
+import java.util.TreeSet;
+import java.util.Vector;
 
 import main.ArchitecturalComponent;
 import memorysystem.directory.CentralizedDirectoryCache;
 import misc.Util;
 import config.CacheConfig;
-import config.SystemConfig;
 import config.CacheConfig.WritePolicy;
 import config.SimulationConfig;
+import config.SystemConfig;
 import dram.MainMemoryDRAMController;
-import generic.*;
 
 public class Cache extends SimulationElement
 {

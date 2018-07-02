@@ -65,8 +65,13 @@
 			
 			
 		</TPC>
-		
-		
+		<Cache>
+				<iCache nextLevel="" type="iCache" />
+				<constantCache nextLevel="" type="constantCache" />
+				<sharedCache nextLevel="" type="sharedCache" />
+				<!--L1Cache nextLevel="L2" type="dCache" /
+				Cache name="L2" nextLevel="" type="L2" /-->
+		</Cache>
 		<MainMemory>
 			<MemControllerToUse>true</MemControllerToUse> 
 			<MainMemoryLatency>200</MainMemoryLatency>		

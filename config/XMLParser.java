@@ -93,7 +93,7 @@ public class XMLParser
 		OperationLatencyConfig.exitLatency= Integer.parseInt(getImmediateString("exit", latencyElmnt));
 				
 	}
-	
+
 	private static void setSimulationParameters()
 	{
 		NodeList nodeLst = doc.getElementsByTagName("Simulation");
@@ -155,31 +155,47 @@ public class XMLParser
 			setTpcProperties(tpc, tpcElmnt);
 		}
 		
-		//Code for remaining Cache configurations
+//		//Code for remaining Cache configurations
 		NodeList cacheLst = systemElmnt.getElementsByTagName("Cache");
-		for (int i = 0; i < cacheLst.getLength(); i++)
-		{
-			Element cacheElmnt = (Element) cacheLst.item(i);
-			String cacheName = cacheElmnt.getAttribute("name");
-			
-			if (!(SystemConfig.declaredCaches.containsKey(cacheName)))	//If the identically named cache is not already present
-			{
-				CacheConfig newCacheConfigEntry = new CacheConfig();
-				newCacheConfigEntry.levelFromTop = Cache.CacheType.Lower;
-				String cacheType = cacheElmnt.getAttribute("type");
-				Element cacheTypeElmnt = searchLibraryForItem(cacheType);
-				setCacheProperties(cacheTypeElmnt, newCacheConfigEntry);
-				newCacheConfigEntry.nextLevel = cacheElmnt.getAttribute("nextLevel");
-				SystemConfig.declaredCaches.put(cacheName, newCacheConfigEntry);
-			}
-		}	
+		Node cacheNode = cacheLst.item(0);
+		Element cacheElmnt = (Element) cacheNode;
+		CacheConfig iCacheConfigEntry = new CacheConfig();
+		CacheConfig constantCacheConfigEntry = new CacheConfig();
+		CacheConfig sharedConfigEntry = new CacheConfig();
+		//newCacheConfigEntry.levelFromTop = Cache.CacheType.Lower;				
+		NodeList iCacheList = cacheElmnt.getElementsByTagName("iCache");
+		Element iCacheElmnt = (Element) iCacheList.item(0);
+		String cacheType = iCacheElmnt.getAttribute("type");
+		Element cacheTypeElmnt = searchLibraryForItem(cacheType);
+		setCacheProperties(cacheTypeElmnt, iCacheConfigEntry);
+		iCacheConfigEntry.nextLevel = cacheElmnt.getAttribute("nextLevel");
+		iCacheConfigEntry.levelFromTop=Cache.CacheType.iCache;
+		SystemConfig.declaredCaches.put("iCache", iCacheConfigEntry);
 		
+		NodeList constantCacheList = cacheElmnt.getElementsByTagName("constantCache");
+		Element constantCacheElmnt = (Element) constantCacheList.item(0);
+		cacheType = constantCacheElmnt.getAttribute("type");
+		cacheTypeElmnt = searchLibraryForItem(cacheType);
+		setCacheProperties(cacheTypeElmnt, constantCacheConfigEntry);
+		constantCacheConfigEntry.nextLevel = cacheElmnt.getAttribute("nextLevel");
+		constantCacheConfigEntry.levelFromTop=Cache.CacheType.constantCache;
+		SystemConfig.declaredCaches.put("constantCache", constantCacheConfigEntry);
+				
+		NodeList sharedCacheList = cacheElmnt.getElementsByTagName("sharedCache");
+		Element sharedCacheElmnt = (Element) sharedCacheList.item(0);
+		cacheType = sharedCacheElmnt.getAttribute("type");
+		cacheTypeElmnt = searchLibraryForItem(cacheType);
+		setCacheProperties(cacheTypeElmnt,sharedConfigEntry);
+		sharedConfigEntry.nextLevel = cacheElmnt.getAttribute("nextLevel");
+		sharedConfigEntry.levelFromTop=Cache.CacheType.sharedCache;
+		SystemConfig.declaredCaches.put("sharedCache", sharedConfigEntry);			
+//		
 		if(SystemConfig.memControllerToUse==true){
 					
-					MainMemoryConfig mainMemoryConfig=new MainMemoryConfig();
-					NodeList MemControllerLst = systemElmnt.getElementsByTagName("MainMemoryController");
-					Element MemControllerElmnt = (Element) MemControllerLst.item(0);
-					setMemControllerProperties(MemControllerElmnt,mainMemoryConfig, SystemConfig.tpc[0].sm[0].frequency);
+			MainMemoryConfig mainMemoryConfig=new MainMemoryConfig();
+			NodeList MemControllerLst = systemElmnt.getElementsByTagName("MainMemoryController");
+			Element MemControllerElmnt = (Element) MemControllerLst.item(0);
+			setMemControllerProperties(MemControllerElmnt,mainMemoryConfig, SystemConfig.tpc[0].sm[0].frequency);
 				
 				}
 		

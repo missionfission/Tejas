@@ -160,6 +160,8 @@ private static void createElementsOfBus() {
 		setCores(sms);
 		
 		Collection<CacheConfig> c= SystemConfig.declaredCaches.values();
+		System.out.println("Caches here are "+SystemConfig.declaredCaches.values());
+		System.out.println("Interconnect"+SystemConfig.interconnect);
 		Iterator<CacheConfig> it= c.iterator();
 		while(it.hasNext()) {
 			CacheConfig cc= it.next();
@@ -171,14 +173,7 @@ private static void createElementsOfBus() {
 				busInterface = new BusInterface(bus);
 				CentralizedDirectoryCache dircCache= new CentralizedDirectoryCache(cc, null, NetworkDelay.networkDelay);
 				dircCache.setComInterface(busInterface);}
-			else if(cc.levelFromTop.equals(Cache.CacheType.iCache))
-			{System.out.println("bus interface for icache");
-			busInterface = new BusInterface(bus);
-			Cache cache= new Cache(cc, null);
-			cache.setComInterface(busInterface);
-			}
-			
-		}
+				}
 		
 		// Create Main Memory Controller
 		//Note: number of physical channels = number of Memory Controllers
