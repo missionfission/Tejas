@@ -211,6 +211,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 
 		MainMemoryBusPacket b;	
 		for(int i=0; i < pendingTransQueue.size(); i++){
+			
 //		{	System.out.println("Size of Pending Transaction Queue  "+pendingTransQueue.size());
 			b = pendingTransQueue.get(i);
 //			System.out.println("Size of Pending Transaction Queue get ke baad "+pendingTransQueue.size());
@@ -243,8 +244,10 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				//if enqueued, remove the pending packet
 				if (pendingTransQueue.size()>0)
 				pendingTransQueue.remove(0);
-				else
-					System.out.println("What the fuck is happening  " + pendingTransQueue.size()+"printing i also "+i);
+				else{
+					System.out.println("Following is the tread id"+Thread.currentThread().getId());
+					System.out.println("What the fuck is happening  " + pendingTransQueue.size()+" printing i also "+i);
+				}
 
 				break;               //just enqueue the first one !! not all pending, break when first is enqueued
 

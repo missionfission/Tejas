@@ -159,6 +159,7 @@ public class XMLParser
 		NodeList cacheLst = systemElmnt.getElementsByTagName("Cache");
 		Node cacheNode = cacheLst.item(0);
 		Element cacheElmnt = (Element) cacheNode;
+		
 		CacheConfig iCacheConfigEntry = new CacheConfig();
 		CacheConfig constantCacheConfigEntry = new CacheConfig();
 		CacheConfig sharedConfigEntry = new CacheConfig();
