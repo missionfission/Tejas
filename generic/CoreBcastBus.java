@@ -22,6 +22,7 @@ public class CoreBcastBus extends SimulationElement{
 	public void handleEvent(EventQueue eventQ, Event event) {
 		int tpcId=((AddressCarryingEvent)event).tpcId;
 		int smId =((AddressCarryingEvent)event).smId;
+		System.out.println("handle event of core broadcast bus called");
 		if(event.getRequestType() == RequestType.TREE_BARRIER_RELEASE){
 			
 			

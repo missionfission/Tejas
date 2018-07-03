@@ -33,6 +33,7 @@ import java.util.Hashtable;
 import config.SimulationConfig;
 import config.SmConfig;
 import config.SystemConfig;
+import config.TpcConfig;
 
 import main.ArchitecturalComponent;
 import main.Main;
@@ -369,6 +370,10 @@ public class SimplerRunnableThread implements Runnable {
 		}
 
 			AddToSetAndIncrementClock(); 
+//			for(int i=0;i<SystemConfig.NoOfTPC;i++)
+//				for(int j=0;j<TpcConfig.NoOfSM;j++)
+//			System.out.println("Time of sm with id"+ (i+1)*(j+1) + "is "+ArchitecturalComponent.getCores()[i][j].clock.getCurrentTime());
+//		System.out.println("local clock time is "+LocalClockperSm.getCurrentTime());
 		}
 		
 	

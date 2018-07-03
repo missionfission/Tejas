@@ -246,11 +246,11 @@ public class Cache extends SimulationElement
 			if(printCacheDebugMessages==true) {
 				if(event.getClass()==AddressCarryingEvent.class)
 				{
-					System.out.println("CACHE : globalTime = " + ArchitecturalComponent.getCores()[event.tpcId][event.smId].clock.getCurrentTime() +
-						"\teventTime = " + event.getEventTime() + "\t" + event.getRequestType() +
-						"\trequestingElelement = " + event.getRequestingElement() +
-						"\taddress = " + ((AddressCarryingEvent)event).getAddress() +
-						"\t" + this);
+				System.out.println("CACHE : globalTime = " + ArchitecturalComponent.getCores()[event.tpcId][event.smId].clock.getCurrentTime() +
+					"\teventTime = " + event.getEventTime() + "\t" + event.getRequestType() +
+					"\trequestingElelement = " + event.getRequestingElement() +
+					"\taddress = " + ((AddressCarryingEvent)event).getAddress() +
+					"\t" + this);
 				}
 			}
 			
@@ -330,7 +330,7 @@ public class Cache extends SimulationElement
 //					sendReadRequest(event);
 				}
 			
-			//	mshr.addToMSHR(event);	
+			missStatusHoldingRegister.addOutstandingRequest(event);	
 			}
 			
 		}
@@ -447,7 +447,7 @@ public class Cache extends SimulationElement
 				sendWriteRequestToLowerCache(receivedEvent);
 			}			
 		}		
-
+//
 		private void sendReadRequest(AddressCarryingEvent receivedEvent)
 		{
 			if(this.isLastLevel)
@@ -496,20 +496,7 @@ public class Cache extends SimulationElement
 				missStatusHoldingRegister.handleLowerMshrFull(receivedEvent);
 			}
 		}
-//		if(SystemConfig.memControllerToUse==true){
-//			int chan=findChannelNumber(addr);
-//			memController = getComInterface()
-//					.getNearestMemoryController(chan);
-//		}
-//		else{
-//			memController = getComInterface()
-//					.getNearestMemoryController(0);	
-//		}
-//
-//		event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,
-//				memController, requestType, addr);
-//		sendEvent(event);
-//	}		
+
 		private void sendWriteRequestToMainMemory(AddressCarryingEvent receivedEvent)
 		{
 			System.out.println("Was earlier calling through here upar waala ha");
@@ -806,13 +793,7 @@ public class Cache extends SimulationElement
 				eventTime = 1;
 			}
 			if(flag){
-				simElement.getPort().put(
-						event.update(
-								event.getEventQ(),
-								eventTime,
-								this,
-								simElement,
-								requestType));
+				simElement.getPort().put(event.update(event.getEventQ(),eventTime,this,simElement,requestType));
 				return null;
 			} else {
 				AddressCarryingEvent addressEvent = 	new AddressCarryingEvent( 	event.getEventQ(),eventTime, this,

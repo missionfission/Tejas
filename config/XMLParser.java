@@ -191,12 +191,10 @@ public class XMLParser
 		SystemConfig.declaredCaches.put("sharedCache", sharedConfigEntry);			
 //		
 		if(SystemConfig.memControllerToUse==true){
-					
 			MainMemoryConfig mainMemoryConfig=new MainMemoryConfig();
 			NodeList MemControllerLst = systemElmnt.getElementsByTagName("MainMemoryController");
 			Element MemControllerElmnt = (Element) MemControllerLst.item(0);
 			setMemControllerProperties(MemControllerElmnt,mainMemoryConfig, SystemConfig.tpc[0].sm[0].frequency);
-				
 				}
 		
 		

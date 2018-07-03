@@ -53,6 +53,7 @@ public abstract class SMMemorySystem extends SimulationElement
 		CacheConfig cacheParameterObj;
 		cacheParameterObj = SystemConfig.tpc[tpc_id].sm[sm_id].iCache;
 		iCache = new Cache(cacheParameterObj, this);
+		iCache.setComInterface(sm.getComInterface());
 		//add initial cache pull event
 		this.sm.getEventQueue().addEvent(
 									new CachePullEvent(
@@ -68,6 +69,7 @@ public abstract class SMMemorySystem extends SimulationElement
 		//initialize constant cache
 		cacheParameterObj = SystemConfig.tpc[tpc_id].sm[sm_id].constantCache;
 		constantCache = new Cache(cacheParameterObj, this);
+		constantCache.setComInterface(sm.getComInterface());
 		//add initial cache pull event
 		this.sm.getEventQueue().addEvent(
 									new CachePullEvent(
@@ -82,14 +84,10 @@ public abstract class SMMemorySystem extends SimulationElement
 		//initialize shared cache
 		cacheParameterObj = SystemConfig.tpc[tpc_id].sm[sm_id].sharedCache;
 		sharedCache = new Cache(cacheParameterObj, this);
+		sharedCache.setComInterface(sm.getComInterface());
 		//add initial cache pull event
 		this.sm.getEventQueue().addEvent(
-									new CachePullEvent(
-											this.sm.getEventQueue(),
-											0,
-											sharedCache,
-											sharedCache,
-											RequestType.PerformPulls,
+									new CachePullEvent(this.sm.getEventQueue(),	0,sharedCache,	sharedCache,RequestType.PerformPulls,
 											this.tpc_id,
 											this.sm_id));
 	}

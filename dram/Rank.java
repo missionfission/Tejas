@@ -75,8 +75,8 @@ public class Rank extends SimulationElement{
 		//RequestType requestType = event.getRequestType();
 		long currentTime = LocalClockperSm.getCurrentTime(); 		//Assumption: time will never change while handling an event
 		
-		//System.out.println("Handling rank event scheduled for time " + event.getEventTime());
-		//b.printPacket();
+		System.out.println("Handling rank event scheduled for time " + event.getEventTime());
+		b.printPacket();
 		//bankStates[b.bank].printState();
 		//System.out.println("Time:" + currentTime);
 		
@@ -211,8 +211,7 @@ public class Rank extends SimulationElement{
 		case ACTIVATE:
 			//make sure activate is allowed		
 			
-			if (bankStates[b.bank].currentBankState != CurrentBankState.IDLE ||
-			        currentTime < bankStates[b.bank].nextActivate)
+			if (bankStates[b.bank].currentBankState != CurrentBankState.IDLE ||  currentTime < bankStates[b.bank].nextActivate)
 			{
 				Error.showErrorAndExit("== Error - Rank " + id + " received an ACT when not allowed");
 				System.out.println("ACT not Allowed !!!");

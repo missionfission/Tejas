@@ -161,7 +161,7 @@ private static void createElementsOfBus() {
 		
 		Collection<CacheConfig> c= SystemConfig.declaredCaches.values();
 		System.out.println("Caches here are "+SystemConfig.declaredCaches.values());
-		System.out.println("Interconnect"+SystemConfig.interconnect);
+		System.out.println("Interconnect  "+SystemConfig.interconnect);
 		Iterator<CacheConfig> it= c.iterator();
 		while(it.hasNext()) {
 			CacheConfig cc= it.next();
@@ -175,12 +175,8 @@ private static void createElementsOfBus() {
 				dircCache.setComInterface(busInterface);}
 				}
 		
-		// Create Main Memory Controller
-		//Note: number of physical channels = number of Memory Controllers
-		
-		//added later by kush
-		//in case we use simple (fixed latency) memory controllers, num channels not taken into consideration currently (default to 1)
-		System.out.println(SystemConfig.mainMemoryConfig.numChans);
+
+//		System.out.println(SystemConfig.mainMemoryConfig.numChans);
 		if(SystemConfig.memControllerToUse==true){
 			for(int i=0;i<SystemConfig.mainMemoryConfig.numChans;i++){
 				MainMemoryDRAMController mainMemController = new MainMemoryDRAMController(SystemConfig.mainMemoryConfig);

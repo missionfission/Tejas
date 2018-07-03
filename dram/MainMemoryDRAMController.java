@@ -113,7 +113,6 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			
 			
 			StateUpdateEvent event = (StateUpdateEvent) e;
-			
 			int rank = event.getRank(); System.out.println(e.getRequestType()+"rank is "+rank+" in handle event of DRAM");
 			int bank = event.getBank();
 			long eventTime = event.getEventTime();		//IMP: the reference for timing should be the time previous event was generated
@@ -244,7 +243,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				if (pendingTransQueue.size()>0)
 				pendingTransQueue.remove(0);
 				else
-					System.out.println("What the fuck is happening  " + pendingTransQueue.size()+"printing i also "+i);
+					System.out.println("size of queue is  " + pendingTransQueue.size()+"printing i also "+i);
 
 				break;               //just enqueue the first one !! not all pending, break when first is enqueued
 

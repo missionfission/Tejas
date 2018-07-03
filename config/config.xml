@@ -165,7 +165,7 @@
 			<AccessPorts>1</AccessPorts>			
 			<PortOccupancy>1</PortOccupancy>		
 			<MultiPortingType>B</MultiPortingType>		
-			<Coherence>N</Coherence>			
+			<Coherence>D</Coherence>			
 			<NumBuses>1</NumBuses>			
 			<MSHRSize>32</MSHRSize>
 			<BusOccupancy>0</BusOccupancy>
@@ -185,7 +185,7 @@
 			<AccessPorts>1</AccessPorts>			
 			<PortOccupancy>1</PortOccupancy>		
 			<MultiPortingType>B</MultiPortingType>		
-			<Coherence>N</Coherence>			
+			<Coherence>D</Coherence>			
 			<NumBuses>1</NumBuses>			
 			<MSHRSize>32</MSHRSize>
 			<BusOccupancy>0</BusOccupancy>
@@ -205,7 +205,7 @@
 			<AccessPorts>1</AccessPorts>			
 			<PortOccupancy>1</PortOccupancy>		
 			<MultiPortingType>B</MultiPortingType>		
-			<Coherence>N</Coherence>			
+			<Coherence>D</Coherence>			
 			<NumBuses>1</NumBuses>			
 			<MSHRSize>32</MSHRSize>
 			<BusOccupancy>0</BusOccupancy>
