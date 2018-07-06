@@ -144,8 +144,9 @@ public class SimplerFilePacket extends IpcBase{
 				}
 				catch(EOFException e)
 				{
-					System.out.println("cannot read "+dis);
-					System.exit(0);
+					System.out.println("cannot read "+dis+"  "+i);
+					//System.exit(0);
+					maxSize=-1;
 				}
 				if(tmp!=null)
 				{
@@ -204,7 +205,7 @@ public class SimplerFilePacket extends IpcBase{
 				}
 				else
 				{
-					//fromEmulator.enqueue(TYPE_KERNEL_END, -2, null, null);
+//					fromEmulator.enqueue(InstructionClass.TYPE_KERNEL_END, -2, null);
 				}
 				
 			}

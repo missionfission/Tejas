@@ -20,6 +20,7 @@ package memorysystem;
 
 	Contributors:  Seep Goel, Geetika Malhotra, Harinder Pal
 *****************************************************************************/ 
+import config.SystemConfig;
 import dram.MainMemoryDRAMController;
 import generic.EventQueue;
 import generic.PortType;
@@ -35,16 +36,22 @@ public class MainMemoryController extends SimulationElement
 		
 	public MainMemoryController() {
 		super(PortType.Unlimited,-1,10,250);
-		
+//	
+//			super(SystemConfig.mainMemPortType,
+//					SystemConfig.mainMemoryAccessPorts,
+//					SystemConfig.mainMemoryPortOccupancy,
+//					SystemConfig.mainMemoryLatency,
+//					SystemConfig.mainMemoryFrequency
+//					);	
 	}
 	
-	public MainMemoryController(int[] memoryControllersLocations) 
-	{
-		super(PortType.Unlimited,-1,10,250);
-		this.numberOfMemoryControllers = memoryControllersLocations.length;
-		this.mainmemoryControllersLocations = memoryControllersLocations;
-	}
-	
+//	public MainMemoryController(int[] memoryControllersLocations) 
+//	{
+//		super(PortType.Unlimited,-1,10,250);
+//		this.numberOfMemoryControllers = memoryControllersLocations.length;
+//		this.mainmemoryControllersLocations = memoryControllersLocations;
+//	}
+//	
 	public void handleEvent(EventQueue eventQ, Event event)
 	{ 
 		System.out.println("purana vaala memory controller");

@@ -75,10 +75,10 @@ public class Rank extends SimulationElement{
 		//RequestType requestType = event.getRequestType();
 		long currentTime = LocalClockperSm.getCurrentTime(); 		//Assumption: time will never change while handling an event
 		
-		System.out.println("Handling rank event scheduled for time " + event.getEventTime());
+//		System.out.println("Handling rank event scheduled for time " + event.getEventTime());
 		b.printPacket();
 		//bankStates[b.bank].printState();
-		//System.out.println("Time:" + currentTime);
+//		System.out.println("Time:" + currentTime);
 		
 		//Main.debugPrinter.print("\n\nHandling rank event.....\n");
 		//Main.debugPrinter.print("Received packet..\n");
@@ -102,6 +102,9 @@ public class Rank extends SimulationElement{
 			//make sure read is allowed
 			if (bankStates[b.bank].currentBankState != CurrentBankState.ROW_ACTIVE || currentTime < bankStates[b.bank].nextRead || b.row != bankStates[b.bank].openRowAddress)
 			{
+//			System.out.println("is row_active ?"+bankStates[b.bank].currentBankState);
+//			System.out.println("is current time"+bankStates[b.bank].nextRead);
+//			System.out.println("is row correct"+bankStates[b.bank].openRowAddress);
 			Error.showErrorAndExit("Received a read which is not allowed");	
 			}
 			

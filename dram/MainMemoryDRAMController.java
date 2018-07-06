@@ -98,14 +98,13 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			super.handleEvent(eventQ,e);
 			return;
 		}
-		System.out.println("Function Called by"+e.getRequestingElement()+"the request is "+e.getRequestType());
+//		System.out.println("Function Called by"+e.getRequestingElement()+"the request is "+e.getRequestType());
 		long currentTime = LocalClockperSm.getCurrentTime();
 
 		if(e.getRequestType() == RequestType.Main_Mem_Read)
 		{
-			
-			e.getRequestingElement().getPort().put(
-					e.update(eventQ,2,null,e.getRequestingElement(),RequestType.Mem_Response));
+//			System.out.println("Request recieved is "+e.getRequestType());
+			e.getRequestingElement().getPort().put(e.update(eventQ,2,null,e.getRequestingElement(),RequestType.Mem_Response));
 		}
 	//	check if state update event
 
@@ -113,7 +112,11 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			
 			
 			StateUpdateEvent event = (StateUpdateEvent) e;
-			int rank = event.getRank(); System.out.println(e.getRequestType()+"rank is "+rank+" in handle event of DRAM");
+//			
+			
+			int rank = event.getRank(); 
+//			System.out.println(e.getRequestType()+"rank is "+rank+" in handle event of DRAM");
+			
 			int bank = event.getBank();
 			long eventTime = event.getEventTime();		//IMP: the reference for timing should be the time previous event was generated
 														//and not the current clock cycle as these 2 may differ sometimes!
@@ -160,10 +163,10 @@ public class MainMemoryDRAMController extends MainMemoryController{
 			
 			//maintain number of transactions waiting to be serviced
 			numTransactions++;
-			System.out.println("Num of Transactions here are increased"+numTransactions);		
+//			System.out.println("Num of Transactions here are increased"+numTransactions);		
 			MainMemoryBusPacket b = AddressMapping(event.getAddress()); 
 			b.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));
-			
+			System.out.println(event.getRequestType()+"       "+b.getBusPacketType());
 			//for TIMING
 			//create k6 style trace file
 			b.timeCreated = LocalClockperSm.getCurrentTime();
@@ -209,14 +212,15 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	{
 
 		MainMemoryBusPacket b;	
-		for(int i=0; i < pendingTransQueue.size(); i++){
-//		{	System.out.println("Size of Pending Transaction Queue  "+pendingTransQueue.size());
+		for(int i=0; i < pendingTransQueue.size(); i++)
+		{	
+//			System.out.println("Size of Pending Transaction Queue  "+pendingTransQueue.size());
 			b = pendingTransQueue.get(i);
-//			System.out.println("Size of Pending Transaction Queue get ke baad "+pendingTransQueue.size());
+//			System.out.println(this.channel);
 			if(commandQueue.hasRoomFor(2,b.rank, b.bank))
 			{
 				numTransactions--;			
-//				System.out.println(numTransactions+" number of trans");
+//				System.out.println(numTransactions+ "     number of trans");
 				//the transaction is no longer waiting in the controller
 				//pendingTransQueue.remove(0);
 				//create new ACTIVATE bus packet with the address we just decoded 
@@ -228,9 +232,9 @@ public class MainMemoryDRAMController extends MainMemoryController{
 //			    RWcommand.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));			
 //				System.out.println("Enqueuing commands for address " + event.getAddress());	at dram.MainMemoryDRAMController.enqueueToCommandQ(MainMemoryDRAMController.java:215)Function Called byiCache : 0the request is Cache_Read
 
-				System.out.println("ACTcommand busPacketType "+ACTcommand.busPacketType);
+//				System.out.println("ACTcommand busPacketType "+ACTcommand.busPacketType);
 //				System.out.println("RWcommand busPacketType "+RWcommand.busPacketType);
-				
+//				
 				commandQueue.enqueue(ACTcommand);
 				commandQueue.enqueue(RWcommand);
 				
@@ -243,7 +247,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				if (pendingTransQueue.size()>0)
 				pendingTransQueue.remove(0);
 				else
-					System.out.println("size of queue is  " + pendingTransQueue.size()+"printing i also "+i);
+					System.out.println("nahi  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 " + pendingTransQueue.size()+"printing i also "+i);
 
 				break;               //just enqueue the first one !! not all pending, break when first is enqueued
 
@@ -259,7 +263,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 	public void oneCycleOperation(){
 		long currentTime = LocalClockperSm.getCurrentTime();
 		SM core0 = ArchitecturalComponent.getCores()[0][0];				//using core 0 queue similar to as in cache
-		//System.out.println("In one cycle operation DRAM");
+//		System.out.println("In one cycle operation DRAM");
 		if (refreshCount[refreshRank]==0)
 		{
 			commandQueue.needRefresh(refreshRank);
@@ -279,7 +283,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 		//System.out.println(b);
 		if(b!=null)
 		{
-			System.out.println(b.rank+" in one cycle operation "+b.busPacketType);
+//			System.out.println(b.rank+" in one cycle operation "+b.busPacketType);
 			int rank = b.rank;
 			int bank = b.bank;
 		//	System.out.println(b.busPacketType); System.out.println("HOORAY");
@@ -364,8 +368,8 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				break;
 			case WRITE_P:
 			case WRITE:
-				if (b.busPacketType == BusPacketType.WRITE_P) 
-				{	System.out.println("in write");
+				if (b.busPacketType == BusPacketType.WRITE_P) {
+//				{	System.out.println("in write");
 					bankStates[rank][bank].nextActivate = Math.max(currentTime + mainMemoryConfig.WriteAutopreDelay,
 																	bankStates[rank][bank].nextActivate);
 					bankStates[rank][bank].lastCommand = BusPacketType.WRITE_P;

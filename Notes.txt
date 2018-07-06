@@ -3,4 +3,35 @@ Some Notes on the MemoryController in GPUTejas
 Next level of L2 CACHE
 
 
+No request is coming in the core broadcast bus.(handle event)
 
+In the cache of GPU TEJAS, when there are request of cache read and cache write, in the case when the cache line is not found(that is a miss) and MSHR also dont contain the address of the evicted line, 
+there is no handling of the case when there is no coherence and the event is of cache write, and they are directly sent to the sendReadRequestToMemory. The request that are being sent to this function are cache_read and cache write. When i tried to fix this by creating a new field of cache Write, it gave me error that memory not allocated/ Program stoppe
+
+
+TEJAS GLOBAL CLOCK----
+dram controller-> oneCycle operation -> commandQueue.pop(Current Time);
+               -> handle event- not doing big role
+
+rank---> handle event, used to set the new activate, precharge etc times.
+
+emulator interface- run pipelines - increase the clock cycle, and after 1000 cycles it checks the status of the mshr.
+
+Generic-- barrier-- increment thread method(); set the current time
+	  eventQueue--- while adding the element, it see the current time and event time.
+	pinpointprocessing ---- actually in gpu tejas we dont neeed it .
+	  port--- to set the time of event in the port(if port is not occupied) otherwise to see 
+			availability of the port.
+
+Main-- architecture component-- create chip() that calls init core.
+
+Memory system-- event time setting
+
+I have removed the show error and exit things and I have to add them later
+
+Only one thread running for now !!!!!!!!!!!!!!!!!
+
+
+finish all pipelines is commented out , running indefinitely for some reason 
+
+initialize also commented out in run 

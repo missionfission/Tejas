@@ -27,6 +27,7 @@ public class SmConfig {
 	public static int NoOfSP;
 	public static SpConfig[] sp;
 	public static int WarpSize;
+	public int IntRegFileSize;
 	public static int frequency;
 	public CacheConfig iCache = new CacheConfig();
 	public CacheConfig constantCache = new CacheConfig();

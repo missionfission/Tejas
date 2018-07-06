@@ -116,7 +116,7 @@ public class Mode3MSHR extends SimulationElement implements MissStatusHoldingReg
 		
 		OMREntry entry = this.mshr.remove(blockAddr);
 		if(entry==null) {
-			misc.Error.showErrorAndExit("event not in MSHR : " + event);
+//			misc.Error.showErrorAndExit("event not in MSHR : " + event);
 			return null;
 		} else {
 			Event removedEvent = entry.outStandingEvents.get(0);

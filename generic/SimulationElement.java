@@ -48,11 +48,7 @@ public abstract class SimulationElement implements Cloneable
     }
 
 	
-	public SimulationElement(PortType portType,
-								int noOfPorts,
-								long occupancy,
-								long latency
-								)
+	public SimulationElement(PortType portType,	int noOfPorts,	long occupancy,long latency)
 	{
 		this.port = new Port(portType, noOfPorts, occupancy);
 		this.latency = latency;
@@ -85,11 +81,14 @@ public abstract class SimulationElement implements Cloneable
 	}
 	
 	public CommunicationInterface getComInterface() {
-		if (comInterface==null)
-			{ BusInterface busInterface;
-			busInterface = new BusInterface(ArchitecturalComponent.bus);
-			setComInterface(busInterface);
-			}
+		
+//		if (comInterface==null)
+//			{ 
+//			System.out.println("comInterface is null");
+//			//BusInterface busInterface;
+//			//busInterface = new BusInterface(ArchitecturalComponent.bus);
+//		//	setComInterface(busInterface);
+//			}
 	
 		return comInterface;
 	}
@@ -114,7 +113,9 @@ public abstract class SimulationElement implements Cloneable
 
 		if (event.getProcessingElement().getComInterface() != this.getComInterface()) {
 			getComInterface().sendMessage(event);
-		} else {
+			//System.out.println("Message not going through bus"+event.getProcessingElement().getComInterface()+ "  "+this.getComInterface());
+		} 
+	else {
 			event.getProcessingElement().getPort().put(event);
 		}
 	}

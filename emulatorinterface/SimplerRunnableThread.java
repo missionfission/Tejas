@@ -39,6 +39,8 @@ import main.ArchitecturalComponent;
 import main.Main;
 import memorysystem.Cache;
 import pipeline.GPUpipeline;
+import emulatorinterface.ThreadBlockState.blockState;
+import emulatorinterface.communication.Encoding;
 import emulatorinterface.communication.IpcBase;
 import emulatorinterface.communication.Packet;
 import emulatorinterface.communication.filePacket.SimplerFilePacket;
@@ -53,7 +55,7 @@ import java.util.concurrent.*;
  * continuously keeps reading from the shared memory segment according
  * to its index(taken care in the jni C file).
  */
-public class SimplerRunnableThread implements Runnable {
+public class SimplerRunnableThread implements Runnable,Encoding {
 	
 	int currBlock = 0;
 
@@ -62,7 +64,9 @@ public class SimplerRunnableThread implements Runnable {
 	public long barier_wait=0;
 	public long phaser_wait=0;
 	public boolean mem_flag = false;
-	
+	//static EmulatorThreadState[] emulatorThreadState;// = new EmulatorThreadState[EMUTHREADS];
+	static ThreadBlockState[] threadBlockState;//=new ThreadBlockState[EMUTHREADS];
+//	GenericCircularQueue<Instruction>[] inputToPipeline;
 	public int javaTid;
 	public ObjParser myParser;
 	public int TOTALBLOCKS, blocksExecuted=0;
@@ -180,28 +184,33 @@ public class SimplerRunnableThread implements Runnable {
 				}
 				
 				numReads = ipcBase.fetchManyPackets(this, currBlock, fromEmulator, threadParam);
+//				System.out.println(numReads);
 				if (fromEmulator.size() == 0) {
-					continue;
+					System.out.println("True");
+					//continue;
 				}
-				
+				//System.out.println("here");
+//				if(numReads==-1)
+//					break;
 				// update the number of read packets
 				threadParam.totalRead += numReads;
 				
 				// If java thread itself is terminated then break out from this
 				// for loop. also update the variable all-over so that I can
 				// break from the outer while loop also.
-				if (ipcBase.javaThreadTermination == true) {
+				if (ipcBase.javaThreadTermination == true || numReads==-1) {
 					allover = true;
 					break;
 				}
 				
 				threadParam.checkStarted();
 				InstructionClass type;
+//				int i=0;
 				// Process all the packets read from the communication channel
 				while(fromEmulator.isEmpty() == false) {
 					
 					pnew = fromEmulator.dequeue();
-					
+				//	System.out.println("some things");
 					type=pnew.insClass;
 					if(type==InstructionClass.TYPE_BLOCK_END)
 					{
@@ -221,7 +230,8 @@ public class SimplerRunnableThread implements Runnable {
 					}
 					
 					boolean ret = processPacket(threadParam, pnew, currBlock, assignedSP);
-					
+//					System.out.println(i);
+//					i++;
 					if(ret==false) {
 						System.out.println(ret);
 						// There is not enough space in pipeline buffer. 
@@ -229,7 +239,9 @@ public class SimplerRunnableThread implements Runnable {
 						break;
 					}
 				}
+				
 				runPipelines(assignedSP);
+//				System.out.println("where stuck run ");
 				if(blockEndSeen)
 				{
 					
@@ -242,26 +254,30 @@ public class SimplerRunnableThread implements Runnable {
 					break;
 				}
 				if(allover) {
+//					System.out.println("terminated");
 					ipcBase.javaThreadTermination = true;
 					break;
 			    }
 			}
+//			System.out.println("where stuck finish");
 			finishAllPipelines(assignedSP);
 			Statistics.calculateCyclesKernel(javaTid);
 			ipcBase.kernelExecuted++;
-			if(ipcBase.kernelExecuted % 10 == 0)
-				System.out.println("Simulated " + ipcBase.kernelExecuted + " kernels on " + javaTid);
+//			System.out.println("where stuck finish");
+//			if(ipcBase.kernelExecuted % 10 == 0)
+			System.out.println("Simulated " + ipcBase.kernelExecuted + " kernels on " + javaTid);
 			ipcBase.javaThreadTermination = false;
 			
 			blocksExecuted+=currBlock+1;
 			
 			
-				try {
-					main.Main.runners[javaTid].initialize();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					main.Main.runners[javaTid].initialize();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 		}
+		//System.out.println("first iterations");
 		ipcBase.javaThreadTermination = true;
 		iFinished();
 		ipcBase.free.release();
@@ -385,6 +401,7 @@ public class SimplerRunnableThread implements Runnable {
 private void AddToSetAndIncrementClock() {
 
 		LocalClockperSm.incrementClock();
+//		@SuppressWarnings();
 		ArchitecturalComponent.getCores()[pipelineInterfaces.getCore().getTPC_number()][pipelineInterfaces.getCore().getSM_number()].clock.incrementClock();
 		blockState[currBlock].tot_cycles++;
 		
@@ -479,33 +496,59 @@ private void AddToSetAndIncrementClock() {
 	}
 
 	
+
+	private void checkForBlockingPacket(long value,int TidApp) {
+		// TODO Auto-generated method stub
+		int val=(int)value;
+		switch(val)
+		{
+		case LOCK:
+		case JOIN:
+		case CONDWAIT:
+		case BARRIERWAIT:threadBlockState[TidApp].gotBlockingPacket(val);
+		
+		}
+	}
 	
+	private void checkForUnBlockingPacket(long value,int TidApp) {
+		// TODO Auto-generated method stub
+		int val=(int)value;
+		switch(val)
+		{
+		case LOCK+1:
+		case JOIN+1:
+		case CONDWAIT+1:
+		case BARRIERWAIT+1:threadBlockState[TidApp].gotUnBlockingPacket();
+		
+		}
+	}
 	@SuppressWarnings("unused")
 	public void finishAllPipelines(int assigned_SP) {
-
-		boolean queueComplete;    //queueComplete is true when all cores have completed
-		while(true)
-		{
+		int i=0;
+		return;
+//		boolean queueComplete;    //queueComplete is true when all cores have completed
+//		while(true)
+//		{
+//			
+//			int count=0;
+//			queueComplete = true;        
+//		
+//			if(maxCoreAssign>0) {
+//				
+//					//	System.out.println(i);
+//						pipelineInterfaces.oneCycleOperation(assigned_SP);
+//						AddToSetAndIncrementClock();
+//						ArchitecturalComponent.getCores()[pipelineInterfaces.getCore().getTPC_number()][pipelineInterfaces.getCore().getSM_number()].clock.incrementClock();
+//			//	i++;
+//				
+//			}
+//			if(inputToPipeline.size()==0)
+//			{
+//				break;
+//			}
 			
-			int count=0;
-			queueComplete = true;        
 			
-			if(maxCoreAssign>0) {
-				
-				
-						pipelineInterfaces.oneCycleOperation(assigned_SP);
-						AddToSetAndIncrementClock();
-						ArchitecturalComponent.getCores()[pipelineInterfaces.getCore().getTPC_number()][pipelineInterfaces.getCore().getSM_number()].clock.incrementClock();
-				
-				
-			}
-			if(inputToPipeline.size()==0)
-			{
-				break;
-			}
-			
-			
-		}	
+		//}	
 		
 	}
 }

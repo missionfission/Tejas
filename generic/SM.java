@@ -29,6 +29,7 @@ import memorysystem.AddressCarryingEvent;
 import memorysystem.MemorySystem;
 import pipeline.GPUExecutionEngine;
 import pipeline.GPUpipeline;
+import regfiles.RegisterFile;
 //import pipeline.multi_issue_inorder.MultiIssueInorderExecutionEngine;
 
 /**
@@ -49,7 +50,7 @@ public class SM extends SimulationElement{
 	private int sm_number;
 	private long coreCyclesTaken;
 	private long noOfInstructionsExecuted;
-	
+	public RegisterFile registerfile;
 	
 	private pipeline.GPUpipeline pipelineInterface;
 	
@@ -146,8 +147,7 @@ public class SM extends SimulationElement{
 		
 		System.out.println("Handled by SM");
 		
-		if (event.getRequestType() == RequestType.Main_Mem_Read ||
-				  event.getRequestType() == RequestType.Main_Mem_Write )
+		if (event.getRequestType() == RequestType.Main_Mem_Read ||  event.getRequestType() == RequestType.Main_Mem_Write )
 		{
 			
 			this.handleMemoryReadWrite(eventQ,event);

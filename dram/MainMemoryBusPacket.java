@@ -100,7 +100,7 @@ public class MainMemoryBusPacket implements Cloneable{
 //				bank +" Rank: "+
 //				rank +" Phys Address: "+
 //				physicalAddress + " Id : " + testid + " timeCreated: " + timeCreated );
-	
+//	
 	}
 	
 	public void printPacketToFile()

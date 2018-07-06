@@ -238,35 +238,31 @@ public class Cache extends SimulationElement
 		private boolean printCacheDebugMessages = false;
 		public void handleEvent(EventQueue eventQ, Event event)
 		{
-			// Sanity check for iCache
-			if(this.levelFromTop==CacheType.iCache && event.getRequestType()==RequestType.Cache_Read && ((AddressCarryingEvent)event).getAddress()==-1) {
-				misc.Error.showErrorAndExit("iCache is getting request for invalid ip : -1");
-			}
-			
-			if(printCacheDebugMessages==true) {
-				if(event.getClass()==AddressCarryingEvent.class)
-				{
-				System.out.println("CACHE : globalTime = " + ArchitecturalComponent.getCores()[event.tpcId][event.smId].clock.getCurrentTime() +
-					"\teventTime = " + event.getEventTime() + "\t" + event.getRequestType() +
-					"\trequestingElelement = " + event.getRequestingElement() +
-					"\taddress = " + ((AddressCarryingEvent)event).getAddress() +
-					"\t" + this);
-				}
-			}
-			
-			if(this.levelFromTop == CacheType.L1 || this.levelFromTop == CacheType.iCache)
-			{
-			}
-			
+//			// Sanity check for iCache
+//			if(this.levelFromTop==CacheType.iCache && event.getRequestType()==RequestType.Cache_Read && ((AddressCarryingEvent)event).getAddress()==-1) {
+//				misc.Error.showErrorAndExit("iCache is getting request for invalid ip : -1");
+//			}
+//			
+//			if(printCacheDebugMessages==true) {
+//				if(event.getClass()==AddressCarryingEvent.class)
+//				{
+//				System.out.println("CACHE : globalTime = " + ArchitecturalComponent.getCores()[event.tpcId][event.smId].clock.getCurrentTime() +
+//					"\teventTime = " + event.getEventTime() + "\t" + event.getRequestType() +
+//					"\trequestingElelement = " + event.getRequestingElement() +
+//					"\taddress = " + ((AddressCarryingEvent)event).getAddress() +
+//					"\t" + this);
+//				}
+//			}
+//			
+//			if(this.levelFromTop == CacheType.L1 || this.levelFromTop == CacheType.iCache)
+//			{
+//			}
+//			
 			if (event.getRequestType() == RequestType.Cache_Read || event.getRequestType() == RequestType.Cache_Write)
 			{
 				this.handleAccess(eventQ, (AddressCarryingEvent) event);
-				
-				// Only for read/write we should send the request to the working set.
-				// All other events like mem_response, etc do not count as an access 
-				// for the working set
 				long address = ((AddressCarryingEvent) event).getAddress();
-				this.addToWorkingSet(address);
+				this.addToWorkingSet(address); //only read and write count as working set
 			}
 			
 			else if (event.getRequestType() == RequestType.Cache_Read_Writeback|| event.getRequestType() == RequestType.Send_Mem_Response 
@@ -277,6 +273,7 @@ public class Cache extends SimulationElement
 			
 			else if (event.getRequestType() == RequestType.Mem_Response)
 			{
+				//System.out.println("Mem_Response request is given here");
 				this.handleMemResponse(eventQ, event);
 			}
 			
@@ -297,7 +294,26 @@ public class Cache extends SimulationElement
 				}
 			}
 		}
-		
+		protected void cacheHit(long addr, RequestType requestType, CacheLine cl,
+				AddressCarryingEvent event) {
+			hits++;
+			noOfRequests++;
+			noOfAccesses++;
+			
+			if (requestType == RequestType.Cache_Read) {
+				//sendAcknowledgement(event);
+			} else if (requestType == RequestType.Cache_Write) {
+				if(this.writePolicy == WritePolicy.WRITE_THROUGH) {
+					sendRequestToNextLevel(addr, RequestType.Cache_Write);
+				}
+				
+				if( (cl.getState() == MESI.SHARED || cl.getState() == MESI.EXCLUSIVE)) {
+					//handleCleanToModified(addr, event);
+				}
+			} else {
+				misc.Error.showErrorAndExit("cache hit unknown event type\n" + event + "\ncache : " + this);
+			}
+		}
 		public void handleAccess(EventQueue eventQ, AddressCarryingEvent event)
 		{
 			if(event.getRequestType() == RequestType.Cache_Write)
@@ -309,7 +325,7 @@ public class Cache extends SimulationElement
 			long address = event.getAddress();
 			
 			CacheLine cl = this.processRequest(requestType, address, event);
-
+			
 			if (cl != null || missStatusHoldingRegister.containsWriteOfEvictedLine(address) )
 			{
 				processBlockAvailable(event);				
@@ -326,8 +342,10 @@ public class Cache extends SimulationElement
 				} 
 				else 
 				{
-					sendRequestToNextLevel(address, RequestType.Cache_Read);
-//					sendReadRequest(event);
+					System.out.println(event.getRequestType());
+					sendRequestToNextLevel(address, RequestType.Cache_Read );
+
+					//sendReadRequest(event);
 				}
 			
 			missStatusHoldingRegister.addOutstandingRequest(event);	
@@ -447,19 +465,19 @@ public class Cache extends SimulationElement
 				sendWriteRequestToLowerCache(receivedEvent);
 			}			
 		}		
-//
-		private void sendReadRequest(AddressCarryingEvent receivedEvent)
-		{
-			if(this.isLastLevel)
-			{
-				sendReadRequestToMainMemory(receivedEvent);
-			} 
-			else
-			{
-				sendReadRequestToLowerCache(receivedEvent);
-			}			
-		}
-		
+
+//		private void sendReadRequest(AddressCarryingEvent receivedEvent)
+//		{
+//			if(this.isLastLevel)
+//			{
+//				sendReadRequestToMainMemory(receivedEvent);
+//			} 
+//			else
+//			{
+//				sendReadRequestToLowerCache(receivedEvent);
+//			}			
+//		}
+//		
 		/* forward memory request to next level
 		 * handle related lower level mshr scenarios
 		 */
@@ -505,16 +523,16 @@ public class Cache extends SimulationElement
 			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
 		}
 		
-		private void sendReadRequestToMainMemory(AddressCarryingEvent receivedEvent)
-		{ 
-		//	System.out.println("Was earlier calling through here");
-			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),this,
-                                MemorySystem.mainMemoryController,receivedEvent.getRequestType());
-
-			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
-		}
-		
-		
+//		private void sendReadRequestToMainMemory(AddressCarryingEvent receivedEvent)
+//		{ 
+//		//	System.out.println("Was earlier calling through here");
+//			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),this,
+//                                MemorySystem.mainMemoryController,receivedEvent.getRequestType());
+//
+//			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
+//		}
+//		
+//		
 		
 		protected void sendResponseToWaitingEvent(ArrayList<AddressCarryingEvent> outstandingRequestList)
 		{
@@ -533,8 +551,10 @@ public class Cache extends SimulationElement
 					if (this.writePolicy == CacheConfig.WritePolicy.WRITE_THROUGH)
 						{
 								if (this.isLastLevel)
-								{
-									putEventToPort(eventPoppedOut,eventPoppedOut.getRequestingElement(), RequestType.Main_Mem_Write, true,true);
+								{	System.out.println(eventPoppedOut.getRequestingElement());
+//									putEventToPort(eventPoppedOut,eventPoppedOut.getRequestingElement(), RequestType.Main_Mem_Write, true,true);
+									long addr=eventPoppedOut.getAddress();
+									sendRequestToNextLevel(addr, eventPoppedOut.getRequestType());
 								}
 								else if (this.coherence == CoherenceType.None)
 								{
@@ -617,10 +637,10 @@ public class Cache extends SimulationElement
 			long addr = ((AddressCarryingEvent)(event)).getAddress();
 			
 			ArrayList<AddressCarryingEvent> eventsToBeServed = missStatusHoldingRegister.removeRequestsByAddress((AddressCarryingEvent)event);
-			
-			misses += eventsToBeServed.size();			
+			if(eventsToBeServed!=null)
+			{misses += eventsToBeServed.size();			
 			noOfRequests += eventsToBeServed.size();
-			noOfAccesses+=eventsToBeServed.size() + 1;
+			noOfAccesses+=eventsToBeServed.size() + 1;}
 			CacheLine evictedLine = this.fill(addr, stateToSet);
 			
 			//This does not ensure inclusiveness
@@ -640,17 +660,15 @@ public class Cache extends SimulationElement
 							evictionUpdateDirectory(requestingCore,evictedLine.getTag(),event,address);
 					}
 					else if (this.isLastLevel)
-					{
-							putEventToPort(event, MemorySystem.mainMemoryController, RequestType.Main_Mem_Write, false,true);
+					{	
+						sendRequestToNextLevel(addr, event.getRequestType());
+					//	putEventToPort(event, MemorySystem.mainMemoryController, RequestType.Main_Mem_Write, false,true);
+						
 					}
 					else
 					{
-						AddressCarryingEvent eventToForward = new AddressCarryingEvent(event.getEventQ(),
-																					   this.nextLevel.getLatency(), 
-																					   this,
-																					   this.nextLevel, 
-																					   RequestType.Cache_Write, 
-																					   evictedLine.getAddress(),
+						AddressCarryingEvent eventToForward = new AddressCarryingEvent(event.getEventQ(), this.nextLevel.getLatency(), this,  this.nextLevel, 
+																					   RequestType.Cache_Write,  evictedLine.getAddress(),
 																					   event.tpcId, event.smId);
 						propogateWrite(eventToForward);
 					}
@@ -661,6 +679,7 @@ public class Cache extends SimulationElement
 				AddressCarryingEvent addrEvent = (AddressCarryingEvent) event;
 				memResponseUpdateDirectory(addrEvent.tpcId, addrEvent.smId,addrEvent.getAddress() >>> blockSizeBits, addrEvent, addrEvent.getAddress());
 			}
+		if(eventsToBeServed!=null)
 			sendResponseToWaitingEvent(eventsToBeServed);
 		}
 		
@@ -775,11 +794,8 @@ public class Cache extends SimulationElement
 		public void sendMemResponseDirectory(AddressCarryingEvent eventToRespondTo)
 		{
 			eventToRespondTo.getRequestingElement().getPort().put(
-										eventToRespondTo.update(
-												eventToRespondTo.getEventQ(),
-												MemorySystem.getDirectoryCache().getNetworkDelay(),
-												eventToRespondTo.getProcessingElement(),
-												eventToRespondTo.getRequestingElement(),
+										eventToRespondTo.update(eventToRespondTo.getEventQ(),MemorySystem.getDirectoryCache().getNetworkDelay(),
+												eventToRespondTo.getProcessingElement(),eventToRespondTo.getRequestingElement(),
 												RequestType.Mem_Response));
 		}
 		
@@ -1033,7 +1049,7 @@ simElement, requestType,((AddressCarryingEvent)event).getAddress(),((AddressCarr
 					cl.setState(MESI.MODIFIED);
 					System.out.println(this.coherence);
 					// Send request to lower cache.
-					if(this.coherence==CoherenceType.None && this.isLastLevel==false) {
+					if(this.coherence==CoherenceType.None) {
 						
 						AddressCarryingEvent newEvent  = (AddressCarryingEvent)event.clone();
 						newEvent.setAddress(addr);
@@ -1119,7 +1135,7 @@ simElement, requestType,((AddressCarryingEvent)event).getAddress(),((AddressCarr
 	
 		public CacheLine processRequest(RequestType requestType, long addr, Event event)
 		{
-			System.out.println("request in processrequest of cache "+ requestType );
+//			System.out.println("request in processrequest of cache "+ requestType );
 			CacheLine ll = null;
 			if(requestType == RequestType.Cache_Read )  {
 				ll = this.read(addr);

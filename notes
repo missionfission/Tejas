@@ -1,6 +1,0 @@
-No request is coming in the core broadcast bus.(handle event)
-
-
-
-In the cache of GPU TEJAS, when there are request of cache read and cache write, in the case when the cache line is not found(that is a miss) and MSHR also dont contain the address of the evicted line, 
-there is no handling of the case when there is no coherence and the event is of cache write, and they are directly sent to the sendReadRequestToMemory. The request that are being sent to this function are cache_read and cache write. When i tried to fix this by creating a new field of cache Write, it gave me error that memory not allocated/ Program stopped.

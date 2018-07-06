@@ -103,6 +103,7 @@ public class Port
 			
 			// If a port is available, set its portBusyUntil field to
 			// current time
+			System.out.println("tpc "+event.tpcId+" sm id "+event.smId);
 			if(portBusyUntil[availablePortID]<
 					ArchitecturalComponent.getCores()[event.tpcId][event.smId].clock.getCurrentTime())
 			{

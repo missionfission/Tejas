@@ -246,6 +246,7 @@ private static void createElementsOfNOC() {
 					misc.Error.showErrorAndExit("There should be a TPC before any SM !!");
 				}else{
 					SM_number_withinTPC++;
+					//System.out.println("( "+TPC_number+" "+SM_number_withinTPC+" )");
 					cores[TPC_number][SM_number_withinTPC].setComInterface(comInterface);
 				}
 			} else if(nextElementToken.equals("M")) {

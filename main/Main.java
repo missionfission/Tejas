@@ -149,17 +149,24 @@ public class Main {
 		ipcBase[i]=new SimplerFilePacket(i);
 		int tpc_id=i/TpcConfig.NoOfSM;
 		int sm_id=i%TpcConfig.NoOfSM;
+		System.out.println(tpc_id+"TPC id"+"java thread"+i);
+		System.out.println(sm_id+"SM id"+"java thread"+i);
+
 		runners[i] = new SimplerRunnableThread(name,i, ipcBase[i], ArchitecturalComponent.getCores()[tpc_id][sm_id], epochEnd);
 		
 		}
-		
-		
+//		int i=0;
+//		name = Integer.toString(i);
+//		ipcBase[i]=new SimplerFilePacket(i);
+//		int tpc_id=i/TpcConfig.NoOfSM;
+//		int sm_id=i%TpcConfig.NoOfSM;
+//		runners[i] = new SimplerRunnableThread(name,i, ipcBase[i], ArchitecturalComponent.getCores()[tpc_id][sm_id], epochEnd);
 		
 		System.out.println("\n\nRunning the simulation !!!");
 		startTime = System.currentTimeMillis();
 	
 		startRunnerThreads();
-                Statistics.initStatistics();
+        Statistics.initStatistics();
 		waitForJavaThreads();
 		
 		endTime = System.currentTimeMillis();
@@ -218,7 +225,7 @@ public class Main {
 			for (int i=0; i<SimulationConfig.MaxNumJavaThreads; i++) {
 				ipcBase[i].free.acquire();	
 			}
-			
+			//ipcBase[0].free.acquire();	
 			
 		} catch (InterruptedException ioe) {
 			misc.Error.showErrorAndExit("Wait for java threads interrupted !!");
@@ -230,6 +237,7 @@ public class Main {
 		for(int i=0;i<SimulationConfig.MaxNumJavaThreads;i++)
 			runners[i].t.start();
 		
+	//	runners[0].t.start();
 	}
 	
 	public static KernelState currKernel = new KernelState();

@@ -59,6 +59,7 @@ public class EventQueue
 			if (eventTime <= currentClockTime)
 			{
 				event = priorityQueue.remove();
+				
 				event.getProcessingElement().handleEvent(this, event);
 			}
 			else
