@@ -373,26 +373,16 @@ public class SimplerRunnableThread implements Runnable,Encoding {
 			
 			
 			if(RAMcyclerun == true)
-			{
-
-				//add the packets pending at this cycle to the queue
-
+			{				//add the packets pending at this cycle to the queue
 				for(int k=0;k<SystemConfig.mainMemoryConfig.numChans;k++){
 					ArchitecturalComponent.getMainMemoryDRAMController(null,k).enqueueToCommandQ();
-		
-					
+						
 				}	
 				RAMcyclerun = false;	
 		}
 
 			AddToSetAndIncrementClock(); 
-//			for(int i=0;i<SystemConfig.NoOfTPC;i++)
-//				for(int j=0;j<TpcConfig.NoOfSM;j++)
-//			System.out.println("Time of sm with id"+ (i+1)*(j+1) + "is "+ArchitecturalComponent.getCores()[i][j].clock.getCurrentTime());
-//		System.out.println("local clock time is "+LocalClockperSm.getCurrentTime());
-		}
-		
-	
+		}		
 	}
 	
 	
@@ -407,21 +397,15 @@ private void AddToSetAndIncrementClock() {
 		
 		epochCount++;
 	if (epochCount % main.Main.SynchClockDomainsCycles ==0) {
-		
 		int phase = epochEnd.getPhase(); 
 		if (phase==previousPhase) {
 			long g=System.currentTimeMillis();
 			epochEnd.awaitAdvance(phase);
 		phaser_wait+=(System.currentTimeMillis()-g);
 			}
-			
 			previousPhase = epochEnd.arrive();
-			
-			
-		}
-
-		
-	}
+			}
+}
 
 	public int epochCount,previousPhase=-1;
 	@SuppressWarnings("unused")

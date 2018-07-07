@@ -82,7 +82,7 @@
 		</MainMemory>
 		
 		<CacheBusLatency>1</CacheBusLatency>
-		<Interconnect>NOC</Interconnect>
+		<Interconnect>Bus</Interconnect>
 		
 		<NOC>
 			<NocConfigFile>/home/khushal/workspace/gpu_tejas/src/simulator/Tejas/config/NocConfig.txt</NocConfigFile>
