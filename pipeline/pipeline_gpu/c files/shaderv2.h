@@ -66,11 +66,11 @@ const unsigned WARP_PER_CTA_MAX = 48;
 typedef std::bitset<WARP_PER_CTA_MAX> warp_set_t;
 
 int register_bank(int regnum, int wid, unsigned num_banks, unsigned bank_warp_shift);
-
+inline int scheduler_unit::get_sid() const { return m_shader->get_sid(); }
 class shader_core_ctx;
 class shader_core_config;
 class shader_core_stats;
-class shader_core_config;
+
 
 
 
@@ -98,6 +98,6 @@ struct ifetch_buffer_t {
 
 
 
-inline int scheduler_unit::get_sid() const { return m_shader->get_sid(); }
+
 
 #endif /* SHADER_H */

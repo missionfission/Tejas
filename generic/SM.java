@@ -29,7 +29,7 @@ import memorysystem.AddressCarryingEvent;
 import memorysystem.MemorySystem;
 import pipeline.GPUExecutionEngine;
 import pipeline.GPUpipeline;
-import regfiles.RegisterFile;
+
 //import pipeline.multi_issue_inorder.MultiIssueInorderExecutionEngine;
 
 /**
@@ -50,7 +50,7 @@ public class SM extends SimulationElement{
 	private int sm_number;
 	private long coreCyclesTaken;
 	private long noOfInstructionsExecuted;
-	public RegisterFile registerfile;
+
 	
 	private pipeline.GPUpipeline pipelineInterface;
 	
