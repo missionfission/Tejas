@@ -38,7 +38,7 @@ import generic.PortType;
 import generic.RequestType;
 import generic.SM;
 import generic.SimulationElement;
-
+import pipeline.StageLatch_MII;
 public class ScheduleUnit extends SimulationElement{
 	
 	SM sm;
@@ -125,8 +125,7 @@ public class ScheduleUnit extends SimulationElement{
 							else
 							{
 								memReqIssued = containingExecutionEngine.gpuMemorySystem.issueRequestToConstantCache(
-								RequestType.Cache_Read,
-								newInstruction.MemoryAddresses[i], k);
+								RequestType.Cache_Read,	newInstruction.MemoryAddresses[i], k);
 								if(!memReqIssued)
 								{
 									System.out.println("Memory request not issuesd");

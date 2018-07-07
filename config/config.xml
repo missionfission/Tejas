@@ -82,7 +82,7 @@
 		</MainMemory>
 		
 		<CacheBusLatency>1</CacheBusLatency>
-		<Interconnect>NOC</Interconnect>
+		<Interconnect>Bus</Interconnect>
 		
 		<NOC>
 			<NocConfigFile>/home/gantavya/workspace/GPU_tejas/src/config/NocConfig.txt</NocConfigFile>

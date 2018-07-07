@@ -46,8 +46,7 @@ public class GPUMemorySystem extends SMMemorySystem {
 		
 		
 		AddressCarryingEvent addressEvent = new AddressCarryingEvent(getSM().getEventQueue(),
-				 iCache.getLatencyDelay(),
-				 this,  iCache, RequestType.Cache_Read, address, sm.getTPC_number(), sm.getSM_number());
+				 iCache.getLatencyDelay(),this,  iCache, RequestType.Cache_Read, address, sm.getTPC_number(), sm.getSM_number());
 
 		
 		//attempt issue to lower level cache
@@ -153,7 +152,7 @@ public class GPUMemorySystem extends SMMemorySystem {
 		//if response comes from iCache, inform fetchunit
 		if(memResponse.getRequestingElement() == iCache)
 			
-		{
+		{	System.out.println("Here");
 //			System.out.println("calling from the gpumemorysystem i cache condition");
 			containingExecEngine.getScheduleUnit().processCompletionOfMemRequest(address);
 		}

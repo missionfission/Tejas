@@ -31,7 +31,16 @@ I have removed the show error and exit things and I have to add them later
 
 Only one thread running for now !!!!!!!!!!!!!!!!!
 
+Check Custom Instruction Pool
 
 finish all pipelines is commented out , running indefinitely for some reason 
 
 initialize also commented out in run 
+
+// Add Register Files 
+// Create a Warp Class 
+// Store memory requested threads in the Register Files
+// Change CalculateWarpOccupancy function in the emulator interface
+// when warp has a memory barrier add it to the register file
+// shader.cc contains the functions regarding the warp scheduling 
+// Barrier Table has a commented and unresolved tgt 

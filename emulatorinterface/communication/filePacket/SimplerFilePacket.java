@@ -144,7 +144,7 @@ public class SimplerFilePacket extends IpcBase{
 				}
 				catch(EOFException e)
 				{
-					System.out.println("cannot read "+dis+"  "+i);
+					//System.out.println("cannot read "+dis+"  "+i);
 					//System.exit(0);
 					maxSize=-1;
 				}

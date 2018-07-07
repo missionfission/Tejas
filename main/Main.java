@@ -155,13 +155,7 @@ public class Main {
 		runners[i] = new SimplerRunnableThread(name,i, ipcBase[i], ArchitecturalComponent.getCores()[tpc_id][sm_id], epochEnd);
 		
 		}
-//		int i=0;
-//		name = Integer.toString(i);
-//		ipcBase[i]=new SimplerFilePacket(i);
-//		int tpc_id=i/TpcConfig.NoOfSM;
-//		int sm_id=i%TpcConfig.NoOfSM;
-//		runners[i] = new SimplerRunnableThread(name,i, ipcBase[i], ArchitecturalComponent.getCores()[tpc_id][sm_id], epochEnd);
-		
+
 		System.out.println("\n\nRunning the simulation !!!");
 		startTime = System.currentTimeMillis();
 	
