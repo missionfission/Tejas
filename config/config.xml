@@ -85,7 +85,7 @@
 		<Interconnect>Bus</Interconnect>
 		
 		<NOC>
-			<NocConfigFile>/home/khushal/workspace/gpu_tejas/src/simulator/Tejas/config/NocConfig.txt</NocConfigFile>
+			<NocConfigFile>/home/gantavya/workspace/GPU_tejas/src/config/NocConfig.txt</NocConfigFile>
 			<NocSelScheme>STATIC</NocSelScheme>
 			<NocNumberOfBuffers>4</NocNumberOfBuffers>
 			<NocPortType>FCFS</NocPortType>

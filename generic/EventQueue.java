@@ -24,7 +24,10 @@ package generic;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
+import dram.MainMemoryDRAMController;
+
 import main.ArchitecturalComponent;
+import memorysystem.MemorySystem;
 
 public class EventQueue 
 {
@@ -59,7 +62,9 @@ public class EventQueue
 			if (eventTime <= currentClockTime)
 			{
 				event = priorityQueue.remove();
-				
+//				System.out.println(event.getProcessingElement()+" is req. elem. and "+event.getRequestType());
+//				System.out.println("( "+event.tpcId+", "+event.smId+" )");
+				//System.out.println(event.getProcessingElement());
 				event.getProcessingElement().handleEvent(this, event);
 			}
 			else

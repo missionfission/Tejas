@@ -238,6 +238,7 @@ public class Cache extends SimulationElement
 		private boolean printCacheDebugMessages = false;
 		public void handleEvent(EventQueue eventQ, Event event)
 		{
+			
 //			// Sanity check for iCache
 //			if(this.levelFromTop==CacheType.iCache && event.getRequestType()==RequestType.Cache_Read && ((AddressCarryingEvent)event).getAddress()==-1) {
 //				misc.Error.showErrorAndExit("iCache is getting request for invalid ip : -1");
@@ -273,7 +274,6 @@ public class Cache extends SimulationElement
 			
 			else if (event.getRequestType() == RequestType.Mem_Response)
 			{
-				//System.out.println("Mem_Response request is given here");
 				this.handleMemResponse(eventQ, event);
 			}
 			
@@ -294,6 +294,23 @@ public class Cache extends SimulationElement
 				}
 			}
 		}
+		public void sendAcknowledgement(AddressCarryingEvent event) {
+			RequestType returnType = null;
+			if(event.getRequestType()==RequestType.Cache_Read) {
+				returnType = RequestType.Mem_Response;
+			} else {
+				misc.Error.showErrorAndExit("sendAcknowledgement is meant for cache read operation only : " + event);
+			}
+			
+			AddressCarryingEvent memResponseEvent = new AddressCarryingEvent(
+					event.getEventQ(), 0, event.getProcessingElement(),
+					event.getRequestingElement(), returnType,
+					event.getAddress());
+			
+			sendEvent(memResponseEvent);
+			noOfResponsesSent++;
+
+		}
 		protected void cacheHit(long addr, RequestType requestType, CacheLine cl,
 				AddressCarryingEvent event) {
 			hits++;
@@ -301,10 +318,10 @@ public class Cache extends SimulationElement
 			noOfAccesses++;
 			
 			if (requestType == RequestType.Cache_Read) {
-				//sendAcknowledgement(event);
+				sendAcknowledgement(event);
 			} else if (requestType == RequestType.Cache_Write) {
 				if(this.writePolicy == WritePolicy.WRITE_THROUGH) {
-					sendRequestToNextLevel(addr, RequestType.Cache_Write);
+					sendRequestToNextLevel(addr, RequestType.Cache_Write, event.tpcId, event.smId);
 				}
 				
 				if( (cl.getState() == MESI.SHARED || cl.getState() == MESI.EXCLUSIVE)) {
@@ -316,8 +333,11 @@ public class Cache extends SimulationElement
 		}
 		public void handleAccess(EventQueue eventQ, AddressCarryingEvent event)
 		{
+//			System.out.println("( "+event.tpcId+", "+event.smId+" )");
+			
 			if(event.getRequestType() == RequestType.Cache_Write)
 			{
+				
 				noOfWritesReceived++;
 			}
 			
@@ -341,21 +361,20 @@ public class Cache extends SimulationElement
 					readMissUpdateDirectory(event.tpcId, event.smId,( address>>> blockSizeBits ), event, address);
 				} 
 				else 
-				{
-					System.out.println(event.getRequestType());
-					sendRequestToNextLevel(address, RequestType.Cache_Read );
-
-					//sendReadRequest(event);
+				{					
+					sendRequestToNextLevel(address, RequestType.Cache_Read, event.tpcId,event.smId );
 				}
 			
 			missStatusHoldingRegister.addOutstandingRequest(event);	
 			}
 			
 		}
-		public void sendRequestToNextLevel(long addr, RequestType requestType) {
+		public void sendRequestToNextLevel(long addr, RequestType requestType, int tpcId, int smId) {
 			if(this.isLastLevel==true)
 //			Cache c = this.nextLevel;
-			{	AddressCarryingEvent event = null;
+			{
+			//	System.out.println("This is the last level");
+				AddressCarryingEvent event = null;
 			//event = new AddressCarryingEvent(getEventQueue(), 0, this, c,	requestType, addr);
 			//addEventAtLowerCache(event, c);
 			SM core0 = ArchitecturalComponent.getCores()[0][0];
@@ -373,8 +392,7 @@ public class Cache extends SimulationElement
 		memController = getComInterface().getNearestMemoryController(0);	
 //				}
 
-		event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,memController, requestType, addr);
-//				System.out.println(event.getProcessingElement().getPort().put(event));
+		event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,memController, requestType, addr, tpcId, smId);
 		sendEvent(event);
 			}
 		}
@@ -554,7 +572,7 @@ public class Cache extends SimulationElement
 								{	System.out.println(eventPoppedOut.getRequestingElement());
 //									putEventToPort(eventPoppedOut,eventPoppedOut.getRequestingElement(), RequestType.Main_Mem_Write, true,true);
 									long addr=eventPoppedOut.getAddress();
-									sendRequestToNextLevel(addr, eventPoppedOut.getRequestType());
+									sendRequestToNextLevel(addr, eventPoppedOut.getRequestType(), eventPoppedOut.tpcId, eventPoppedOut.smId);
 								}
 								else if (this.coherence == CoherenceType.None)
 								{
@@ -661,7 +679,7 @@ public class Cache extends SimulationElement
 					}
 					else if (this.isLastLevel)
 					{	
-						sendRequestToNextLevel(addr, event.getRequestType());
+						sendRequestToNextLevel(addr, event.getRequestType(), event.tpcId, event.smId);
 					//	putEventToPort(event, MemorySystem.mainMemoryController, RequestType.Main_Mem_Write, false,true);
 						
 					}
