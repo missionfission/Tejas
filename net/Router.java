@@ -125,6 +125,7 @@ public class Router extends Switch{
 		break;
 		case SIMPLE :
 			choices = routingAlgo.XYnextBank(current, destination,this.topology,this.numberOfRows,this.numberOfColumns);
+			//System.out.println(choices);
 			break;
 		}
 		if(selScheme == SELSCHEME.ADAPTIVE && choices.size()>1)

@@ -524,9 +524,8 @@ public class MainMemoryDRAMController extends MainMemoryController{
 
 	public double getAverageLatency()
 	{
-		//return totalTime/totalTransactions;
-		return totalTime;
-
+		return totalTime/totalTransactions;
+		
 	}
 
 	public long[][] getTotalReadTransactions()

@@ -380,12 +380,6 @@ public class Cache extends SimulationElement
 			SM core0 = ArchitecturalComponent.getCores()[0][0];
 	
 			MainMemoryDRAMController memController;
-//			if(SystemConfig.memControllerToUse==true){
-//				int chan= findChannelNumber(addr);
-//				System.out.println(chan);
-//					memController = getComInterface().getNearestMemoryController(chan);
-//				}
-//				else{
 		CommunicationInterface ComInterface = getComInterface();
 			//System.out.println(ComInterface + " "+levelFromTop);
 			
@@ -394,6 +388,8 @@ public class Cache extends SimulationElement
 
 		event = new AddressCarryingEvent(core0.getEventQueue(), 0, this,memController, requestType, addr, tpcId, smId);
 		sendEvent(event);
+			}else {
+				System.out.println("not the last level");
 			}
 		}
 		
@@ -412,7 +408,7 @@ public class Cache extends SimulationElement
 			{
 				if (this.isLastLevel)
 				{
-					putEventToPort(event, MemorySystem.mainMemoryController, RequestType.Main_Mem_Write, true, true);
+					putEventToPort(event, ArchitecturalComponent.memoryControllers.get(0), RequestType.Main_Mem_Write, true, true);
 				}
 				else
 				{
@@ -535,19 +531,19 @@ public class Cache extends SimulationElement
 
 		private void sendWriteRequestToMainMemory(AddressCarryingEvent receivedEvent)
 		{
-			System.out.println("Was earlier calling through here upar waala ha");
-			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),	this,MemorySystem.mainMemoryController,	RequestType.Main_Mem_Write);
+			//System.out.println("Was earlier calling through here upar waala ha");
+			receivedEvent.update(receivedEvent.getEventQ(),ArchitecturalComponent.memoryControllers.get(0).getLatency(),this,ArchitecturalComponent.memoryControllers.get(0),	RequestType.Main_Mem_Write);
 
-			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
+			ArchitecturalComponent.memoryControllers.get(0).getPort().put(receivedEvent);
 		}
 		
 //		private void sendReadRequestToMainMemory(AddressCarryingEvent receivedEvent)
 //		{ 
 //		//	System.out.println("Was earlier calling through here");
-//			receivedEvent.update(receivedEvent.getEventQ(),MemorySystem.mainMemoryController.getLatency(),this,
-//                                MemorySystem.mainMemoryController,receivedEvent.getRequestType());
+//			receivedEvent.update(receivedEvent.getEventQ(),ArchitecturalComponent.memoryControllers.get(0).getLatency(),this,
+//                                ArchitecturalComponent.memoryControllers.get(0),receivedEvent.getRequestType());
 //
-//			MemorySystem.mainMemoryController.getPort().put(receivedEvent);
+//			ArchitecturalComponent.memoryControllers.get(0).getPort().put(receivedEvent);
 //		}
 //		
 //		
@@ -680,7 +676,7 @@ public class Cache extends SimulationElement
 					else if (this.isLastLevel)
 					{	
 						sendRequestToNextLevel(addr, event.getRequestType(), event.tpcId, event.smId);
-					//	putEventToPort(event, MemorySystem.mainMemoryController, RequestType.Main_Mem_Write, false,true);
+					//	putEventToPort(event, ArchitecturalComponent.memoryControllers.get(0), RequestType.Main_Mem_Write, false,true);
 						
 					}
 					else

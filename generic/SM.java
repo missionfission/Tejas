@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import dram.MainMemoryDRAMController;
 
+import main.ArchitecturalComponent;
 import memorysystem.AddressCarryingEvent;
 import memorysystem.MemorySystem;
 import pipeline.GPUExecutionEngine;
@@ -155,6 +156,7 @@ public class SM extends SimulationElement{
 		}
 		else if (event.getRequestType() == RequestType.Main_Mem_Response )
 		{
+			//System.out.println("inside sm handle event");
 			handleMainMemoryResponse(eventQ, event);
 		}
 		else 
@@ -173,10 +175,10 @@ public class SM extends SimulationElement{
 		System.out.println("Handled by SM - In Function handleMemoryReadWrite");
 		//System.out.println(((AddressCarryingEvent)event).getDestinationBankId() + ""+ ((AddressCarryingEvent)event).getSourceBankId());
 		AddressCarryingEvent addrEvent = (AddressCarryingEvent) event;
-		Vector<Integer> sourceId = addrEvent.getSourceId();
+		Vector<Integer> sourceId = addrEvent.getSourceId(); 
 		Vector<Integer> destinationId = ((AddressCarryingEvent)event).getDestinationId();
 		RequestType requestType = event.getRequestType();
-		MemorySystem.mainMemoryController.getPort().put(((AddressCarryingEvent)event).updateEvent(eventQ,MemorySystem.mainMemoryController.getLatencyDelay(), this, MemorySystem.mainMemoryController, requestType, sourceId, destinationId));
+		ArchitecturalComponent.memoryControllers.get(0).getPort().put(((AddressCarryingEvent)event).updateEvent(eventQ,ArchitecturalComponent.memoryControllers.get(0).getLatencyDelay(), this, ArchitecturalComponent.memoryControllers.get(0), requestType, sourceId, destinationId));
 
 	}
 	@SuppressWarnings("unused")

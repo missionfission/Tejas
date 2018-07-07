@@ -528,12 +528,12 @@ public class CentralizedDirectoryCache extends Cache
 	private void sendRequestToMainMemory(AddressCarryingEvent event)
 	{
 		System.out.print("send request to Main Memory"+event.getRequestingElement()+"request is "+event.getRequestType());
-		MemorySystem.mainMemoryController.getPort().put(
+		ArchitecturalComponent.memoryControllers.get(0).getPort().put(
 				new AddressCarryingEvent(
 						event.getEventQ(),
-						MemorySystem.mainMemoryController.getLatencyDelay() + getNetworkDelay(),
+						ArchitecturalComponent.memoryControllers.get(0).getLatencyDelay() + getNetworkDelay(),
 						event.getRequestingElement(), 
-						MemorySystem.mainMemoryController,
+						ArchitecturalComponent.memoryControllers.get(0),
 						event.getRequestType(),
 						event.getAddress(),
 						(event).tpcId, (event).smId));

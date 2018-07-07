@@ -114,35 +114,7 @@ public class Statistics {
 			//	outputFileWriter.write("Total Bandwidth: "+ (totalReadAndWrite*64)/(double)(maxCoreCycles/SystemConfig.mainMemoryConfig.sm_ram_ratio * SystemConfig.mainMemoryConfig.tCK)/(1024*1024*1024) * 1000000000 + " GB/s\n");
 				outputFileWriter.write("\n");
 			}
-			
-//			avgLatency = MemorySystem.mainMemoryController.getAverageLatency();
-//			outputFileWriter.write("Average Read Latency: " + avgLatency + " cycles = " + (avgLatency/SmConfig.frequency* 1000) + " ns\n");
-//			totalReadTransactions =MemorySystem.mainMemoryController.getTotalReadTransactions();
-//			totalWriteTransactions = MemorySystem.mainMemoryController.getTotalWriteTransactions();
-//			totalReadAndWrite=0L;			
-////	
-//			for(int i=0;i<SystemConfig.mainMemoryConfig.numRanks;i++){
-//				
-//				outputFileWriter.write("\t Rank "+(i+1)+"\n");
-//				
-//				for(int j=0;j<SystemConfig.mainMemoryConfig.numBanks;j++){
-//					outputFileWriter.write("\t\t Bank "+(j+1)+" :: ");
-//					outputFileWriter.write(" Reads : " +totalReadTransactions[i][j] + " | Writes: "+totalWriteTransactions[i][j] +"\n\n");
-//					totalReadAndWrite += totalReadTransactions[i][j] + totalWriteTransactions[i][j];
-//					totalReadRank += totalReadTransactions[i][j];
-//					totalWriteRank += totalWriteTransactions[i][j];
-//					}
-//
-//				outputFileWriter.write("\t Total Reads: " + totalReadRank);
-//				outputFileWriter.write("\t Total Writes: " + totalWriteRank + "\n");
-//				totalReadRank = 0L;
-//				totalWriteRank = 0L;
-//
-//			}
-//			outputFileWriter.write("\nTotal Reads and Writes: " + (totalReadAndWrite*64) + " Bytes\n");
-//			outputFileWriter.write("Total Bandwidth: "+ (totalReadAndWrite*64)/(double)(maxCoreCycles/SystemConfig.mainMemoryConfig.sm_ram_ratio * SystemConfig.mainMemoryConfig.tCK)/(1024*1024*1024) * 1000000000 + " GB/s\n");
-//			outputFileWriter.write("\n");
-//			
+		
 			}
 		outputFileWriter.write("\n\n");
 			

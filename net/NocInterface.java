@@ -49,6 +49,7 @@ public class NocInterface implements CommunicationInterface{
 			event.getProcessingElement().getPort().put(event.update(SystemConfig.nocConfig.latencyBetweenNOCElements));
 		}
 		else{
+			System.out.println("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
 			event.update(event.getRequestingElement(), this.getRouter(), event.getRequestingElement(), event.getProcessingElement());
 			this.getRouter().getPort().put(event);
 		}
