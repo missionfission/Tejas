@@ -13,9 +13,7 @@
 #include <utility>
 #include <algorithm>
 #include <deque>
-
 //#include "../cuda-sim/ptx.tab.h"
-
 #include "delayqueue.h"
 #include "stack.h"
 #include "dram.h"
@@ -29,20 +27,14 @@
 
 
 #define NO_OP_FLAG            0xFF
-
 /* READ_PACKET_SIZE:
    bytes: 6 address (flit can specify chanel so this gives up to ~2GB/channel, so good for now),
           2 bytes   [shaderid + mshrid](14 bits) + req_size(0-2 bits if req_size variable) - so up to 2^14 = 16384 mshr total 
  */
-
 #define READ_PACKET_SIZE 8
-
 //WRITE_PACKET_SIZE: bytes: 6 address, 2 miscelaneous. 
 #define WRITE_PACKET_SIZE 8
-
 #define WRITE_MASK_SIZE 8
-
-
 class thread_ctx_t {
 public:
    unsigned m_cta_id; // hardware CTA this thread belongs
@@ -56,24 +48,15 @@ public:
 
    bool m_active; 
 };
-
-
-
 inline unsigned hw_tid_from_wid(unsigned wid, unsigned warp_size, unsigned i){return wid * warp_size + i;};
 inline unsigned wid_from_hw_tid(unsigned tid, unsigned warp_size){return tid/warp_size;};
-
 const unsigned WARP_PER_CTA_MAX = 48;
 typedef std::bitset<WARP_PER_CTA_MAX> warp_set_t;
-
 int register_bank(int regnum, int wid, unsigned num_banks, unsigned bank_warp_shift);
 inline int scheduler_unit::get_sid() const { return m_shader->get_sid(); }
 class shader_core_ctx;
 class shader_core_config;
 class shader_core_stats;
-
-
-
-
 struct insn_latency_info {
    unsigned pc;
    unsigned long latency;

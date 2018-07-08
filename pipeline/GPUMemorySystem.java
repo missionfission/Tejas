@@ -151,8 +151,8 @@ public class GPUMemorySystem extends SMMemorySystem {
 		
 		//if response comes from iCache, inform fetchunit
 		if(memResponse.getRequestingElement() == iCache)
-			
-		{	System.out.println("Here");
+		{
+//		{	System.out.println("Here");
 //			System.out.println("calling from the gpumemorysystem i cache condition");
 			containingExecEngine.getScheduleUnit().processCompletionOfMemRequest(address);
 		}

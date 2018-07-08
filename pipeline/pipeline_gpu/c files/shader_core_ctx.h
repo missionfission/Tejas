@@ -1,13 +1,7 @@
 class shader_core_ctx : public core_t {
 public:
-    // creator:
-    shader_core_ctx( class gpgpu_sim *gpu,
-                     class simt_core_cluster *cluster,
-                     unsigned shader_id,
-                     unsigned tpc_id,
-                     const struct shader_core_config *config,
-                     const struct memory_config *mem_config,
-                     shader_core_stats *stats );
+    shader_core_ctx( class gpgpu_sim *gpu,class simt_core_cluster *cluster, unsigned shader_id, unsigned tpc_id, 
+    const struct shader_core_config *config,const struct memory_config *mem_config,     shader_core_stats *stats );
 
 // used by simt_core_cluster:
     // modifiers
@@ -66,9 +60,6 @@ public:
     void get_L1C_sub_stats(struct cache_sub_stats &css) const;
     void get_L1T_sub_stats(struct cache_sub_stats &css) const;
 
-    void get_icnt_power_stats(long &n_simt_to_mem, long &n_mem_to_simt) const;
-
-// debug:
     void display_simt_state(FILE *fout, int mask ) const;
     void display_pipeline( FILE *fout, int print_mem, int mask3bit ) const;
 
@@ -87,10 +78,10 @@ public:
     }
     void incimul_stat(unsigned active_count,double latency) {
 		if(m_config->gpgpu_clock_gated_lanes==false){
-		  m_stats->m_num_imul_acesses[m_sid]=m_stats->m_num_imul_acesses[m_sid]+active_count*latency
+		  m_stats->m_num_imul_acesses[m_sid]+=active_count*latency
 		    + inactive_lanes_accesses_nonsfu(active_count, latency);
 		}else {
-        m_stats->m_num_imul_acesses[m_sid]=m_stats->m_num_imul_acesses[m_sid]+active_count*latency;
+        m_stats->m_num_imul_acesses[m_sid]+=active_count*latency;
 		}
 	 }
     void incimul24_stat(unsigned active_count,double latency) {
@@ -168,10 +159,10 @@ public:
 	 void incregfile_writes(unsigned active_count){m_stats->m_write_regfile_acesses[m_sid]=m_stats->m_write_regfile_acesses[m_sid]+active_count;}
 	 void incnon_rf_operands(unsigned active_count){m_stats->m_non_rf_operands[m_sid]=m_stats->m_non_rf_operands[m_sid]+active_count;}
 
-	 void incspactivelanes_stat(unsigned active_count) {m_stats->m_active_sp_lanes[m_sid]=m_stats->m_active_sp_lanes[m_sid]+active_count;}
-	 void incsfuactivelanes_stat(unsigned active_count) {m_stats->m_active_sfu_lanes[m_sid]=m_stats->m_active_sfu_lanes[m_sid]+active_count;}
-	 void incfuactivelanes_stat(unsigned active_count) {m_stats->m_active_fu_lanes[m_sid]=m_stats->m_active_fu_lanes[m_sid]+active_count;}
-	 void incfumemactivelanes_stat(unsigned active_count) {m_stats->m_active_fu_mem_lanes[m_sid]=m_stats->m_active_fu_mem_lanes[m_sid]+active_count;}
+	 void incspactivelanes_stat(unsigned active_count) {m_stats->m_active_sp_lanes[m_sid]+=active_count;}
+	 void incsfuactivelanes_stat(unsigned active_count) {m_stats->m_active_sfu_lanes[m_sid]+=active_count;}
+	 void incfuactivelanes_stat(unsigned active_count) {m_stats->m_active_fu_lanes[m_sid]+=active_count;}
+	 void incfumemactivelanes_stat(unsigned active_count) {m_stats->m_active_fu_mem_lanes[m_sid]+=active_count;}
 
 	 void inc_simt_to_mem(unsigned n_flits){ m_stats->n_simt_to_mem[m_sid] += n_flits; }
 	 bool check_if_non_released_reduction_barrier(warp_inst_t &inst);

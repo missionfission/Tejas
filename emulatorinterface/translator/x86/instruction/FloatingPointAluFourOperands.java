@@ -31,7 +31,7 @@ import generic.Instruction;
 public class FloatingPointAluFourOperands implements PTXStaticInstructionHandler{
 	public void handle(long instructionPointer, 
 			/*Operand operand1, Operand operand2, Operand operand3, Operand operand4, Operand operand5,*/
-			ArrayList<Instruction> instructionArrayList/*, Registers tempRegisterNum*/, Packet p ) throws InvalidInstructionException
+			ArrayList<Instruction> instructionArrayList, Registers tempRegisterNum, Packet p ) throws InvalidInstructionException
 	{
 		instructionArrayList.add(Instruction.getFloatingPointALU());
 		

@@ -44,14 +44,6 @@ public:
         return active_lanes.count();
     }
     virtual void active_lanes_in_pipeline() = 0;
-/*
-    virtual void issue( register_set& source_reg )
-    {
-        //move_warp(m_dispatch_reg,source_reg);
-        //source_reg.move_out_to(m_dispatch_reg);
-        simd_function_unit::issue(source_reg);
-    }
-*/
     // accessors
     virtual bool stallable() const { return false; }
     virtual bool can_issue( const warp_inst_t &inst ) const

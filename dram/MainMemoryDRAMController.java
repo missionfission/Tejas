@@ -166,7 +166,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 //			System.out.println("Num of Transactions here are increased"+numTransactions);		
 			MainMemoryBusPacket b = AddressMapping(event.getAddress()); 
 			b.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));
-			System.out.println(event.getRequestType()+"       "+b.getBusPacketType());
+//			System.out.println(event.getRequestType()+"       "+b.getBusPacketType());
 			//for TIMING
 			//create k6 style trace file
 			b.timeCreated = LocalClockperSm.getCurrentTime();

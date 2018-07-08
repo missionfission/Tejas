@@ -1,9 +1,6 @@
 package pipeline.multi_issue_inorder;
-
 import java.io.FileWriter;
 import java.io.IOException;
-
-
 import generic.Instruction;
 import config.SimulationConfig;
 import main.CustomObjectPool;
@@ -29,7 +26,7 @@ public class WriteBackUnitIn_MII extends SimulationElement{
 	long numIntRegFileAccesses;
 	long numFloatRegFileAccesses;
 	
-	public WriteBackUnitIn_MII(Core core, MultiIssueInorderExecutionEngine execEngine)
+	public WriteBackUnitIn_MII(SM core, MultiIssueInorderExecutionEngine execEngine)
 	{
 		super(PortType.Unlimited, -1, -1 , -1, -1);
 		this.core = core;
@@ -160,17 +157,4 @@ public class WriteBackUnitIn_MII extends SimulationElement{
 		numFloatRegFileAccesses += incrementBy;
 	}
 	
-	public EnergyConfig calculateAndPrintEnergy(FileWriter outputFileWriter, String componentName) throws IOException
-	{
-		EnergyConfig totalPower = new EnergyConfig(0, 0);
-		EnergyConfig intRegFilePower = new EnergyConfig(core.getIntRegFilePower(), numIntRegFileAccesses);
-		totalPower.add(totalPower, intRegFilePower);
-		EnergyConfig floatRegFilePower = new EnergyConfig(core.getFpRegFilePower(), numFloatRegFileAccesses);
-		totalPower.add(totalPower, floatRegFilePower);
-		
-		intRegFilePower.printEnergyStats(outputFileWriter, componentName + ".int");
-		floatRegFilePower.printEnergyStats(outputFileWriter, componentName + ".float");
-		
-		return totalPower;
-	}
 }
