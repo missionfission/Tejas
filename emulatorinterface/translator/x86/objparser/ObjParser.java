@@ -42,7 +42,7 @@ try
 		
 		if(handler!=null)
 		{
-			handler.handle(p.ip,instructionList, p);
+			handler.handle(p.ip,instructionList,null, p);
 		}
 		else
 		{

@@ -2,11 +2,10 @@ Some Notes on the MemoryController in GPUTejas
 
 Next level of L2 CACHE
 
-
 No request is coming in the core broadcast bus.(handle event)
 
 In the cache of GPU TEJAS, when there are request of cache read and cache write, in the case when the cache line is not found(that is a miss) and MSHR also dont contain the address of the evicted line, 
-there is no handling of the case when there is no coherence and the event is of cache write, and they are directly sent to the sendReadRequestToMemory. The request that are being sent to this function are cache_read and cache write. When i tried to fix this by creating a new field of cache Write, it gave me error that memory not allocated/ Program stoppe
+there is no handling of the case when there is no coherence and the event is of cache write, and they are directly sent to the sendReadRequestToMemory. The request that are being sent to this function are cache_read and cache write. When i tried to fix this by creating a new field of cache Write, it gave me error that memory not allocated/ Program stopped.
 
 
 TEJAS GLOBAL CLOCK----
@@ -37,10 +36,5 @@ finish all pipelines is commented out , running indefinitely for some reason
 
 initialize also commented out in run 
 
-// Add Register Files 
-// Create a Warp Class 
-// Store memory requested threads in the Register Files
-// Change CalculateWarpOccupancy function in the emulator interface
-// when warp has a memory barrier add it to the register file
-// shader.cc contains the functions regarding the warp scheduling 
-// Barrier Table has a commented and unresolved tgt 
+Local Clock per SM has a static clock
+

@@ -1,3 +1,4 @@
+#include<pipelineunit.h>
 class ldst_unit: public pipelined_simd_unit {
 public:
     ldst_unit( mem_fetch_interface *icnt,
