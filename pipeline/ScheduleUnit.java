@@ -301,6 +301,7 @@ public class ScheduleUnit extends SimulationElement{
 	}
 
 	public void processCompletionOfMemRequest(long requestedAddress) {
+	//	System.out.println(this.fetchedInstruction.getCISCProgramCounter() == requestedAddress);
 			if(this.fetchedInstruction != null && 
 					this.fetchedInstruction.getCISCProgramCounter() == requestedAddress && 
 					this.fetchedInstructionStatus==false){

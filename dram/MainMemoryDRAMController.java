@@ -166,7 +166,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 //			System.out.println("Num of Transactions here are increased"+numTransactions);		
 			MainMemoryBusPacket b = AddressMapping(event.getAddress()); 
 			b.setBusPacketType(requestTypeToBusPacketType(event.getRequestType()));
-			System.out.println(event.getRequestType()+"       "+b.getBusPacketType());
+	//		System.out.println(event.getRequestType()+"       "+b.getBusPacketType());
 			//for TIMING
 			//create k6 style trace file
 			b.timeCreated = LocalClockperSm.getCurrentTime();
@@ -247,7 +247,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				if (pendingTransQueue.size()>0)
 				pendingTransQueue.remove(0);
 				else
-					System.out.println("nahi  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 " + pendingTransQueue.size()+"printing i also "+i);
+			//		System.out.println("nahi  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 " + pendingTransQueue.size()+"printing i also "+i);
 
 				break;               //just enqueue the first one !! not all pending, break when first is enqueued
 
@@ -300,7 +300,7 @@ public class MainMemoryDRAMController extends MainMemoryController{
 				RamBusAddressCarryingEvent event = new RamBusAddressCarryingEvent( core0.getEventQueue() , (currentTime + mainMemoryConfig.tWL), this,
 						ranks[rank], RequestType.Main_Mem_Access, dataPacketToSend.physicalAddress, dataPacketToSend);
 				event.getEventQ().addEvent(event);
-				System.out.println("Write Transaction");
+			//	System.out.println("Write Transaction");
 				totalWriteTransactions[rank][bank]++;
 			}
 			

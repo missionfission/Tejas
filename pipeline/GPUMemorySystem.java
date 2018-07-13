@@ -75,10 +75,7 @@ public class GPUMemorySystem extends SMMemorySystem {
 																	 address,
 																	 sm.getTPC_number(), sm.getSM_number() );
 		
-		if(constantCache.missStatusHoldingRegister.getCurrentSize() >= constantCache.missStatusHoldingRegister.getMSHRStructSize()) {
-			return false;
-		}
-		
+	
 		//attempt issue to lower level cache
 		AddressCarryingEvent clone = (AddressCarryingEvent) addressEvent.clone();
 		boolean isAddedinLowerMshr = this.constantCache.addEvent(clone);
@@ -114,9 +111,7 @@ public class GPUMemorySystem extends SMMemorySystem {
 																	 this, sharedCache, requestType, address,
 																	 sm.getTPC_number(), sm.getSM_number() );
 		
-		if(sharedCache.missStatusHoldingRegister.getCurrentSize() >= sharedCache.missStatusHoldingRegister.getMSHRStructSize()) {
-			return false;
-		}
+	
 		
 		//attempt issue to lower level cache
 		AddressCarryingEvent clone = (AddressCarryingEvent) addressEvent.clone();
@@ -140,7 +135,7 @@ public class GPUMemorySystem extends SMMemorySystem {
 		
 		return true;
 	}
-
+	
 	@Override
 	public void handleEvent(EventQueue eventQ, Event event) {
 		
@@ -152,7 +147,7 @@ public class GPUMemorySystem extends SMMemorySystem {
 		//if response comes from iCache, inform fetchunit
 		if(memResponse.getRequestingElement() == iCache)
 			
-		{	System.out.println("Here");
+		{	
 //			System.out.println("calling from the gpumemorysystem i cache condition");
 			containingExecEngine.getScheduleUnit().processCompletionOfMemRequest(address);
 		}

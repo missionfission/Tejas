@@ -565,7 +565,7 @@ public class Cache extends SimulationElement
 					if (this.writePolicy == CacheConfig.WritePolicy.WRITE_THROUGH)
 						{
 								if (this.isLastLevel)
-								{	System.out.println(eventPoppedOut.getRequestingElement());
+								{	//System.out.println(eventPoppedOut.getRequestingElement());
 //									putEventToPort(eventPoppedOut,eventPoppedOut.getRequestingElement(), RequestType.Main_Mem_Write, true,true);
 									long addr=eventPoppedOut.getAddress();
 									sendRequestToNextLevel(addr, eventPoppedOut.getRequestType(), eventPoppedOut.tpcId, eventPoppedOut.smId);
@@ -607,11 +607,6 @@ public class Cache extends SimulationElement
 		@SuppressWarnings("unused")
 		public boolean addEvent(AddressCarryingEvent addressEvent)
 		{	
-			if(missStatusHoldingRegister.isFull())
-			{
-				return false;
-			}
-			
 			// Clear the working set data after every x instructions
 			if(this.containingMemSys!=null && this.workingSet!=null) {
 				
@@ -1061,7 +1056,7 @@ simElement, requestType,((AddressCarryingEvent)event).getAddress(),((AddressCarr
 				if(cl.getState()!=MESI.MODIFIED) {
 					
 					cl.setState(MESI.MODIFIED);
-					System.out.println(this.coherence);
+					//System.out.println(this.coherence);
 					// Send request to lower cache.
 					if(this.coherence==CoherenceType.None) {
 						
