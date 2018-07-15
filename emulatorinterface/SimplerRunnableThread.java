@@ -508,7 +508,11 @@ private void AddToSetAndIncrementClock() {
 	@SuppressWarnings("unused")
 	public void finishAllPipelines(int assigned_SP) {
 		int i=0;
+<<<<<<< HEAD
 //		return;
+=======
+		//return;
+>>>>>>> 96abe70bbbadf294696b658e2592aef5d11d76c5
 		boolean queueComplete;    //queueComplete is true when all cores have completed
 		while(true)
 		{
