@@ -259,7 +259,7 @@ public class SimplerRunnableThread implements Runnable,Encoding {
 					break;
 			    }
 			}
-//			System.out.println("where stuck finish");
+
 			finishAllPipelines(assignedSP);
 			Statistics.calculateCyclesKernel(javaTid);
 			ipcBase.kernelExecuted++;
@@ -271,11 +271,11 @@ public class SimplerRunnableThread implements Runnable,Encoding {
 			blocksExecuted+=currBlock+1;
 			
 			
-//				try {
-//					main.Main.runners[javaTid].initialize();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+				try {
+					main.Main.runners[javaTid].initialize();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 		//System.out.println("first iterations");
 		ipcBase.javaThreadTermination = true;
@@ -437,8 +437,7 @@ private void AddToSetAndIncrementClock() {
 			long numHandledInsn = 0;
 			int numMicroOpsBefore = thread.outstandingMicroOps.size();
 			
-			myParser.fuseInstruction( thread.packetList.get(0).ip, 
-				thread.packetList, thread.outstandingMicroOps);
+			myParser.fuseInstruction( thread.packetList.get(0).ip, thread.packetList, thread.outstandingMicroOps);
 			int numMicroOpsAfter = thread.outstandingMicroOps.size();
 
 			if(numMicroOpsAfter>numMicroOpsBefore) {
@@ -509,30 +508,30 @@ private void AddToSetAndIncrementClock() {
 	@SuppressWarnings("unused")
 	public void finishAllPipelines(int assigned_SP) {
 		int i=0;
-		return;
-//		boolean queueComplete;    //queueComplete is true when all cores have completed
-//		while(true)
-//		{
-//			
-//			int count=0;
-//			queueComplete = true;        
-//		
-//			if(maxCoreAssign>0) {
-//				
-//					//	System.out.println(i);
-//						pipelineInterfaces.oneCycleOperation(assigned_SP);
-//						AddToSetAndIncrementClock();
-//						ArchitecturalComponent.getCores()[pipelineInterfaces.getCore().getTPC_number()][pipelineInterfaces.getCore().getSM_number()].clock.incrementClock();
-//			//	i++;
-//				
-//			}
-//			if(inputToPipeline.size()==0)
-//			{
-//				break;
-//			}
+//		return;
+		boolean queueComplete;    //queueComplete is true when all cores have completed
+		while(true)
+		{
+			
+			int count=0;
+			queueComplete = true;        
+		
+			if(maxCoreAssign>0) {
+				
+					//	System.out.println(i);
+						pipelineInterfaces.oneCycleOperation(assigned_SP);
+						AddToSetAndIncrementClock();
+						ArchitecturalComponent.getCores()[pipelineInterfaces.getCore().getTPC_number()][pipelineInterfaces.getCore().getSM_number()].clock.incrementClock();
+			//	i++;
+				
+			}
+			if(inputToPipeline.size()==0)
+			{
+				break;
+			}
 			
 			
-		//}	
+		}	
 		
 	}
 }

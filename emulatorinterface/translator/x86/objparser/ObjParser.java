@@ -83,6 +83,7 @@ private  String[] tokenizeObjDumpAssemblyCode(String sCurrentLine) {
 		//contains prefix 
 		instructionPrefix=lineTokenizer.nextToken();
 		operation=lineTokenizer.nextToken();
+		System.out.println(operation);
 		
 	}
 	else

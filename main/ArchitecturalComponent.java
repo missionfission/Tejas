@@ -160,8 +160,8 @@ private static void createElementsOfBus() {
 		setCores(sms);
 		
 		Collection<CacheConfig> c= SystemConfig.declaredCaches.values();
-		System.out.println("Caches here are "+SystemConfig.declaredCaches.values());
-		System.out.println("Interconnect  "+SystemConfig.interconnect);
+//		System.out.println("Caches here are "+SystemConfig.declaredCaches.values());
+//		System.out.println("Interconnect  "+SystemConfig.interconnect);
 		Iterator<CacheConfig> it= c.iterator();
 		while(it.hasNext()) {
 			CacheConfig cc= it.next();
