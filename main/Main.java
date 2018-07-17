@@ -57,9 +57,7 @@ public class Main {
 	public static SimplerFilePacket ipcBase[];
 	public static volatile boolean statFileWritten = false;
 	public static int [] totalBlocks;
-	
 	public static  String traceFileFolder = " ";
-	
 	public static String getTraceFileFolder()
 	{
 		return traceFileFolder;
@@ -142,9 +140,7 @@ public class Main {
 	
 		InstructionClassTable.createInstructionClassHandlerTable();
 		
-		for (int i=0; i<SimulationConfig.MaxNumJavaThreads; i++) {
-			
-			
+		for (int i=0; i<SimulationConfig.MaxNumJavaThreads; i++) {	
 		name = Integer.toString(i);
 		ipcBase[i]=new SimplerFilePacket(i);
 		int tpc_id=i/TpcConfig.NoOfSM;
@@ -158,11 +154,15 @@ public class Main {
 
 		System.out.println("\n\nRunning the simulation !!!");
 		startTime = System.currentTimeMillis();
-	
-		startRunnerThreads();
-        Statistics.initStatistics();
-		waitForJavaThreads();
-		
+		Statistics.initStatistics();
+//		startRunnerThreads();
+//		waitForJavaThreads();
+//		
+		for(int i=0;i<SimulationConfig.MaxNumJavaThreads;i++)
+		{
+			startRunnerThreads(i);
+			waitForJavaThreads(i);			
+		}
 		endTime = System.currentTimeMillis();
               
 		Statistics.printAllStatistics(traceFileFolder,startTime, endTime);
@@ -212,13 +212,13 @@ public class Main {
 	}
 
 
-	public static void waitForJavaThreads() {
+	public static void waitForJavaThreads(int id) {
 		
 		try {		
 			
-			for (int i=0; i<SimulationConfig.MaxNumJavaThreads; i++) {
-				ipcBase[i].free.acquire();	
-			}
+		//	for (int i=0; i<SimulationConfig.MaxNumJavaThreads; i++) {
+				ipcBase[id].free.acquire();	
+	//		}
 			//ipcBase[0].free.acquire();	
 			
 		} catch (InterruptedException ioe) {
@@ -227,9 +227,9 @@ public class Main {
 	}
 
 
-	private static void startRunnerThreads() {
-		for(int i=0;i<SimulationConfig.MaxNumJavaThreads;i++)
-			runners[i].t.start();
+	private static void startRunnerThreads(int id) {
+		//for(int i=0;i<SimulationConfig.MaxNumJavaThreads;i++)
+			runners[id].t.start();
 		
 	//	runners[0].t.start();
 	}

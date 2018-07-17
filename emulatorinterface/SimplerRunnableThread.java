@@ -135,7 +135,7 @@ public class SimplerRunnableThread implements Runnable,Encoding {
 				e.printStackTrace();
 			}
 		
-			ipcBase.javaThreadStarted = true;
+		ipcBase.javaThreadStarted = true;
 		boolean blockEndSeen=false;
 		while(ipcBase.kernelLeft())
 		{
@@ -239,7 +239,6 @@ public class SimplerRunnableThread implements Runnable,Encoding {
 						break;
 					}
 				}
-				
 				runPipelines(assignedSP);
 //				System.out.println("where stuck run ");
 				if(blockEndSeen)
