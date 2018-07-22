@@ -1,0 +1,153 @@
+[Configuration]
+
+EmulatorType: OCELOT
+Schedule: Fri Jul 13 18:34:28 IST 2018
+
+[RAM statistics]
+
+For channel 0:
+Average Read Latency: 499.0 cycles = 138.61111111111111 ns
+	 Rank 1
+		 Bank 1 ::  Reads : 88 | Writes: 2406
+
+		 Bank 2 ::  Reads : 0 | Writes: 0
+
+		 Bank 3 ::  Reads : 0 | Writes: 0
+
+		 Bank 4 ::  Reads : 0 | Writes: 0
+
+		 Bank 5 ::  Reads : 0 | Writes: 0
+
+		 Bank 6 ::  Reads : 0 | Writes: 0
+
+		 Bank 7 ::  Reads : 0 | Writes: 0
+
+		 Bank 8 ::  Reads : 0 | Writes: 0
+
+	 Total Reads: 88	 Total Writes: 2406
+	 Rank 2
+		 Bank 1 ::  Reads : 0 | Writes: 0
+
+		 Bank 2 ::  Reads : 0 | Writes: 0
+
+		 Bank 3 ::  Reads : 0 | Writes: 0
+
+		 Bank 4 ::  Reads : 0 | Writes: 0
+
+		 Bank 5 ::  Reads : 0 | Writes: 0
+
+		 Bank 6 ::  Reads : 0 | Writes: 0
+
+		 Bank 7 ::  Reads : 0 | Writes: 0
+
+		 Bank 8 ::  Reads : 0 | Writes: 0
+
+	 Total Reads: 0	 Total Writes: 0
+
+Total Reads and Writes: 159616 Bytes
+
+
+
+
+[Simulator Time]
+Time Taken		=	0 : 0 minutes
+Total Instructions executed : 13308
+Instructions per Second	=	Infinity KIPS		
+****************************************************************************
+TOTAL INSTRUCTIONS = 13308
+TOTAL CYCLES = 0
+TOTAL INSTRUCTIONS PER CYCLE = Infinity
+**************************************************************************** 
+
+[Memory System Statistics]
+
+[Per core statistics]
+
+SM : 0 of TPC : 0
+iCache details
+NO OF REQUESTS 10570
+NO OF HITS 10556
+NO OF MISSES 14
+constantCache details
+NO OF REQUESTS 12024
+NO OF HITS 11796
+NO OF MISSES 228
+sharedCache details
+NO OF REQUESTS 745
+NO OF HITS 731
+NO OF MISSES 14
+Nothing executed on SM 1 of TPC 0
+Nothing executed on SM 2 of TPC 0
+Nothing executed on SM 3 of TPC 0
+Nothing executed on SM 4 of TPC 0
+Nothing executed on SM 5 of TPC 0
+Nothing executed on SM 6 of TPC 0
+Nothing executed on SM 7 of TPC 0
+Nothing executed on SM 0 of TPC 1
+Nothing executed on SM 1 of TPC 1
+Nothing executed on SM 2 of TPC 1
+Nothing executed on SM 3 of TPC 1
+Nothing executed on SM 4 of TPC 1
+Nothing executed on SM 5 of TPC 1
+Nothing executed on SM 6 of TPC 1
+Nothing executed on SM 7 of TPC 1
+Nothing executed on SM 0 of TPC 2
+Nothing executed on SM 1 of TPC 2
+Nothing executed on SM 2 of TPC 2
+Nothing executed on SM 3 of TPC 2
+Nothing executed on SM 4 of TPC 2
+Nothing executed on SM 5 of TPC 2
+Nothing executed on SM 6 of TPC 2
+Nothing executed on SM 7 of TPC 2
+Nothing executed on SM 0 of TPC 3
+Nothing executed on SM 1 of TPC 3
+Nothing executed on SM 2 of TPC 3
+Nothing executed on SM 3 of TPC 3
+Nothing executed on SM 4 of TPC 3
+Nothing executed on SM 5 of TPC 3
+Nothing executed on SM 6 of TPC 3
+Nothing executed on SM 7 of TPC 3
+Nothing executed on SM 0 of TPC 4
+Nothing executed on SM 1 of TPC 4
+Nothing executed on SM 2 of TPC 4
+Nothing executed on SM 3 of TPC 4
+Nothing executed on SM 4 of TPC 4
+Nothing executed on SM 5 of TPC 4
+Nothing executed on SM 6 of TPC 4
+Nothing executed on SM 7 of TPC 4
+Nothing executed on SM 0 of TPC 5
+Nothing executed on SM 1 of TPC 5
+Nothing executed on SM 2 of TPC 5
+Nothing executed on SM 3 of TPC 5
+Nothing executed on SM 4 of TPC 5
+Nothing executed on SM 5 of TPC 5
+Nothing executed on SM 6 of TPC 5
+Nothing executed on SM 7 of TPC 5
+Nothing executed on SM 0 of TPC 6
+Nothing executed on SM 1 of TPC 6
+Nothing executed on SM 2 of TPC 6
+Nothing executed on SM 3 of TPC 6
+Nothing executed on SM 4 of TPC 6
+Nothing executed on SM 5 of TPC 6
+Nothing executed on SM 6 of TPC 6
+Nothing executed on SM 7 of TPC 6
+Nothing executed on SM 0 of TPC 7
+Nothing executed on SM 1 of TPC 7
+Nothing executed on SM 2 of TPC 7
+Nothing executed on SM 3 of TPC 7
+Nothing executed on SM 4 of TPC 7
+Nothing executed on SM 5 of TPC 7
+Nothing executed on SM 6 of TPC 7
+Nothing executed on SM 7 of TPC 7
+****************************************************************************
+Cache details
+Total Instruction Cache Access 10570
+Total Instruction Cache Misses 14
+
+Total Constant Cache Access 12024
+Total Constant Cache Misses 228
+
+Total Shared Cache Access 745
+Total Constant Cache Misses 14
+
+****************************************************************************
